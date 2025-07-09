@@ -3,7 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Your custom styles here */
+
+/* custom button style */
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition;
+}
 
 @theme inline {
 
