@@ -47,7 +47,7 @@ export default function ErrorPage() {
             </span>
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed">
-            It seems like the page you're looking for has found its perfect match elsewhere. Don't worry, there are
+            It seems like the page you&apos;re looking for has found its perfect match elsewhere. Don&apos;t worry, there are
             plenty of other amazing pages waiting to connect with you!
           </p>
         </div>
@@ -73,8 +73,8 @@ export default function ErrorPage() {
         {/* Fun Message */}
         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto border border-rose-100">
           <p className="text-gray-700 italic">
-            💕 "Sometimes the best connections happen when you least expect them. While you're here, why not explore
-            some amazing profiles or read success stories from couples who found their happily ever after!"
+            💕 Sometimes the best connections happen when you least expect them. While you&apos;re here, why not explore
+            some amazing profiles or read success stories from couples who found their happily ever after!
           </p>
         </div>
 

@@ -85,7 +85,7 @@ export default function LoginPage() {
                 </div>
                 <div>
                   <p className="text-gray-700 italic mb-2">
-                    "I found my soulmate within 3 months. The platform is amazing and the profiles are genuine!"
+                    I found my soulmate within 3 months. The platform is amazing and the profiles are genuine!
                   </p>
                   <div className="text-sm">
                     <span className="font-semibold text-gray-800">Sarah Johnson</span>
@@ -224,7 +224,7 @@ export default function LoginPage() {
               {/* Sign Up Link */}
               <div className="text-center pt-4 border-t border-gray-100">
                 <p className="text-gray-600">
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <Link href="/register" className="text-rose-600 hover:text-rose-700 font-semibold">
                     Create Account
                   </Link>
