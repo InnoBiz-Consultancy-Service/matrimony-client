@@ -79,6 +79,8 @@ export default function Banner() {
             <div className="relative">
               <div className="w-full h-[500px] bg-gradient-to-br from-rose-100 to-pink-100 rounded-3xl shadow-2xl overflow-hidden">
                 <Image
+                  width={500}
+                  height={500}
                   src="https://t3.ftcdn.net/jpg/06/52/48/90/360_F_652489048_7AjxWwFhIEGCl1Md0VV5u78UR1MYjW4d.jpg"
                   alt="Happy couple"
                   className="w-full h-full object-cover"
