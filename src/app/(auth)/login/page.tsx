@@ -23,7 +23,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center px-4">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl"></div>
@@ -63,15 +63,15 @@ export default function LoginPage() {
           {/* Success Stats */}
           <div className="grid grid-cols-3 gap-6 pt-8">
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-600">50K+</div>
+              <div className="text-2xl font-bold text-rose-600">0</div>
               <div className="text-sm text-gray-600">Happy Couples</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-600">1M+</div>
+              <div className="text-2xl font-bold text-rose-600">0</div>
               <div className="text-sm text-gray-600">Active Members</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-600">99%</div>
+              <div className="text-2xl font-bold text-rose-600">0</div>
               <div className="text-sm text-gray-600">Success Rate</div>
             </div>
           </div>
