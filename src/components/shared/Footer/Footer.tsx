@@ -59,7 +59,7 @@ export default function Footer() {
                   <Heart className="h-5 w-5 text-white fill-white" />
                 </div>
                 <div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-rose-400 to-rose-300 bg-clip-text text-transparent">
+                  <span className="text-2xl font-bold primary-color">
                     Nikah
                   </span>
                   <p className="text-xs text-gray-400 -mt-1">Find Your Perfect Match</p>

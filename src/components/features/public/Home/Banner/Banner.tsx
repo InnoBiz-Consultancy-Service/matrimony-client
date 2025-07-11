@@ -28,7 +28,7 @@ export default function Banner() {
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Find Your
-                <span className="block bg-gradient-to-r from-rose-600 via-rose-500 to-pink-500 bg-clip-text text-transparent">
+                <span className="primary-color">
                   Perfect Match
                 </span>
                 <span className="block text-gray-800">Today</span>
@@ -42,7 +42,7 @@ export default function Banner() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               {/* <Link href="/register"> */}
-                <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold px-8 py-4 text-lg rounded-xl group">
+                <Button className="primary-btn">
                   Start Free Today
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
