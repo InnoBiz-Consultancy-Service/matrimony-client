@@ -10,9 +10,6 @@ import {
   Twitter,
   Instagram,
   Youtube,
-  Shield,
-  Award,
-  Users,
   Clock,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -66,7 +63,7 @@ export default function Footer() {
                 </div>
               </div>
               <p className="text-gray-300 leading-relaxed">
-                The most trusted matrimony platform connecting hearts worldwide. We've helped over 50,000 couples find
+                The most trusted matrimony platform connecting hearts worldwide. We&apos;ve helped over 50,000 couples find
                 their perfect match.
               </p>
               <div className="flex space-x-4">
