@@ -81,7 +81,7 @@ export default function Navbar() {
                 Sign In
               </Button>
             </Link>
-            <Link href="/register">
+            <Link href="/registration">
               <Button className="primary-btn">
                 Join Free
               </Button>
@@ -145,7 +145,7 @@ export default function Navbar() {
                       Sign In
                     </Button>
                   </Link>
-                  <Link href="/register" className="block">
+                  <Link href="/registration" className="block">
                     <Button
                       className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg"
                       onClick={() => setIsOpen(false)}
