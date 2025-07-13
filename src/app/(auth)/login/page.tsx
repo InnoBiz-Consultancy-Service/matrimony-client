@@ -1,26 +1,34 @@
+"use client";
 
-"use client"
-
-import * as React from "react"
-import Link from "next/link"
-import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight, Facebook, Chrome } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import * as React from "react";
+import Link from "next/link";
+import {
+  Eye,
+  EyeOff,
+  Heart,
+  Mail,
+  Lock,
+  ArrowRight,
+  Facebook,
+  Chrome,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [email, setEmail] = React.useState("")
-  const [password, setPassword] = React.useState("")
-  const [rememberMe, setRememberMe] = React.useState(false)
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [rememberMe, setRememberMe] = React.useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Handle login logic here
-    console.log("Login attempt:", { email, password, rememberMe })
-  }
+    console.log("Login attempt:", { email, password, rememberMe });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center px-4">
@@ -42,7 +50,9 @@ export default function LoginPage() {
               <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
                 Nikah
               </span>
-              <span className="text-sm text-rose-500/70 font-medium -mt-1">Find Your Perfect Match</span>
+              <span className="text-sm text-rose-500/70 font-medium -mt-1">
+                Find Your Perfect Match
+              </span>
             </div>
           </div>
 
@@ -55,8 +65,8 @@ export default function LoginPage() {
               </span>
             </h1>
             <p className="text-lg text-gray-600 leading-relaxed max-w-lg">
-              Continue your search for the perfect life partner. Thousands of verified profiles are waiting to connect
-              with you.
+              Continue your search for the perfect life partner. Thousands of
+              verified profiles are waiting to connect with you.
             </p>
           </div>
 
@@ -85,10 +95,13 @@ export default function LoginPage() {
                 </div>
                 <div>
                   <p className="text-gray-700 italic mb-2">
-                    I found my soulmate within 3 months. The platform is amazing and the profiles are genuine!
+                    I found my soulmate within 3 months. The platform is amazing
+                    and the profiles are genuine!
                   </p>
                   <div className="text-sm">
-                    <span className="font-semibold text-gray-800">Sarah Johnson</span>
+                    <span className="font-semibold text-gray-800">
+                      Sarah Johnson
+                    </span>
                     <span className="text-gray-500"> • Married in 2024</span>
                   </div>
                 </div>
@@ -112,8 +125,12 @@ export default function LoginPage() {
               </div>
 
               <div className="text-center space-y-2">
-                <h2 className="text-2xl font-bold text-gray-800">Welcome Back!</h2>
-                <p className="text-gray-600">Sign in to continue your journey</p>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Welcome Back!
+                </h2>
+                <p className="text-gray-600">
+                  Sign in to continue your journey
+                </p>
               </div>
             </CardHeader>
 
@@ -142,7 +159,9 @@ export default function LoginPage() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">Or continue with email</span>
+                  <span className="px-4 bg-white text-gray-500">
+                    Or continue with email
+                  </span>
                 </div>
               </div>
 
@@ -150,7 +169,10 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Email Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Email Address
                   </Label>
                   <div className="relative">
@@ -169,7 +191,10 @@ export default function LoginPage() {
 
                 {/* Password Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Password
                   </Label>
                   <div className="relative">
@@ -188,7 +213,11 @@ export default function LoginPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -199,14 +228,22 @@ export default function LoginPage() {
                     <Checkbox
                       id="remember"
                       checked={rememberMe}
-                      onCheckedChange={checked => setRememberMe(checked === true)}
+                      onCheckedChange={(checked) =>
+                        setRememberMe(checked === true)
+                      }
                       className="border-2 border-gray-300 data-[state=checked]:bg-rose-600 data-[state=checked]:border-rose-600"
                     />
-                    <Label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+                    <Label
+                      htmlFor="remember"
+                      className="text-sm text-gray-600 cursor-pointer"
+                    >
                       Remember me
                     </Label>
                   </div>
-                  <Link href="/forgot-password" className="text-sm text-rose-600 hover:text-rose-700 font-medium">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-rose-600 hover:text-rose-700 font-medium"
+                  >
                     Forgot password?
                   </Link>
                 </div>
@@ -225,7 +262,10 @@ export default function LoginPage() {
               <div className="text-center pt-4 border-t border-gray-100">
                 <p className="text-gray-600">
                   Don&apos;t have an account?{" "}
-                  <Link href="/register" className="text-rose-600 hover:text-rose-700 font-semibold">
+                  <Link
+                    href="/registration"
+                    className="text-rose-600 hover:text-rose-700 font-semibold"
+                  >
                     Create Account
                   </Link>
                 </p>
@@ -235,11 +275,12 @@ export default function LoginPage() {
 
           {/* Security Notice */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">🔒 Your data is protected with 256-bit SSL encryption</p>
+            <p className="text-sm text-gray-500">
+              🔒 Your data is protected with 256-bit SSL encryption
+            </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

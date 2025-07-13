@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Search, Filter, X, Heart, Users, MapPin } from "lucide-react";
+import { Search, Filter, X, Heart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -65,8 +64,7 @@ export default function SearchFilters() {
 
   const [showAdvanced, setShowAdvanced] = React.useState(false);
   const [isSearching, setIsSearching] = React.useState(false);
-
-  const handleFilterChange = (key: keyof FilterState, value: any) => {
+  const handleFilterChange = (key: keyof FilterState, value: unknown) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -264,9 +262,9 @@ export default function SearchFilters() {
                       <SelectContent>
                         <SelectItem value="high-school">High School</SelectItem>
                         <SelectItem value="bachelors">
-                          Bachelor's Degree
+                          Bachelor&lsquo;s Degree
                         </SelectItem>
-                        <SelectItem value="masters">Master's Degree</SelectItem>
+                        <SelectItem value="masters">Master&lsquo;s Degree</SelectItem>
                         <SelectItem value="phd">PhD</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
