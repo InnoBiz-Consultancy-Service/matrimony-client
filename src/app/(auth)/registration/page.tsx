@@ -49,14 +49,9 @@ enum UserRole {
 // Zod validation schema
 const registrationSchema = z
   .object({
-    username: z
-      .string()
-      .min(3, "Username must be at least 3 characters")
-      .max(20, "Username must be less than 20 characters")
-      .regex(
-        /^[a-zA-Z0-9_]+$/,
-        "Username can only contain letters, numbers, and underscores"
-      ),
+    name: z.string()
+      .min(1, "Name is required")
+      .max(100, "Name must be less than 100 characters"),
     email: z
       .string()
       .email("Please enter a valid email address")
@@ -69,10 +64,14 @@ const registrationSchema = z
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       ),
     confirmPassword: z.string(),
-    phone: z
+        phone: z
       .string()
-      .min(10, "Phone number must be at least 10 digits")
-      .regex(/^\+?[\d\s-()]+$/, "Please enter a valid phone number"),
+      .min(11, "Phone number must be at least 11 digits (including +880)")
+      .max(15, "Phone number must be less than 15 digits")
+      .regex(
+        /^(?:\+?88)?01[3-9]\d{8}$/,
+        "Please enter a valid Bangladeshi phone number (e.g. +8801712345678 or 01712345678)"
+      ),
     gender: z.enum(["male", "female"], {
       required_error: "Please select your gender",
     }),
@@ -102,7 +101,7 @@ export default function RegistrationPage() {
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -141,7 +140,7 @@ export default function RegistrationPage() {
   const nextStep = async () => {
     const fieldsToValidate =
       currentStep === 1
-        ? ["username", "email"]
+        ? ["name", "email"]
         : ["password", "confirmPassword", "phone", "gender"];
 
     const isValid = await form.trigger(
@@ -292,18 +291,18 @@ export default function RegistrationPage() {
                       {/* Username Field */}
                       <FormField
                         control={form.control}
-                        name="username"
+                        name="name"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-sm font-medium text-gray-700">
-                              Username
+                              Name
                             </FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                                 <Input
                                   {...field}
-                                  placeholder="Choose a unique username"
+                                  placeholder="Enter your name"
                                   className="pl-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
                                 />
                               </div>
