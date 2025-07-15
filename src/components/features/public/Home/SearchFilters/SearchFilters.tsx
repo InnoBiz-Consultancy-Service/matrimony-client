@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 
 interface FilterState {
   lookingFor: "male" | "female" | "";
@@ -55,6 +56,7 @@ const professions = [
 ];
 
 export default function SearchFilters() {
+  const router = useRouter();
   const [filters, setFilters] = React.useState<FilterState>({
     lookingFor: "",
     ageRange: [18, 40],
@@ -76,7 +78,8 @@ export default function SearchFilters() {
     // Simulate search API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log("Search filters:", filters);
-    setIsSearching(false);
+    // setIsSearching(false);
+    router.push("/biodatas");
   };
 
   const clearFilters = () => {
@@ -264,7 +267,9 @@ export default function SearchFilters() {
                         <SelectItem value="bachelors">
                           Bachelor&lsquo;s Degree
                         </SelectItem>
-                        <SelectItem value="masters">Master&lsquo;s Degree</SelectItem>
+                        <SelectItem value="masters">
+                          Master&lsquo;s Degree
+                        </SelectItem>
                         <SelectItem value="phd">PhD</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>

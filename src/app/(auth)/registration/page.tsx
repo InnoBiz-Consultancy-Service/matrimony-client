@@ -39,6 +39,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ButtonLoader } from "@/components/common/Loader";
+import { useRouter } from "next/navigation";
 
 enum UserRole {
   USER = "user",
@@ -96,6 +97,8 @@ export default function RegistrationPage() {
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+  const router = useRouter();
+
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
@@ -116,13 +119,18 @@ export default function RegistrationPage() {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({ email: data.email, phone: data.phone })
+      );
       console.log("Registration data:", {
         ...data,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
       // Handle successful registration
-      alert("Registration successful!");
+      // alert("Registration successful!");
+      router.push("verify-otp");
     } catch (error) {
       console.error("Registration failed:", error);
     } finally {
@@ -169,19 +177,21 @@ export default function RegistrationPage() {
         {/* Left Side - Branding */}
         <div className="hidden lg:block space-y-8 text-center lg:text-left px-8">
           {/* Logo */}
-          <div className="flex items-center justify-center lg:justify-start space-x-3">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
-              <Heart className="h-6 w-6 text-white fill-white" />
+          <Link href={"/"}>
+            <div className="flex items-center justify-center lg:justify-start space-x-3">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                <Heart className="h-6 w-6 text-white fill-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                  Nikah
+                </span>
+                <span className="text-sm text-rose-500/70 font-medium -mt-1">
+                  Find Your Perfect Match
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
-                Nikah
-              </span>
-              <span className="text-sm text-rose-500/70 font-medium -mt-1">
-                Find Your Perfect Match
-              </span>
-            </div>
-          </div>
+          </Link>
 
           {/* Welcome Message */}
           <div className="space-y-6">

@@ -42,19 +42,21 @@ export default function LoginPage() {
         {/* Left Side - Branding */}
         <div className="hidden lg:block space-y-8 text-center lg:text-left px-8">
           {/* Logo */}
-          <div className="flex items-center justify-center lg:justify-start space-x-3">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
-              <Heart className="h-6 w-6 text-white fill-white" />
+          <Link href={"/"}>
+            <div className="flex items-center justify-center lg:justify-start space-x-3">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                <Heart className="h-6 w-6 text-white fill-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                  Nikah
+                </span>
+                <span className="text-sm text-rose-500/70 font-medium -mt-1">
+                  Find Your Perfect Match
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
-                Nikah
-              </span>
-              <span className="text-sm text-rose-500/70 font-medium -mt-1">
-                Find Your Perfect Match
-              </span>
-            </div>
-          </div>
+          </Link>
 
           {/* Welcome Message */}
           <div className="space-y-6">
