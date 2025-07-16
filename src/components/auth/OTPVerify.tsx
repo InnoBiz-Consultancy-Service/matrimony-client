@@ -1,169 +1,209 @@
 "use client";
 
-import type React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import axios, { AxiosError } from "axios";
 import {
   ArrowLeft,
   Shield,
   CheckCircle,
   RefreshCw,
   Mail,
-  Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
-
-type OtpType = "email" | "phone";
+import { OTPArray } from "@/types/otp";
 
 export default function OTPVerify() {
-  const [email, setEmail] = useState("user@example.com");
-  const [phone, setPhone] = useState("+1 (555) 123-4567");
-  const [emailOtp, setEmailOtp] = useState<string[]>(["", "", "", "", "", ""]);
-  const [phoneOtp, setPhoneOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  // State
+  const [email, setEmail] = useState<string>("");
+  const [emailOtp, setEmailOtp] = useState<OTPArray>(["", "", "", "", "", ""]);
   const [isVerifyingEmail, setIsVerifyingEmail] = useState<boolean>(false);
-  const [isVerifyingPhone, setIsVerifyingPhone] = useState<boolean>(false);
+  const [isSendingOtp, setIsSendingOtp] = useState<boolean>(false);
   const [emailVerified, setEmailVerified] = useState<boolean>(false);
-  const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+  const [countdown, setCountdown] = useState<number>(0);
 
+  // Refs
   const emailInputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const phoneInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Effects
+  useEffect(() => {
+    const loadUserEmail = () => {
+      const data = localStorage.getItem("userInfo");
+      if (data) {
+        try {
+          const userInfo = JSON.parse(data);
+          setEmail(userInfo.email || "");
+        } catch (err) {
+          console.error("Error parsing user info:", err);
+        }
+      }
+    };
+
+    loadUserEmail();
+  }, []);
 
   useEffect(() => {
-    const data = localStorage.getItem("userInfo");
-    if (data) {
-      const userInfo = JSON.parse(data);
-      setEmail(userInfo.email || "user@example.com");
-      setPhone(userInfo.phone || "+1 (555) 123-4567");
+    let interval: NodeJS.Timeout;
+    if (countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
     }
-  }, []);
-  const handleInputChange = (index: number, value: string, type: OtpType) => {
-    if (value.length > 1) return;
+    return () => clearInterval(interval);
+  }, [countdown]);
 
-    const isEmail = type === "email";
-    const currentOtp = isEmail ? emailOtp : phoneOtp;
-    const setOtp = isEmail ? setEmailOtp : setPhoneOtp;
-    const inputRefs = isEmail ? emailInputRefs : phoneInputRefs;
+  useEffect(() => {
+    if (email) {
+      sendInitialOtp();
+    }
+  }, [email]);
 
-    const newOtp = [...currentOtp];
+  // API Calls
+  const sendOtpToEmail = async (emailAddress: string) => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/send-otp`, {
+        email: emailAddress,
+      });
+      return response.data;
+    } catch (error) {
+      const err = error as AxiosError<{ message?: string }>;
+      throw new Error(
+        err.response?.data?.message || "Failed to send OTP. Please try again."
+      );
+    }
+  };
+
+  const verifyOtp = async (otpCode: string) => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/verify-otp`, {
+        email: email,
+        otp: otpCode,
+      });
+      return response.data;
+    } catch (error) {
+      const err = error as AxiosError<{ message?: string }>;
+      throw new Error(
+        err.response?.data?.message || "Invalid OTP code. Please try again."
+      );
+    }
+  };
+
+  // Handlers
+  const handleInputChange = (index: number, value: string) => {
+    if (value.length > 1 || !/^\d*$/.test(value)) return;
+
+    const newOtp = [...emailOtp] as OTPArray;
     newOtp[index] = value;
-    setOtp(newOtp);
+    setEmailOtp(newOtp);
 
     // Auto-focus next input
     if (value && index < 5) {
-      inputRefs.current[index + 1]?.focus();
+      emailInputRefs.current[index + 1]?.focus();
     }
 
     // Auto-verify when complete
     if (newOtp.every((digit) => digit !== "")) {
-      if (isEmail) {
-        handleEmailVerify(newOtp.join(""));
-      } else {
-        handlePhoneVerify(newOtp.join(""));
-      }
+      handleEmailVerify(newOtp.join(""));
     }
   };
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    index: number,
-    type: OtpType
+    index: number
   ) => {
-    const inputRefs = type === "email" ? emailInputRefs : phoneInputRefs;
-    const currentOtp = type === "email" ? emailOtp : phoneOtp;
-
-    if (e.key === "Backspace" && index > 0 && !currentOtp[index]) {
-      inputRefs.current[index - 1]?.focus();
+    if (e.key === "Backspace" && index > 0 && !emailOtp[index]) {
+      emailInputRefs.current[index - 1]?.focus();
     }
   };
 
   const handleEmailVerify = async (otpCode: string) => {
     setIsVerifyingEmail(true);
     setError("");
+    
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      if (otpCode === "123456") {
-        setEmailVerified(true);
-        setSuccess("Email verified successfully!");
-      } else {
-        setError("Invalid email OTP code. Please try again.");
-        setEmailOtp(["", "", "", "", "", ""]);
+      await verifyOtp(otpCode);
+      setEmailVerified(true);
+      setSuccess("Email verified successfully!");
+      setError("");
+    } catch (err: any) {
+      setError(err.message);
+      setEmailOtp(["", "", "", "", "", ""]);
+      setTimeout(() => {
         emailInputRefs.current[0]?.focus();
-      }
-    } catch (err) {
-      setError(`Email verification failed. Please try again. ${err}`);
+      }, 100);
     } finally {
       setIsVerifyingEmail(false);
     }
   };
 
-  const handlePhoneVerify = async (otpCode: string) => {
-    setIsVerifyingPhone(true);
+  const handleEmailResend = async () => {
+    if (countdown > 0) return;
+
+    setIsSendingOtp(true);
+    setEmailOtp(["", "", "", "", "", ""]);
     setError("");
+    setSuccess("");
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      if (otpCode === "654321") {
-        setPhoneVerified(true);
-        setSuccess("Phone number verified successfully!");
-      } else {
-        setError("Invalid phone OTP code. Please try again.");
-        setPhoneOtp(["", "", "", "", "", ""]);
-        phoneInputRefs.current[0]?.focus();
-      }
-    } catch (err) {
-      setError(`Phone verification failed. Please try again. ${err}`);
+      await sendOtpToEmail(email);
+      setSuccess("New OTP sent to your email!");
+      setCountdown(60);
+      setTimeout(() => {
+        emailInputRefs.current[0]?.focus();
+      }, 100);
+    } catch (err: any) {
+      setError(err.message);
     } finally {
-      setIsVerifyingPhone(false);
+      setIsSendingOtp(false);
     }
   };
 
-  const handleEmailResend = async () => {
-    setEmailOtp(["", "", "", "", "", ""]);
-    setError("");
-    setSuccess("New email OTP sent!");
-    emailInputRefs.current[0]?.focus();
+  const sendInitialOtp = async () => {
+    setIsSendingOtp(true);
+    try {
+      await sendOtpToEmail(email);
+      setSuccess("OTP sent to your email!");
+      setCountdown(60);
+      setTimeout(() => {
+        emailInputRefs.current[0]?.focus();
+      }, 100);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsSendingOtp(false);
+    }
   };
 
-  const handlePhoneResend = async () => {
-    setPhoneOtp(["", "", "", "", "", ""]);
-    setError("");
-    setSuccess("New phone OTP sent!");
-    phoneInputRefs.current[0]?.focus();
-  };
-
-  const renderOTPInputs = (
-    otp: string[],
-    type: OtpType,
-    isVerifying: boolean,
-    isVerified: boolean
-  ) => {
-    const inputRefs = type === "email" ? emailInputRefs : phoneInputRefs;
-
+  // Render Functions
+  const renderOTPInputs = () => {
     return (
       <div className="flex justify-center space-x-3">
-        {otp.map((digit, index) => (
+        {emailOtp.map((digit, index) => (
           <input
             key={index}
             ref={(el) => {
-              inputRefs.current[index] = el;
+              emailInputRefs.current[index] = el;
             }}
             type="text"
             inputMode="numeric"
+            pattern="[0-9]*"
             maxLength={1}
             value={digit}
-            onChange={(e) => handleInputChange(index, e.target.value, type)}
-            onKeyDown={(e) => handleKeyDown(e, index, type)}
-            disabled={isVerifying || isVerified}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+            disabled={isVerifyingEmail || emailVerified}
             className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-xl transition-all duration-300 ${
-              isVerified
+              emailVerified
                 ? "border-green-400 bg-green-50 text-green-700"
                 : digit
                 ? "border-rose-400 bg-rose-50 text-rose-700"
                 : "border-gray-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
             }`}
+            aria-label={`OTP digit ${index + 1}`}
           />
         ))}
       </div>
@@ -173,10 +213,10 @@ export default function OTPVerify() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
       {/* Background Decorative Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-rose-100/10 to-pink-100/10 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-rose-100/10 to-pink-100/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-2xl mx-auto">
@@ -184,13 +224,16 @@ export default function OTPVerify() {
           <CardHeader className="text-center space-y-6 pb-8">
             {/* Back Button */}
             <div className="flex justify-start">
-              <Link href={"/registration"}>
+              <Link href="/registration" passHref>
                 <Button
                   variant="ghost"
                   className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 group"
+                  asChild
                 >
-                  <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                  Back
+                  <div>
+                    <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                    Back
+                  </div>
                 </Button>
               </Link>
             </div>
@@ -203,28 +246,24 @@ export default function OTPVerify() {
 
               <div>
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                  Verify Your Account
+                  Verify Your Email
                 </h1>
                 <p className="text-gray-600 max-w-md mx-auto">
-                  We&apos;ve sent verification codes to secure your account.
-                  Please enter the codes below to continue.
+                  We've sent a verification code to your email address. Please
+                  enter the 6-digit code below to verify your account.
                 </p>
               </div>
             </div>
 
             {/* Status Alerts */}
             {error && (
-              <Alert className="border-red-200 bg-red-50">
-                <AlertDescription className="text-red-700">
-                  {error}
-                </AlertDescription>
+              <Alert variant="destructive" className="text-red-700">
+                <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             {success && (
-              <Alert className="border-green-200 bg-green-50">
-                <AlertDescription className="text-green-700">
-                  {success}
-                </AlertDescription>
+              <Alert variant="default" className="text-green-700">
+                <AlertDescription>{success}</AlertDescription>
               </Alert>
             )}
           </CardHeader>
@@ -263,17 +302,13 @@ export default function OTPVerify() {
                     Enter 6-digit code from your email
                   </label>
                 </div>
-                {renderOTPInputs(
-                  emailOtp,
-                  "email",
-                  isVerifyingEmail,
-                  emailVerified
-                )}
+                
+                {renderOTPInputs()}
 
                 {isVerifyingEmail && (
                   <div className="flex justify-center">
                     <div className="flex items-center space-x-2 text-rose-600">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600"></div>
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600" />
                       <span className="text-sm">Verifying email...</span>
                     </div>
                   </div>
@@ -285,88 +320,25 @@ export default function OTPVerify() {
                       variant="ghost"
                       size="sm"
                       onClick={handleEmailResend}
-                      className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                      disabled={countdown > 0 || isSendingOtp}
+                      className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 disabled:opacity-50"
                     >
-                      <RefreshCw className="h-4 w-4 mr-1" />
-                      Resend Email Code
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">AND</span>
-              </div>
-            </div>
-
-            {/* Phone Verification */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <Phone className="h-5 w-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800">
-                      Phone Verification
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Code sent to{" "}
-                      <span className="font-medium">
-                        {phone.replace(
-                          /(\+\d{1,3})\s$$(\d{3})$$\s(\d{3})-(\d{4})/,
-                          "$1 (***) ***-$4"
-                        )}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                {phoneVerified && (
-                  <div className="flex items-center space-x-2 bg-green-100 text-green-700 px-3 py-1 rounded-full">
-                    <CheckCircle className="h-4 w-4" />
-                    <span className="text-sm font-medium">Verified</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-4">
-                <div className="text-center">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Enter 6-digit code from SMS
-                  </label>
-                </div>
-                {renderOTPInputs(
-                  phoneOtp,
-                  "phone",
-                  isVerifyingPhone,
-                  phoneVerified
-                )}
-
-                {isVerifyingPhone && (
-                  <div className="flex justify-center">
-                    <div className="flex items-center space-x-2 text-rose-600">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600"></div>
-                      <span className="text-sm">Verifying phone...</span>
-                    </div>
-                  </div>
-                )}
-
-                {!phoneVerified && (
-                  <div className="flex justify-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handlePhoneResend}
-                      className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                    >
-                      <RefreshCw className="h-4 w-4 mr-1" />
-                      Resend Phone Code
+                      {isSendingOtp ? (
+                        <>
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600 mr-2" />
+                          Sending...
+                        </>
+                      ) : countdown > 0 ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-1" />
+                          Resend in {countdown}s
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-1" />
+                          Resend Email Code
+                        </>
+                      )}
                     </Button>
                   </div>
                 )}
@@ -374,15 +346,15 @@ export default function OTPVerify() {
             </div>
 
             {/* Success State */}
-            {emailVerified && phoneVerified && (
+            {emailVerified && (
               <div className="space-y-6 pt-6">
                 <div className="flex items-center justify-center text-green-600 bg-green-50 py-4 rounded-xl">
                   <CheckCircle className="h-6 w-6 mr-2" />
                   <span className="font-semibold text-lg">
-                    Both Email and Phone Verified!
+                    Email Verified Successfully!
                   </span>
                 </div>
-                <Link href={"/login"}>
+                <Link href="/login" passHref>
                   <Button className="w-full primary-btn text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold py-4 text-lg rounded-xl">
                     <CheckCircle className="mr-2 h-5 w-5" />
                     Continue to Dashboard
@@ -394,7 +366,7 @@ export default function OTPVerify() {
             {/* Help Section */}
             <div className="pt-6 border-t border-gray-100 text-center space-y-4">
               <p className="text-sm text-gray-600">
-                Didn&apos;t receive the code?
+                Didn't receive the code?
               </p>
               <div className="flex flex-col sm:flex-row gap-2 justify-center">
                 <Button
@@ -412,7 +384,7 @@ export default function OTPVerify() {
         {/* Security Notice */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
-            🔒 Verification codes expire in 10 minutes and are encrypted for
+            🔒 Verification codes expire in 5 minutes and are encrypted for
             security
           </p>
         </div>

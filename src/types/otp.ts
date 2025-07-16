@@ -1,0 +1,1 @@
+export type OTPArray = [string, string, string, string, string, string];
