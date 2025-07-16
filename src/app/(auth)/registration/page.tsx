@@ -40,6 +40,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ButtonLoader } from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 enum UserRole {
   USER = "user",
@@ -49,7 +50,8 @@ enum UserRole {
 // Zod validation schema
 const registrationSchema = z
   .object({
-    name: z.string()
+    name: z
+      .string()
       .min(1, "Name is required")
       .max(100, "Name must be less than 100 characters"),
     email: z
@@ -64,7 +66,7 @@ const registrationSchema = z
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       ),
     confirmPassword: z.string(),
-        phone: z
+    phone: z
       .string()
       .min(11, "Phone number must be at least 11 digits (including +880)")
       .max(15, "Phone number must be less than 15 digits")
@@ -106,7 +108,7 @@ export default function RegistrationPage() {
       password: "",
       confirmPassword: "",
       phone: "",
-      gender: "male", // Set a default value instead of undefined
+      gender: "male",
       role: UserRole.USER,
       agreeToTerms: false,
       agreeToPrivacy: false,
@@ -117,18 +119,27 @@ export default function RegistrationPage() {
     setIsSubmitting(true);
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       localStorage.setItem(
         "userInfo",
         JSON.stringify({ email: data.email, phone: data.phone })
       );
-      console.log("Registration data:", {
+      console.log({
         ...data,
         createdAt: new Date(),
         updatedAt: new Date(),
+        isVerified: false,
       });
-      // Handle successful registration
-      // alert("Registration successful!");
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`,
+        {
+          ...data,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isVerified: false,
+        }
+      );
+      console.log("Registration response:", response.data);
       router.push("verify-otp");
     } catch (error) {
       console.error("Registration failed:", error);
