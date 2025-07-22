@@ -124,16 +124,17 @@ export default function RegistrationPage() {
         "userInfo",
         JSON.stringify({ email: data.email, phone: data.phone })
       );
-      console.log({
-        ...data,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        isVerified: false,
-      });
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`,
         {
-          ...data,
+          agreeToPrivacy: data.agreeToPrivacy,
+          agreeToTerms: data.agreeToTerms,
+          role: data.role,
+          gender: data.gender,
+          password: data.password,
+          phone: data.phone,
+          email: data.email,
+          name: data.name,
           createdAt: new Date(),
           updatedAt: new Date(),
           isVerified: false,
