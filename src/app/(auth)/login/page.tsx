@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -24,11 +26,39 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [rememberMe, setRememberMe] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", { email, password, rememberMe });
-  };
+  const router = useRouter();
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  // 1. Basic validation
+  if (!email || !password) {
+    alert('Email and password are required!');
+    return;
+  }
+
+  try {
+    // 2. API call
+    const { data } = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+      { email, password, rememberMe },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    // 3. On success
+    console.log('Login success:', data);
+    // Do something with the response (like redirect or store token)
+    router.push('/');
+
+  } catch (error) {
+    // 4. Error handling
+    if (axios.isAxiosError(error)) {
+      alert(error.response?.data?.message || 'Login failed!');
+    } else {
+      alert('An unexpected error occurred');
+    }
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center px-4">
@@ -138,7 +168,7 @@ export default function LoginPage() {
 
             <CardContent className="space-y-6">
               {/* Social Login Buttons */}
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <Button
                   variant="outline"
                   className="w-full border-2 border-gray-200 hover:border-rose-200 hover:bg-rose-50 transition-all duration-300 py-3 bg-transparent"
@@ -153,7 +183,7 @@ export default function LoginPage() {
                   <Facebook className="mr-3 h-5 w-5 text-blue-600" />
                   Continue with Facebook
                 </Button>
-              </div>
+              </div> */}
 
               {/* Divider */}
               <div className="relative">
