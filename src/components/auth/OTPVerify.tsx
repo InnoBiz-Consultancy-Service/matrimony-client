@@ -1,19 +1,13 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import axios, { AxiosError } from "axios";
-import {
-  ArrowLeft,
-  Shield,
-  CheckCircle,
-  RefreshCw,
-  Mail,
-} from "lucide-react";
+import { ArrowLeft, Shield, CheckCircle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
-import { OTPArray } from "@/types/otp";
+import { ApiResponse, OTPArray } from "@/types/otp";
 
 export default function OTPVerify() {
   // State
@@ -21,29 +15,41 @@ export default function OTPVerify() {
   const [emailOtp, setEmailOtp] = useState<OTPArray>(["", "", "", "", "", ""]);
   const [isVerifyingEmail, setIsVerifyingEmail] = useState<boolean>(false);
   const [isSendingOtp, setIsSendingOtp] = useState<boolean>(false);
+  const [isVerifyingUser, setIsVerifyingUser] = useState<boolean>(false);
   const [emailVerified, setEmailVerified] = useState<boolean>(false);
+  const [userVerified, setUserVerified] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const [countdown, setCountdown] = useState<number>(0);
+  const [userId, setUserId] = useState<string>("");
 
   // Refs
   const emailInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Effects
   useEffect(() => {
-    const loadUserEmail = () => {
-      const data = localStorage.getItem("userInfo");
-      if (data) {
-        try {
-          const userInfo = JSON.parse(data);
+    const loadUserData = () => {
+      try {
+        // Load user email
+        const userInfoData = localStorage.getItem("userInfo");
+        if (userInfoData) {
+          const userInfo = JSON.parse(userInfoData);
           setEmail(userInfo.email || "");
-        } catch (err) {
-          console.error("Error parsing user info:", err);
         }
+
+        // Load user ID
+        const userIdData = localStorage.getItem("userId");
+        if (userIdData) {
+          const parsedUserId = JSON.parse(userIdData);
+          setUserId(parsedUserId);
+        }
+      } catch (err) {
+        console.error("Error loading user data:", err);
+        setError("Failed to load user information. Please try again.");
       }
     };
 
-    loadUserEmail();
+    loadUserData();
   }, []);
 
   useEffect(() => {
@@ -63,11 +69,14 @@ export default function OTPVerify() {
   }, [email]);
 
   // API Calls
-  const sendOtpToEmail = async (emailAddress: string) => {
+  const sendOtpToEmail = async (emailAddress: string): Promise<ApiResponse> => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/send-otp`, {
-        email: emailAddress,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/send-otp`,
+        {
+          email: emailAddress,
+        }
+      );
       return response.data;
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
@@ -77,12 +86,15 @@ export default function OTPVerify() {
     }
   };
 
-  const verifyOtp = async (otpCode: string) => {
+  const verifyOtp = async (otpCode: string): Promise<ApiResponse> => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/verify-otp`, {
-        email: email,
-        otp: otpCode,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/verify-otp`,
+        {
+          email: email,
+          otp: otpCode,
+        }
+      );
       return response.data;
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
@@ -91,6 +103,34 @@ export default function OTPVerify() {
       );
     }
   };
+
+  const verifyUserAccount = async (
+    userIdParam: string
+  ): Promise<ApiResponse> => {
+    try {
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/${userIdParam}/verify`
+      );
+
+      return response.data;
+    } catch (error) {
+      const err = error as AxiosError<{ message?: string }>;
+      throw new Error(
+        err.response?.data?.message ||
+          "Failed to verify user account. Please try again."
+      );
+    }
+  };
+
+  // const clearUserDataFromStorage = () => {
+  //   try {
+  //     localStorage.removeItem("userInfo");
+  //     localStorage.removeItem("userId");
+  //     console.log("User data cleared from localStorage");
+  //   } catch (error) {
+  //     console.error("Error clearing localStorage:", error);
+  //   }
+  // };
 
   // Handlers
   const handleInputChange = (index: number, value: string) => {
@@ -121,22 +161,40 @@ export default function OTPVerify() {
   };
 
   const handleEmailVerify = async (otpCode: string) => {
+    if (!userId) {
+      setError("User ID not found. Please try logging in again.");
+      return;
+    }
+
     setIsVerifyingEmail(true);
     setError("");
-    
+
     try {
+      // Step 1: Verify OTP
       await verifyOtp(otpCode);
       setEmailVerified(true);
-      setSuccess("Email verified successfully!");
+      setSuccess("Email verified successfully! Verifying your account...");
+
+      // Step 2: Call user verification API
+      setIsVerifyingUser(true);
+      await verifyUserAccount(userId);
+
+      setUserVerified(true);
+      setSuccess(
+        "Account verified successfully! You can now continue to your dashboard."
+      );
       setError("");
     } catch (err: any) {
       setError(err.message);
       setEmailOtp(["", "", "", "", "", ""]);
+      setEmailVerified(false);
+      setUserVerified(false);
       setTimeout(() => {
         emailInputRefs.current[0]?.focus();
       }, 100);
     } finally {
       setIsVerifyingEmail(false);
+      setIsVerifyingUser(false);
     }
   };
 
@@ -147,6 +205,8 @@ export default function OTPVerify() {
     setEmailOtp(["", "", "", "", "", ""]);
     setError("");
     setSuccess("");
+    setEmailVerified(false);
+    setUserVerified(false);
 
     try {
       await sendOtpToEmail(email);
@@ -195,10 +255,12 @@ export default function OTPVerify() {
             value={digit}
             onChange={(e) => handleInputChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, index)}
-            disabled={isVerifyingEmail || emailVerified}
+            disabled={isVerifyingEmail || emailVerified || isVerifyingUser}
             className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-xl transition-all duration-300 ${
-              emailVerified
+              userVerified
                 ? "border-green-400 bg-green-50 text-green-700"
+                : emailVerified
+                ? "border-blue-400 bg-blue-50 text-blue-700"
                 : digit
                 ? "border-rose-400 bg-rose-50 text-rose-700"
                 : "border-gray-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
@@ -208,6 +270,32 @@ export default function OTPVerify() {
         ))}
       </div>
     );
+  };
+
+  const renderLoadingState = () => {
+    if (isVerifyingEmail && !isVerifyingUser) {
+      return (
+        <div className="flex justify-center">
+          <div className="flex items-center space-x-2 text-rose-600">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600" />
+            <span className="text-sm">Verifying email...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (isVerifyingUser) {
+      return (
+        <div className="flex justify-center">
+          <div className="flex items-center space-x-2 text-blue-600">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-200 border-t-blue-600" />
+            <span className="text-sm">Verifying account...</span>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -288,10 +376,16 @@ export default function OTPVerify() {
                     </p>
                   </div>
                 </div>
-                {emailVerified && (
+                {userVerified && (
                   <div className="flex items-center space-x-2 bg-green-100 text-green-700 px-3 py-1 rounded-full">
                     <CheckCircle className="h-4 w-4" />
                     <span className="text-sm font-medium">Verified</span>
+                  </div>
+                )}
+                {emailVerified && !userVerified && (
+                  <div className="flex items-center space-x-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                    <CheckCircle className="h-4 w-4" />
+                    <span className="text-sm font-medium">Email Verified</span>
                   </div>
                 )}
               </div>
@@ -302,19 +396,12 @@ export default function OTPVerify() {
                     Enter 6-digit code from your email
                   </label>
                 </div>
-                
+
                 {renderOTPInputs()}
 
-                {isVerifyingEmail && (
-                  <div className="flex justify-center">
-                    <div className="flex items-center space-x-2 text-rose-600">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600" />
-                      <span className="text-sm">Verifying email...</span>
-                    </div>
-                  </div>
-                )}
+                {renderLoadingState()}
 
-                {!emailVerified && (
+                {!emailVerified && !isVerifyingEmail && (
                   <div className="flex justify-center">
                     <Button
                       variant="ghost"
@@ -346,12 +433,12 @@ export default function OTPVerify() {
             </div>
 
             {/* Success State */}
-            {emailVerified && (
+            {userVerified && (
               <div className="space-y-6 pt-6">
                 <div className="flex items-center justify-center text-green-600 bg-green-50 py-4 rounded-xl">
                   <CheckCircle className="h-6 w-6 mr-2" />
                   <span className="font-semibold text-lg">
-                    Email Verified Successfully!
+                    Account Verified Successfully!
                   </span>
                 </div>
                 <Link href="/login" passHref>
@@ -365,9 +452,7 @@ export default function OTPVerify() {
 
             {/* Help Section */}
             <div className="pt-6 border-t border-gray-100 text-center space-y-4">
-              <p className="text-sm text-gray-600">
-                Didn't receive the code?
-              </p>
+              <p className="text-sm text-gray-600">Didn't receive the code?</p>
               <div className="flex flex-col sm:flex-row gap-2 justify-center">
                 <Button
                   variant="ghost"
