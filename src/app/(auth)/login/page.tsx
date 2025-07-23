@@ -28,37 +28,36 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  // 1. Basic validation
-  if (!email || !password) {
-    alert('Email and password are required!');
-    return;
-  }
-
-  try {
-    // 2. API call
-    const { data } = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
-      { email, password, rememberMe },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-
-    // 3. On success
-    console.log('Login success:', data);
-    // Do something with the response (like redirect or store token)
-    router.push('/');
-
-  } catch (error) {
-    // 4. Error handling
-    if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Login failed!');
-    } else {
-      alert('An unexpected error occurred');
+    // 1. Basic validation
+    if (!email || !password) {
+      alert("Email and password are required!");
+      return;
     }
-  }
-};
+
+    try {
+      // 2. API call
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+        { email, password, rememberMe },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      // 3. On success
+      console.log("Login success:", data);
+      // Do something with the response (like redirect or store token)
+      router.push("/");
+    } catch (error) {
+      // 4. Error handling
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || "Login failed!");
+      } else {
+        alert("An unexpected error occurred");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center px-4">
