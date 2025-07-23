@@ -141,6 +141,7 @@ export default function RegistrationPage() {
         }
       );
       console.log("Registration response:", response.data);
+      localStorage.setItem("userId", JSON.stringify(response.data.userId));
       router.push("verify-otp");
     } catch (error) {
       console.error("Registration failed:", error);
