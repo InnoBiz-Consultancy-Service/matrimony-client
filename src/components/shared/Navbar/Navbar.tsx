@@ -1,12 +1,22 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, Heart, X } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, Heart, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/app/(auth)/context/auth-context";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import femaleAvatar from "../../../../public/female_avatar.jpg";
+import maleAvatar from "../../../../public/men_avatar.webp";
+import { User } from "@/types/user";
 
 const navigationItems = [
   { title: "Home", href: "/" },
@@ -14,27 +24,34 @@ const navigationItems = [
   { title: "Success Stories", href: "/success-stories" },
   { title: "About Us", href: "/about" },
   { title: "Contact", href: "/contact" },
-]
+];
 
 export default function Navbar() {
-  const pathname = usePathname()
-  const [isScrolled, setIsScrolled] = React.useState(false)
-  const [isOpen, setIsOpen] = React.useState(false)
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
+  const {
+    user,
+    isAuthenticated,
+    logout
+  }: { user: User | null; isAuthenticated: boolean; logout: () => void } = useAuth();
   // Handle scroll effect
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
-        isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg border-rose-100" : "bg-white border-rose-50",
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md shadow-lg border-rose-100"
+          : "bg-white border-rose-50"
       )}
     >
       <div className="container mx-auto px-4 lg:px-8">
@@ -48,10 +65,10 @@ export default function Navbar() {
               <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 opacity-80"></div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold primary-color">
-                Nikah
+              <span className="text-2xl font-bold primary-color">Nikah</span>
+              <span className="text-xs primary-color font-medium -mt-1">
+                Find Your Perfect Match
               </span>
-              <span className="text-xs primary-color font-medium -mt-1">Find Your Perfect Match</span>
             </div>
           </Link>
 
@@ -63,7 +80,9 @@ export default function Navbar() {
                 href={item.href}
                 className={cn(
                   "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-rose-50",
-                  pathname === item.href ? "text-rose-700 bg-rose-50" : "text-gray-700 hover:text-rose-700",
+                  pathname === item.href
+                    ? "text-rose-700 bg-rose-50"
+                    : "text-gray-700 hover:text-rose-700"
                 )}
               >
                 {item.title}
@@ -75,27 +94,60 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop CTA Buttons */}
-          <div className="hidden lg:flex items-center space-x-3">
-            <Link href="/login">
-              <Button variant="ghost" className="text-rose-700 hover:text-rose-800 hover:bg-rose-50 font-medium">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/registration">
-              <Button className="primary-btn">
-                Join Free
-              </Button>
-            </Link>
+          <div className="hidden lg:flex">
+            {isAuthenticated ? (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Avatar className="rounded-lg cursor-pointer">
+                    <AvatarImage
+                      src={
+                        user?.gender === "male"
+                          ? maleAvatar.src
+                          : femaleAvatar.src
+                      }
+                      alt="@evilrabbit"
+                    />
+                    <AvatarFallback>{user?.name}</AvatarFallback>
+                  </Avatar>
+                </PopoverTrigger>
+                <PopoverContent className="w-48">
+                  <li>Profile</li>
+                  <li>Logout</li>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    className="text-rose-700 hover:text-rose-800 hover:bg-rose-50 font-medium"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/registration">
+                  <Button className="primary-btn">Join Free</Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" aria-label="Menu" className="text-rose-700 hover:bg-rose-50">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Menu"
+                className="text-rose-700 hover:bg-rose-50"
+              >
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[320px] sm:w-[350px] bg-white">
+            <SheetContent
+              side="right"
+              className="w-[320px] sm:w-[350px] bg-white px-2"
+            >
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between py-4 border-b border-rose-100">
@@ -103,7 +155,9 @@ export default function Navbar() {
                     <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
                       <Heart className="h-4 w-4 text-white fill-white" />
                     </div>
-                    <span className="text-xl font-bold text-rose-700">Nikah</span>
+                    <span className="text-xl font-bold text-rose-700">
+                      Nikah
+                    </span>
                   </div>
                   <Button
                     variant="ghost"
@@ -126,7 +180,7 @@ export default function Navbar() {
                         "flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200",
                         pathname === item.href
                           ? "text-rose-700 bg-rose-50 border-l-4 border-rose-600"
-                          : "text-gray-700 hover:text-rose-700 hover:bg-rose-50",
+                          : "text-gray-700 hover:text-rose-700 hover:bg-rose-50"
                       )}
                     >
                       {item.title}
@@ -135,30 +189,56 @@ export default function Navbar() {
                 </nav>
 
                 {/* Mobile CTA Buttons */}
-                <div className="border-t border-rose-100 pt-6 space-y-3">
-                  <Link href="/login" className="block">
-                    <Button
-                      variant="outline"
-                      className="w-full border-rose-200 text-rose-700 hover:bg-rose-50 bg-transparent"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link href="/registration" className="block">
-                    <Button
-                      className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Join Free
-                    </Button>
-                  </Link>
-                </div>
+                {isAuthenticated ? (
+                  <>
+                    <div className="border-t border-rose-100 pt-6 space-y-3">
+                      <Link href="/profile" className="block">
+                        <Button
+                          variant="outline"
+                          className="w-full border-rose-200 text-rose-700 hover:bg-rose-50 bg-transparent"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Profile
+                        </Button>
+                      </Link>
+                      
+                        <Button
+                          className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg"
+                          onClick={() => logout()}
+                        >
+                          Logout
+                        </Button>
+
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="border-t border-rose-100 pt-6 space-y-3">
+                      <Link href="/login" className="block">
+                        <Button
+                          variant="outline"
+                          className="w-full border-rose-200 text-rose-700 hover:bg-rose-50 bg-transparent"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href="/registration" className="block">
+                        <Button
+                          className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Join Free
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
+                )}
               </div>
             </SheetContent>
           </Sheet>
         </div>
       </div>
     </header>
-  )
+  );
 }
