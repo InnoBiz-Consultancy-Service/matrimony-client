@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   User,
   MapPin,
@@ -20,15 +20,16 @@ import {
   MessageCircle,
   Share2,
   Settings,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
-import { IBiodata } from "@/types/bioData"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import { IBiodata } from "@/types/bioData";
+import Link from "next/link";
 // import { Label } from "@/components/ui/label"
 // import type { IBiodata } from "@/types/biodata"
 
@@ -41,7 +42,7 @@ const scrollbarHideStyles = `
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 
 // Mock data based on the interface
 const mockProfile: IBiodata = {
@@ -105,8 +106,10 @@ const mockProfile: IBiodata = {
   maritalInfo: {
     maritalStatus: "Never Married",
     childAllow: "Yes",
-    whyWantToMarry: "To complete half of my deen and build a beautiful family together",
-    futurePlan: "Continue medical practice while raising a family with Islamic values",
+    whyWantToMarry:
+      "To complete half of my deen and build a beautiful family together",
+    futurePlan:
+      "Continue medical practice while raising a family with Islamic values",
   },
 
   contactInfo: {
@@ -126,40 +129,38 @@ const mockProfile: IBiodata = {
 
   createdAt: new Date("2024-01-15"),
   updatedAt: new Date("2024-01-20"),
-}
+};
 
 export default function Profile() {
-  const [isEditing, setIsEditing] = React.useState(false)
-  const [profileVisibility, setProfileVisibility] = React.useState(true)
-  const [activeTab, setActiveTab] = React.useState("overview")
+  const [activeTab, setActiveTab] = React.useState("overview");
 
-  const profileCompleteness = 92
-  const profileViews = 1247
-  const interests = 45
+  const profileCompleteness = 92;
+  const profileViews = 1247;
+  const interests = 45;
 
   // Add this style injection
-//   React.useEffect(() => {
-//     const style = document.createElement("style")
-//     style.textContent = `
-//       .scrollbar-hide {
-//         -ms-overflow-style: none;
-//         scrollbar-width: none;
-//       }
-//       .scrollbar-hide::-webkit-scrollbar {
-//         display: none;
-//       }
-//     `
-//     document.head.appendChild(style)
-//     return () => document.head.removeChild(style)
-//   }, [])
+  //   React.useEffect(() => {
+  //     const style = document.createElement("style")
+  //     style.textContent = `
+  //       .scrollbar-hide {
+  //         -ms-overflow-style: none;
+  //         scrollbar-width: none;
+  //       }
+  //       .scrollbar-hide::-webkit-scrollbar {
+  //         display: none;
+  //       }
+  //     `
+  //     document.head.appendChild(style)
+  //     return () => document.head.removeChild(style)
+  //   }, [])
 
   const getInitials = (name: string) => {
     return name
       .split(" ")
       .map((n) => n[0])
       .join("")
-      .toUpperCase()
-  }
+      .toUpperCase();
+  };
 
   const InfoCard = ({
     title,
@@ -167,12 +168,14 @@ export default function Profile() {
     children,
     className = "",
   }: {
-    title: string
-    icon: any
-    children: React.ReactNode
-    className?: string
+    title: string;
+    icon: any;
+    children: React.ReactNode;
+    className?: string;
   }) => (
-    <Card className={`border-rose-100 hover:shadow-lg transition-all duration-300 ${className}`}>
+    <Card
+      className={`border-rose-100 hover:shadow-lg transition-all duration-300 ${className}`}
+    >
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-gray-800 flex items-center">
           <Icon className="h-5 w-5 mr-2 text-rose-600" />
@@ -181,25 +184,29 @@ export default function Profile() {
       </CardHeader>
       <CardContent className="space-y-3">{children}</CardContent>
     </Card>
-  )
+  );
 
   const InfoRow = ({
     label,
     value,
     icon: Icon,
   }: {
-    label: string
-    value: string | undefined
-    icon?: any
+    label: string;
+    value: string | undefined;
+    icon?: any;
   }) => (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100 last:border-b-0 space-y-1 sm:space-y-0">
       <div className="flex items-center space-x-2">
         {Icon && <Icon className="h-4 w-4 text-gray-500" />}
-        <span className="text-gray-600 font-medium text-sm sm:text-base">{label}:</span>
+        <span className="text-gray-600 font-medium text-sm sm:text-base">
+          {label}:
+        </span>
       </div>
-      <span className="text-gray-800 font-semibold text-sm sm:text-base break-words">{value || "Not specified"}</span>
+      <span className="text-gray-800 font-semibold text-sm sm:text-base break-words">
+        {value || "Not specified"}
+      </span>
     </div>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
@@ -208,7 +215,10 @@ export default function Profile() {
         <div className="container mx-auto px-4 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-rose-600 hover:bg-rose-50">
+              <Button
+                variant="ghost"
+                className="text-rose-600 hover:bg-rose-50"
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 Account Settings
               </Button>
@@ -220,13 +230,12 @@ export default function Profile() {
                 </Label>
                 <Switch id="profile-visibility" checked={profileVisibility} onCheckedChange={setProfileVisibility} />
               </div> */}
-              <Button
-                onClick={() => setIsEditing(!isEditing)}
-                className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white"
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                {isEditing ? "Save Changes" : "Edit Profile"}
-              </Button>
+              <Link href={"/profile/update"}>
+                <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 cursor-pointer text-white">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Profile
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -241,7 +250,10 @@ export default function Profile() {
               <CardContent className="p-6 text-center">
                 <div className="relative inline-block mb-4">
                   <Avatar className="h-32 w-32 rounded-2xl shadow-lg ring-4 ring-rose-100">
-                    <AvatarImage src="/placeholder.svg?height=128&width=128" alt={mockProfile.name} />
+                    <AvatarImage
+                      src="/placeholder.svg?height=128&width=128"
+                      alt={mockProfile.name}
+                    />
                     <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white text-2xl font-bold rounded-2xl">
                       {getInitials(mockProfile.name)}
                     </AvatarFallback>
@@ -260,11 +272,14 @@ export default function Profile() {
                     <Shield className="h-5 w-5 ml-2 text-blue-500" />
                     <Crown className="h-5 w-5 ml-1 text-amber-500" />
                   </h1>
-                  <p className="text-gray-600">{mockProfile.education?.honours}</p>
+                  <p className="text-gray-600">
+                    {mockProfile.education?.honours}
+                  </p>
                   <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
                     <MapPin className="h-4 w-4" />
                     <span>
-                      {mockProfile.address?.present?.district}, {mockProfile.address?.country}
+                      {mockProfile.address?.present?.district},{" "}
+                      {mockProfile.address?.country}
                     </span>
                   </div>
                 </div>
@@ -280,11 +295,15 @@ export default function Profile() {
 
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <div className="text-2xl font-bold text-rose-600">{profileViews}</div>
+                    <div className="text-2xl font-bold text-rose-600">
+                      {profileViews}
+                    </div>
                     <div className="text-sm text-gray-600">Profile Views</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-rose-600">{interests}</div>
+                    <div className="text-2xl font-bold text-rose-600">
+                      {interests}
+                    </div>
                     <div className="text-sm text-gray-600">Interests</div>
                   </div>
                 </div>
@@ -296,12 +315,17 @@ export default function Profile() {
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-gray-800">Profile Completeness</h3>
-                    <span className="text-2xl font-bold text-rose-600">{profileCompleteness}%</span>
+                    <h3 className="font-semibold text-gray-800">
+                      Profile Completeness
+                    </h3>
+                    <span className="text-2xl font-bold text-rose-600">
+                      {profileCompleteness}%
+                    </span>
                   </div>
                   <Progress value={profileCompleteness} className="h-3" />
                   <p className="text-sm text-gray-600">
-                    Complete your profile to get more visibility and better matches.
+                    Complete your profile to get more visibility and better
+                    matches.
                   </p>
                 </div>
               </CardContent>
@@ -310,7 +334,9 @@ export default function Profile() {
             {/* Quick Actions */}
             <Card className="border-rose-100">
               <CardContent className="p-6 space-y-3">
-                <h3 className="font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                <h3 className="font-semibold text-gray-800 mb-4">
+                  Quick Actions
+                </h3>
                 <Button
                   variant="outline"
                   className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
@@ -346,7 +372,11 @@ export default function Profile() {
                     { value: "overview", label: "Overview", icon: User },
                     { value: "personal", label: "Personal", icon: BookOpen },
                     { value: "family", label: "Family", icon: Users },
-                    { value: "education", label: "Education", icon: GraduationCap },
+                    {
+                      value: "education",
+                      label: "Education",
+                      icon: GraduationCap,
+                    },
                     { value: "contact", label: "Contact", icon: Phone },
                     { value: "preferences", label: "Preferences", icon: Heart },
                   ].map((tab) => (
@@ -367,7 +397,11 @@ export default function Profile() {
               </div>
 
               {/* Desktop Tab Navigation */}
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
                 <TabsList className="hidden md:grid w-full grid-cols-6 bg-rose-50 mb-8">
                   <TabsTrigger
                     value="overview"
@@ -431,18 +465,38 @@ export default function Profile() {
                       <div className="grid grid-cols-1 gap-6">
                         <InfoCard title="Physical Information" icon={Activity}>
                           <div className="grid grid-cols-2 gap-4">
-                            <InfoRow label="Height" value={mockProfile.physicalInfo?.height} />
-                            <InfoRow label="Weight" value={mockProfile.physicalInfo?.weight} />
-                            <InfoRow label="Body Color" value={mockProfile.physicalInfo?.bodyColor} />
-                            <InfoRow label="Blood Group" value={mockProfile.physicalInfo?.bloodGroup} />
+                            <InfoRow
+                              label="Height"
+                              value={mockProfile.physicalInfo?.height}
+                            />
+                            <InfoRow
+                              label="Weight"
+                              value={mockProfile.physicalInfo?.weight}
+                            />
+                            <InfoRow
+                              label="Body Color"
+                              value={mockProfile.physicalInfo?.bodyColor}
+                            />
+                            <InfoRow
+                              label="Blood Group"
+                              value={mockProfile.physicalInfo?.bloodGroup}
+                            />
                           </div>
                         </InfoCard>
 
                         <InfoCard title="Marital Status" icon={Heart}>
-                          <InfoRow label="Status" value={mockProfile.maritalInfo?.maritalStatus} />
-                          <InfoRow label="Children Allowed" value={mockProfile.maritalInfo?.childAllow} />
+                          <InfoRow
+                            label="Status"
+                            value={mockProfile.maritalInfo?.maritalStatus}
+                          />
+                          <InfoRow
+                            label="Children Allowed"
+                            value={mockProfile.maritalInfo?.childAllow}
+                          />
                           <div className="pt-3">
-                            <p className="text-sm text-gray-600 font-medium mb-2">Why want to marry:</p>
+                            <p className="text-sm text-gray-600 font-medium mb-2">
+                              Why want to marry:
+                            </p>
                             <p className="text-gray-700 text-sm leading-relaxed">
                               {mockProfile.maritalInfo?.whyWantToMarry}
                             </p>
@@ -454,22 +508,50 @@ export default function Profile() {
                       <InfoCard title="Address Information" icon={MapPin}>
                         <div className="space-y-6">
                           <div>
-                            <h4 className="font-semibold text-gray-800 mb-3">Present Address</h4>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Present Address
+                            </h4>
                             <div className="space-y-2">
-                              <InfoRow label="Division" value={mockProfile.address?.present?.division} />
-                              <InfoRow label="District" value={mockProfile.address?.present?.district} />
-                              <InfoRow label="Upazila" value={mockProfile.address?.present?.upazila} />
-                              <InfoRow label="Details" value={mockProfile.address?.present?.details} />
+                              <InfoRow
+                                label="Division"
+                                value={mockProfile.address?.present?.division}
+                              />
+                              <InfoRow
+                                label="District"
+                                value={mockProfile.address?.present?.district}
+                              />
+                              <InfoRow
+                                label="Upazila"
+                                value={mockProfile.address?.present?.upazila}
+                              />
+                              <InfoRow
+                                label="Details"
+                                value={mockProfile.address?.present?.details}
+                              />
                             </div>
                           </div>
                           <Separator />
                           <div>
-                            <h4 className="font-semibold text-gray-800 mb-3">Permanent Address</h4>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Permanent Address
+                            </h4>
                             <div className="space-y-2">
-                              <InfoRow label="Division" value={mockProfile.address?.permanent?.division} />
-                              <InfoRow label="District" value={mockProfile.address?.permanent?.district} />
-                              <InfoRow label="Upazila" value={mockProfile.address?.permanent?.upazila} />
-                              <InfoRow label="Details" value={mockProfile.address?.permanent?.details} />
+                              <InfoRow
+                                label="Division"
+                                value={mockProfile.address?.permanent?.division}
+                              />
+                              <InfoRow
+                                label="District"
+                                value={mockProfile.address?.permanent?.district}
+                              />
+                              <InfoRow
+                                label="Upazila"
+                                value={mockProfile.address?.permanent?.upazila}
+                              />
+                              <InfoRow
+                                label="Details"
+                                value={mockProfile.address?.permanent?.details}
+                              />
                             </div>
                           </div>
                         </div>
@@ -482,20 +564,37 @@ export default function Profile() {
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 gap-6">
                         <InfoCard title="Religious Practice" icon={BookOpen}>
-                          <InfoRow label="Salat" value={mockProfile.personalInfo?.salat} />
-                          <InfoRow label="Mahram Travel" value={mockProfile.personalInfo?.mahramTravel} />
-                          <InfoRow label="Beard" value={mockProfile.personalInfo?.beard} />
+                          <InfoRow
+                            label="Salat"
+                            value={mockProfile.personalInfo?.salat}
+                          />
+                          <InfoRow
+                            label="Mahram Travel"
+                            value={mockProfile.personalInfo?.mahramTravel}
+                          />
+                          <InfoRow
+                            label="Beard"
+                            value={mockProfile.personalInfo?.beard}
+                          />
                         </InfoCard>
 
                         <InfoCard title="Health Information" icon={Activity}>
-                          <InfoRow label="Health Status" value={mockProfile.personalInfo?.health} />
-                          <InfoRow label="Disability" value={mockProfile.personalInfo?.disability} />
+                          <InfoRow
+                            label="Health Status"
+                            value={mockProfile.personalInfo?.health}
+                          />
+                          <InfoRow
+                            label="Disability"
+                            value={mockProfile.personalInfo?.disability}
+                          />
                         </InfoCard>
                       </div>
 
                       <InfoCard title="Future Plans" icon={Star}>
                         <div className="bg-rose-50 rounded-lg p-4">
-                          <p className="text-gray-700 leading-relaxed">{mockProfile.maritalInfo?.futurePlan}</p>
+                          <p className="text-gray-700 leading-relaxed">
+                            {mockProfile.maritalInfo?.futurePlan}
+                          </p>
                         </div>
                       </InfoCard>
                     </div>
@@ -508,23 +607,45 @@ export default function Profile() {
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-3">
-                              <InfoRow label="Father Status" value={mockProfile.familyInfo?.fatherAlive} />
-                              <InfoRow label="Father's Occupation" value={mockProfile.familyInfo?.fatherOccupation} />
-                              <InfoRow label="Mother Status" value={mockProfile.familyInfo?.motherAlive} />
-                              <InfoRow label="Mother's Occupation" value={mockProfile.familyInfo?.motherOccupation} />
+                              <InfoRow
+                                label="Father Status"
+                                value={mockProfile.familyInfo?.fatherAlive}
+                              />
+                              <InfoRow
+                                label="Father's Occupation"
+                                value={mockProfile.familyInfo?.fatherOccupation}
+                              />
+                              <InfoRow
+                                label="Mother Status"
+                                value={mockProfile.familyInfo?.motherAlive}
+                              />
+                              <InfoRow
+                                label="Mother's Occupation"
+                                value={mockProfile.familyInfo?.motherOccupation}
+                              />
                             </div>
                             <div className="space-y-3">
-                              <InfoRow label="Brothers" value={mockProfile.familyInfo?.brothers} />
-                              <InfoRow label="Sisters" value={mockProfile.familyInfo?.sisters} />
+                              <InfoRow
+                                label="Brothers"
+                                value={mockProfile.familyInfo?.brothers}
+                              />
+                              <InfoRow
+                                label="Sisters"
+                                value={mockProfile.familyInfo?.sisters}
+                              />
                             </div>
                           </div>
 
                           <Separator className="my-4" />
 
                           <div>
-                            <h4 className="font-semibold text-gray-800 mb-3">Siblings Details</h4>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Siblings Details
+                            </h4>
                             <div className="bg-gray-50 rounded-lg p-4">
-                              <p className="text-gray-700">{mockProfile.familyInfo?.siblingsDetails}</p>
+                              <p className="text-gray-700">
+                                {mockProfile.familyInfo?.siblingsDetails}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -535,30 +656,59 @@ export default function Profile() {
                   {/* Education Tab */}
                   {activeTab === "education" && (
                     <div className="space-y-6">
-                      <InfoCard title="Educational Background" icon={GraduationCap}>
+                      <InfoCard
+                        title="Educational Background"
+                        icon={GraduationCap}
+                      >
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 gap-4">
                             <div className="bg-blue-50 rounded-lg p-4">
-                              <h4 className="font-semibold text-blue-800 mb-3">SSC</h4>
+                              <h4 className="font-semibold text-blue-800 mb-3">
+                                SSC
+                              </h4>
                               <div className="space-y-2">
-                                <InfoRow label="Year" value={mockProfile.education?.sscYear} />
-                                <InfoRow label="Group" value={mockProfile.education?.sscGroup} />
-                                <InfoRow label="Result" value={mockProfile.education?.sscResult} />
+                                <InfoRow
+                                  label="Year"
+                                  value={mockProfile.education?.sscYear}
+                                />
+                                <InfoRow
+                                  label="Group"
+                                  value={mockProfile.education?.sscGroup}
+                                />
+                                <InfoRow
+                                  label="Result"
+                                  value={mockProfile.education?.sscResult}
+                                />
                               </div>
                             </div>
 
                             <div className="bg-green-50 rounded-lg p-4">
-                              <h4 className="font-semibold text-green-800 mb-3">HSC</h4>
+                              <h4 className="font-semibold text-green-800 mb-3">
+                                HSC
+                              </h4>
                               <div className="space-y-2">
-                                <InfoRow label="Year" value={mockProfile.education?.hscYear} />
-                                <InfoRow label="Group" value={mockProfile.education?.hscGroup} />
-                                <InfoRow label="Result" value={mockProfile.education?.hscResult} />
+                                <InfoRow
+                                  label="Year"
+                                  value={mockProfile.education?.hscYear}
+                                />
+                                <InfoRow
+                                  label="Group"
+                                  value={mockProfile.education?.hscGroup}
+                                />
+                                <InfoRow
+                                  label="Result"
+                                  value={mockProfile.education?.hscResult}
+                                />
                               </div>
                             </div>
 
                             <div className="bg-purple-50 rounded-lg p-4">
-                              <h4 className="font-semibold text-purple-800 mb-3">Higher Education</h4>
-                              <p className="text-purple-700 font-medium">{mockProfile.education?.honours}</p>
+                              <h4 className="font-semibold text-purple-800 mb-3">
+                                Higher Education
+                              </h4>
+                              <p className="text-purple-700 font-medium">
+                                {mockProfile.education?.honours}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -575,11 +725,18 @@ export default function Profile() {
                             <div className="flex items-center space-x-3">
                               <Phone className="h-5 w-5 text-green-600" />
                               <div>
-                                <p className="font-medium text-gray-800">Phone Number</p>
-                                <p className="text-green-700 font-semibold">{mockProfile.contactInfo.phone}</p>
+                                <p className="font-medium text-gray-800">
+                                  Phone Number
+                                </p>
+                                <p className="text-green-700 font-semibold">
+                                  {mockProfile.contactInfo.phone}
+                                </p>
                               </div>
                             </div>
-                            <Button size="sm" className="bg-green-600 hover:bg-green-700 w-full sm:w-auto">
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
+                            >
                               Call Now
                             </Button>
                           </div>
@@ -588,8 +745,12 @@ export default function Profile() {
                             <div className="flex items-center space-x-3">
                               <Mail className="h-5 w-5 text-blue-600" />
                               <div>
-                                <p className="font-medium text-gray-800">Email Address</p>
-                                <p className="text-blue-700 font-semibold break-all">{mockProfile.contactInfo.email}</p>
+                                <p className="font-medium text-gray-800">
+                                  Email Address
+                                </p>
+                                <p className="text-blue-700 font-semibold break-all">
+                                  {mockProfile.contactInfo.email}
+                                </p>
                               </div>
                             </div>
                             <Button
@@ -606,7 +767,9 @@ export default function Profile() {
                               <div className="flex items-center space-x-3">
                                 <Facebook className="h-5 w-5 text-indigo-600" />
                                 <div>
-                                  <p className="font-medium text-gray-800">Facebook</p>
+                                  <p className="font-medium text-gray-800">
+                                    Facebook
+                                  </p>
                                   <p className="text-indigo-700 font-semibold break-all">
                                     {mockProfile.contactInfo.facebook}
                                   </p>
@@ -633,18 +796,39 @@ export default function Profile() {
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 gap-4">
                             <div className="space-y-3">
-                              <InfoRow label="Age Range" value={mockProfile.preference?.ageRange} />
-                              <InfoRow label="Education Level" value={mockProfile.preference?.educationLevel} />
-                              <InfoRow label="Marital Status" value={mockProfile.preference?.maritalStatus} />
-                              <InfoRow label="Religious Practice" value={mockProfile.preference?.religiousPractice} />
-                              <InfoRow label="Physical Appearance" value={mockProfile.preference?.physicalAppearance} />
+                              <InfoRow
+                                label="Age Range"
+                                value={mockProfile.preference?.ageRange}
+                              />
+                              <InfoRow
+                                label="Education Level"
+                                value={mockProfile.preference?.educationLevel}
+                              />
+                              <InfoRow
+                                label="Marital Status"
+                                value={mockProfile.preference?.maritalStatus}
+                              />
+                              <InfoRow
+                                label="Religious Practice"
+                                value={
+                                  mockProfile.preference?.religiousPractice
+                                }
+                              />
+                              <InfoRow
+                                label="Physical Appearance"
+                                value={
+                                  mockProfile.preference?.physicalAppearance
+                                }
+                              />
                             </div>
                           </div>
 
                           <Separator className="my-4" />
 
                           <div>
-                            <h4 className="font-semibold text-gray-800 mb-3">Additional Qualities</h4>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Additional Qualities
+                            </h4>
                             <div className="bg-rose-50 rounded-lg p-4">
                               <p className="text-gray-700 leading-relaxed">
                                 {mockProfile.preference?.additionalQualities}
@@ -662,5 +846,5 @@ export default function Profile() {
         </div>
       </div>
     </div>
-  )
+  );
 }
