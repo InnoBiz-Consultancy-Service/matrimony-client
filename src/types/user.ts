@@ -1,9 +1,12 @@
 // write your user types here
 export interface User {
-  id: string;
+  userId: string;
   name: string;
-  email: string;
+  userEmail: string;
   role: 'user' | 'admin';
+  gender: 'male' | 'female';
+  exp: number;
+  iat: string;
 }
 
 export interface ProfileData {
