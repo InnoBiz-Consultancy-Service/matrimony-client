@@ -1,4 +1,5 @@
 import { AuthProvider } from "./(auth)/context/auth-context";
+import { Toaster } from 'react-hot-toast';
 import "./globals.css";
 export const metadata = {
   title: "Nikah",
@@ -18,7 +19,10 @@ export default function RootLayout({
     <html>
       <body>
         <main>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
         </main>
       </body>
     </html>
