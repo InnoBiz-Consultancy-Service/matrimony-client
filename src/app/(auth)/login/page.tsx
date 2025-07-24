@@ -2,16 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Eye,
-  EyeOff,
-  Heart,
-  Mail,
-  Lock,
-  ArrowRight,
-  Facebook,
-  Chrome,
-} from "lucide-react";
+import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,56 +10,123 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner"; 
+// Auth service abstraction
+const authService = {
+  login: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+      credentials,
+      { 
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
+      }
+    );
+    
+    if (!response.data?.token) {
+      throw new Error("Authentication failed: No token received");
+    }
+    
+    return response.data;
+  },
+  
+  storeAuthData: (token: string) => {
+    try {
+      const decoded = jwtDecode<{ id: string; email: string; exp: number }>(token);
+      
+      // Store only necessary non-sensitive data
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify({
+        id: decoded.id,
+        email: decoded.email
+      }));
+      
+      return decoded;
+    } catch (error) {
+      throw new Error("Invalid token format");
+    }
+  },
+  
+  clearAuthData: () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
+};
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [rememberMe, setRememberMe] = React.useState(false);
-
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // 1. Basic validation
-    if (!email || !password) {
-      alert("Email and password are required!");
-      return;
-    }
+    setIsSubmitting(true);
 
     try {
-      // 2. API call
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
-        { email, password, rememberMe },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      // 3. On success
-      console.log("Login success:", data);
-      // Do something with the response (like redirect or store token)
-      router.push("/");
-    } catch (error) {
-      // 4. Error handling
-      if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || "Login failed!");
-      } else {
-        alert("An unexpected error occurred");
+      // Input validation
+      if (!email || !password) {
+        throw new Error("Please enter both email and password");
       }
+
+      // Email format validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new Error("Please enter a valid email address");
+      }
+
+      const { token } = await authService.login({ email, password, rememberMe });
+      const userData = authService.storeAuthData(token);
+
+      // Log success (remove in production)
+      console.log("Login successful", userData);
+      
+      // Redirect with success feedback
+      toast.success("Login successful!");
+      router.push("/");
+      
+    } catch (error: unknown) {
+      authService.clearAuthData();
+      
+      let errorMessage = "An unexpected error occurred";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || "Login failed";
+      }
+      
+      toast.error(errorMessage);
+      console.error("Login error:", error);
+      
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  // Password toggle component
+  const PasswordToggle = () => (
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+      aria-label={showPassword ? "Hide password" : "Show password"}
+    >
+      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+    </button>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center px-4">
-      {/* Background Decorative Elements */}
+      {/* Background elements remain unchanged */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
-        {/* Left Side - Branding */}
+        {/* Left Side - Branding (unchanged) */}
         <div className="hidden lg:block space-y-8 text-center lg:text-left px-8">
           {/* Logo */}
           <Link href={"/"}>
@@ -166,24 +224,6 @@ export default function LoginPage() {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              {/* Social Login Buttons */}
-              {/* <div className="space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full border-2 border-gray-200 hover:border-rose-200 hover:bg-rose-50 transition-all duration-300 py-3 bg-transparent"
-                >
-                  <Chrome className="mr-3 h-5 w-5 text-red-500" />
-                  Continue with Google
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full border-2 border-gray-200 hover:border-rose-200 hover:bg-rose-50 transition-all duration-300 py-3 bg-transparent"
-                >
-                  <Facebook className="mr-3 h-5 w-5 text-blue-600" />
-                  Continue with Facebook
-                </Button>
-              </div> */}
-
               {/* Divider */}
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -216,6 +256,7 @@ export default function LoginPage() {
                       placeholder="Enter your email"
                       className="pl-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
                       required
+                      autoComplete="email"
                     />
                   </div>
                 </div>
@@ -238,18 +279,10 @@ export default function LoginPage() {
                       placeholder="Enter your password"
                       className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
                       required
+                      autoComplete="current-password"
+                      minLength={8}
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-5 w-5" />
-                      ) : (
-                        <Eye className="h-5 w-5" />
-                      )}
-                    </button>
+                    <PasswordToggle />
                   </div>
                 </div>
 
@@ -283,9 +316,16 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
+                  disabled={isSubmitting}
                 >
-                  Sign In to Your Account
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  {isSubmitting ? (
+                    "Signing in..."
+                  ) : (
+                    <>
+                      Sign In to Your Account
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </Button>
               </form>
 

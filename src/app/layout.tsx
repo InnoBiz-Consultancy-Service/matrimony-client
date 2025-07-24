@@ -1,9 +1,11 @@
+import { AuthProvider } from "./(auth)/context/auth-context";
 import "./globals.css";
 export const metadata = {
-  title: 'Nikah',
-  description: 'Nikah is a platform that connects individuals seeking marriage, providing a space for them to find potential partners and build meaningful relationships.',
+  title: "Nikah",
+  description:
+    "Nikah is a platform that connects individuals seeking marriage, providing a space for them to find potential partners and build meaningful relationships.",
   icons: {
-    icon: 'https://i.ibb.co/BHMGGW7z/ontonim.png',
+    icon: "https://i.ibb.co/BHMGGW7z/ontonim.png",
   },
 };
 
@@ -15,7 +17,9 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <main>{children}</main>
+        <main>
+          <AuthProvider>{children}</AuthProvider>
+        </main>
       </body>
     </html>
   );
