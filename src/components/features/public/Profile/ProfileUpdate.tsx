@@ -127,34 +127,119 @@ export default function ProfileUpdate() {
     },
   ];
 
-  const onSubmit = async (data: ProfileFormData) => {
-    const token = localStorage.getItem("token");
-
-    try {
-      console.log("Profile data submitted:", data);
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
-        {
-          ...data,
-          // userId: user?.userId,
-          email: user?.userEmail,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        }
-      );
-
-      console.log("Profile updated successfully:", response.data);
-      toast.success("Profile updated successfully!");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update profile. Please try again.");
-    }
+const transformProfileFormData = (data: ProfileFormData) => {
+  return {
+    name: data.name,
+    description: data.description,
+    address: {
+      present: data.presentDetails,
+      permanent: data.permanentDetails,
+      country: data.country,
+      division: data.permanentDivision,
+      district: data.permanentDistrict,
+      upazila: data.permanentUpazila,
+    },
+    education: {
+      sscYear: data.sscYear,
+      sscGroup: data.sscGroup,
+      sscResult: data.sscResult,
+      hscYear: data.hscYear,
+      hscGroup: data.hscGroup,
+      hscResult: data.hscResult,
+      honours: data.honours,
+      educationLevel: data.educationLevel,
+    },
+    familyInfo: {
+      fatherAlive: data.fatherAlive,
+      fatherOccupation: data.fatherOccupation,
+      motherAlive: data.motherAlive,
+      motherOccupation: data.motherOccupation,
+      brothers: data.brothers,
+      sisters: data.sisters,
+      siblingsDetails: data.siblingsDetails,
+    },
+    personalInfo: {
+      beard: data.beard,
+      salat: data.salat,
+      mahramTravel: data.mahramTravel,
+      health: data.health,
+      disability: data.disability,
+      religiousPractice: data.religiousPractice,
+    },
+    physicalInfo: {
+      height: data.height,
+      weight: data.weight,
+      bloodGroup: data.bloodGroup,
+      bodyColor: data.bodyColor,
+      physicalAppearance: data.physicalAppearance,
+    },
+    maritalInfo: {
+      maritalStatus: data.maritalStatus,
+      preferredMaritalStatus: data.preferredMaritalStatus,
+      childAllow: data.childAllow,
+      whyWantToMarry: data.whyWantToMarry,
+      futurePlan: data.futurePlan,
+    },
+    contactInfo: {
+      email: data.email,
+      phone: data.phone,
+      facebook: data.facebook,
+    },
+    additionalQualities: data.additionalQualities,
+    ageRange: data.ageRange,
   };
+};
+
+/**
+ * Handles profile form submission
+ */
+const onSubmit = async (data: ProfileFormData) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    // Transform form data to nested structure
+    const biodataPayload = transformProfileFormData(data);
+
+    // Add user information to payload
+    const payload = {
+      ...biodataPayload,
+      email: user?.userEmail, // Assuming 'user' is available in scope
+    };
+
+    console.debug("Submitting profile data:", payload);
+
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+
+    console.log("Profile update successful:", response.data);
+    toast.success("Profile updated successfully!");
+    
+    return response.data;
+  } catch (error: unknown) {
+    console.error("Profile update failed:", error);
+    
+    let errorMessage = "Failed to update profile. Please try again.";
+    if (error instanceof Error) {
+      errorMessage = error.message || errorMessage;
+    } else if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.message || errorMessage;
+    }
+
+    toast.error(errorMessage);
+    throw error; // Re-throw for further handling if needed
+  }
+};
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

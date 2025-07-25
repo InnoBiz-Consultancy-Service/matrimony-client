@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  console.log(user)
 
   useEffect(() => {
     initializeAuth();
