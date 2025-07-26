@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export default function PricingSection() {
   const plans = [
@@ -61,13 +62,13 @@ export default function PricingSection() {
       buttonText: "Become VIP",
       popular: false,
       buttonVariant: "outline" as const,
-    },                                                                                                                      
+    },
   ];
 
   return (
     <section className="py-16 bg-gradient-to-br from-rose-50 to-pink-50">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center mb-12">                                      
+        <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Our Pricing Plans
           </h2>
@@ -79,7 +80,7 @@ export default function PricingSection() {
         <div className="grid md:grid-cols-3 gap-8">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
-            return (                                                                                                                                                                                                                                    
+            return (
               <Card
                 key={index}
                 className={`relative transition-all duration-300 hover:shadow-xl ${
@@ -139,16 +140,26 @@ export default function PricingSection() {
                     ))}
                   </ul>
 
-                  <Button
-                    className={`w-full py-3 text-base font-semibold transition-all duration-200 cursor-pointer ${
-                      plan.buttonVariant === "default"
-                        ? "bg-rose-500 hover:bg-rose-600 text-white shadow-lg hover:shadow-xl"
-                        : "border-2 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white"
-                    }`}
-                    variant={plan.buttonVariant}
+                  <Link
+                    href={
+                      plan.name === "VIP"
+                        ? "/payment?plan=vip"
+                        : plan.name === "Premium"
+                        ? "/payment?plan=premium"
+                        : "/payment"
+                    }
                   >
-                    {plan.buttonText}
-                  </Button>
+                    <Button
+                      className={`w-full py-3 text-base font-semibold transition-all duration-200 cursor-pointer ${
+                        plan.buttonVariant === "default"
+                          ? "bg-rose-500 hover:bg-rose-600 text-white shadow-lg hover:shadow-xl"
+                          : "border-2 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white"
+                      }`}
+                      variant={plan.buttonVariant}
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             );
