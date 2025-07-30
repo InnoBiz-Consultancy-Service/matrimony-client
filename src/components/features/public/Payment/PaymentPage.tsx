@@ -389,7 +389,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import axios from "axios";
+// import axios from "axios";
 
 interface SubscriptionPlan {
   id: string;
@@ -469,19 +469,17 @@ export default function PaymentPage() {
     setIsProcessing(true);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/payment/create`,
-        {
-          email: email,
-          name: name,
-          phone: phone,
-          amount: selectedPlan?.price,
-        }
-      );
-      console.log(response.data);
-      if (response?.data?.url) {
-        router.push(`${response?.data?.url}`);
-      }
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/payment/create`,
+      //   {
+      //     email: email,
+      //     name: name,
+      //     phone: phone,
+      //     amount: selectedPlan?.price,
+      //   }
+      // );
+      // console.log(response.data);
+      router.push(`/bkash-manual?plan=${planId}`)
 
       toast.success(
         `${selectedPlan.name} plan has been activated successfully`
