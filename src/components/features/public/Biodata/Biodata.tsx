@@ -756,6 +756,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Slider } from "@/components/ui/slider"
 import { Badge } from "@/components/ui/badge"
 import { ProfileSkeleton } from "@/components/common/Loader"
+import { useSearchParams } from "next/navigation"
+import { useSearchFilters } from "@/hooks/useSearchFilters"
 
 interface FilterState {
   lookingFor: "male" | "female" | ""
@@ -924,6 +926,8 @@ export default function ProfessionalBiodatasPage() {
   const [profiles, setProfiles] = React.useState<Profile[]>(mockProfiles)
   const [savedProfiles, setSavedProfiles] = React.useState<string[]>([])
 
+  const filter = useSearchFilters();
+  console.log(filter.division)
   const handleFilterChange = (key: keyof FilterState, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }

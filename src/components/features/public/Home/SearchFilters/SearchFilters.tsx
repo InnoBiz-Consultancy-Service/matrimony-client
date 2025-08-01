@@ -31,6 +31,9 @@ import divisions from "../../../../../../public/division.json";
 import districts from "../../../../../../public/district.json";
 import upazilas from "../../../../../../public/upzila.json";
 import { District, Upazila } from "@/types/filterForm";
+import { FilterParams } from "@/types/filters";
+import { generateSearchParams } from "@/utils/searchParams";
+import { useRouter } from "next/navigation";
 
 const professions = [
   "Doctor",
@@ -90,6 +93,8 @@ export default function SearchFilters() {
   const [selectedDivision, setSelectedDivision] = React.useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = React.useState<string>("");
 
+  const router = useRouter();
+
   const form = useForm<FilterFormData>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
@@ -135,43 +140,19 @@ export default function SearchFilters() {
       }, []);
   }, [selectedDistrict]);
 
-  const handleSearch = async (data: FilterFormData) => {
+  const handleSearch = async (filters: FilterParams) => {
     setIsSearching(true);
-    // Simulate search API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    console.log("Search filters applied:", {
-      lookingFor: data.lookingFor || "Any",
-      ageRange: `${data.ageRange[0]} - ${data.ageRange[1]} years`,
-      division: data.division
-        ? divisions.find((d) => d.division_id === data.division)?.divisionName
-        : "Any division",
-      district: data.district || "Any District",
-      upazila: data.upazila || "Any Upazila",
-      profession: data.profession
-        ? professions.find(
-            (p) => p.toLowerCase().replace(/\s+/g, "-") === data.profession
-          )
-        : "Any Profession",
-      education: data.education
-        ? educationLevels.find(
-            (e) => e.toLowerCase().replace(/\s+/g, "-") === data.education
-          )
-        : "Any Education",
-      maritalStatus: data.maritalStatus
-        ? maritalStatuses.find(
-            (m) => m.toLowerCase().replace(/\s+/g, "-") === data.maritalStatus
-          )
-        : "Any Status",
-      incomeRange: data.incomeRange
-        ? incomeRanges.find(
-            (i) => i.toLowerCase().replace(/\s+/g, "-") === data.incomeRange
-          )
-        : "Any Income",
-      timestamp: new Date().toISOString(),
-    });
+    try {
+      // Simulate API call (replace with real API call)
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-    setIsSearching(false);
+      // Generate and update URL params
+      const params = generateSearchParams(filters);
+      router.push(`/biodatas?${params.toString()}`, { scroll: false });
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const clearFilters = () => {
