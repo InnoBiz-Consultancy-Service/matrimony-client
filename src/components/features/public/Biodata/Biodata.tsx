@@ -729,11 +729,10 @@
 //   );
 // }
 
+"use client";
 
-"use client"
-
-import * as React from "react"
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 import {
   Heart,
   Users,
@@ -746,54 +745,70 @@ import {
   Shield,
   Crown,
   Clock,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Slider } from "@/components/ui/slider"
-import { Badge } from "@/components/ui/badge"
-import { ProfileSkeleton } from "@/components/common/Loader"
-import { useSearchParams } from "next/navigation"
-import { useSearchFilters } from "@/hooks/useSearchFilters"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Badge } from "@/components/ui/badge";
+import { ProfileSkeleton } from "@/components/common/Loader";
+import { useSearchParams } from "next/navigation";
+import { useSearchFilters } from "@/hooks/useSearchFilters";
+import axios from "axios";
 
 interface FilterState {
-  lookingFor: "male" | "female" | ""
-  ageRange: [number, number]
-  religion: string
-  profession: string
-  location: string
-  keyword: string
-  sortBy: string
+  lookingFor: "male" | "female" | "";
+  ageRange: [number, number];
+  religion: string;
+  profession: string;
+  location: string;
+  keyword: string;
+  sortBy: string;
 }
 
 interface Profile {
-  id: string
-  name: string
-  age: number
-  gender: "male" | "female"
-  religion: string
-  profession: string
-  location: string
-  education: string
-  height: string
-  isOnline: boolean
-  lastSeen: string
-  verified: boolean
-  premium: boolean
-  bio: string
-  interests: string[]
-  income: string
-  familyType: string
-  motherTongue: string
-  profileCompleteness: number
-  joinedDate: string
-  responseRate: number
+  id: string;
+  name: string;
+  age: number;
+  gender: "male" | "female";
+  religion: string;
+  profession: string;
+  location: string;
+  education: string;
+  height: string;
+  isOnline: boolean;
+  lastSeen: string;
+  verified: boolean;
+  premium: boolean;
+  bio: string;
+  interests: string[];
+  income: string;
+  familyType: string;
+  motherTongue: string;
+  profileCompleteness: number;
+  joinedDate: string;
+  responseRate: number;
 }
 
-const religions = ["Islam", "Christianity", "Hinduism", "Buddhism", "Judaism", "Sikhism", "Other", "No Preference"]
+const religions = [
+  "Islam",
+  "Christianity",
+  "Hinduism",
+  "Buddhism",
+  "Judaism",
+  "Sikhism",
+  "Other",
+  "No Preference",
+];
 
 const professions = [
   "Doctor",
@@ -812,7 +827,7 @@ const professions = [
   "Student",
   "Other",
   "Any Profession",
-]
+];
 
 // Mock data with enhanced professional details
 const mockProfiles: Profile[] = [
@@ -862,7 +877,7 @@ const mockProfiles: Profile[] = [
     joinedDate: "Dec 2023",
     responseRate: 72,
   },
-    {
+  {
     id: "2",
     name: "Michael Johnson",
     age: 32,
@@ -908,7 +923,7 @@ const mockProfiles: Profile[] = [
     joinedDate: "Feb 2024",
     responseRate: 90,
   },
-]
+];
 
 export default function ProfessionalBiodatasPage() {
   const [filters, setFilters] = React.useState<FilterState>({
@@ -919,24 +934,24 @@ export default function ProfessionalBiodatasPage() {
     location: "",
     keyword: "",
     sortBy: "newest",
-  })
+  });
 
-  const [showFilters, setShowFilters] = React.useState(false)
-  const [isLoading, setIsLoading] = React.useState(false)
-  const [profiles, setProfiles] = React.useState<Profile[]>(mockProfiles)
-  const [savedProfiles, setSavedProfiles] = React.useState<string[]>([])
+  const [showFilters, setShowFilters] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [profiles, setProfiles] = React.useState<Profile[]>(mockProfiles);
+  const [savedProfiles, setSavedProfiles] = React.useState<string[]>([]);
 
   const filter = useSearchFilters();
-  console.log(filter.division)
+  // console.log(filter.division)
   const handleFilterChange = (key: keyof FilterState, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }))
-  }
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleSearch = async () => {
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-  }
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIsLoading(false);
+  };
 
   const clearFilters = () => {
     setFilters({
@@ -947,34 +962,36 @@ export default function ProfessionalBiodatasPage() {
       location: "",
       keyword: "",
       sortBy: "newest",
-    })
-    setProfiles(mockProfiles)
-  }
+    });
+    setProfiles(mockProfiles);
+  };
 
   const toggleSaveProfile = (profileId: string) => {
     setSavedProfiles((prev) =>
-      prev.includes(profileId) ? prev.filter((id) => id !== profileId) : [...prev, profileId],
-    )
-  }
+      prev.includes(profileId)
+        ? prev.filter((id) => id !== profileId)
+        : [...prev, profileId]
+    );
+  };
 
   const getActiveFiltersCount = () => {
-    let count = 0
-    if (filters.lookingFor) count++
-    if (filters.religion) count++
-    if (filters.profession) count++
-    if (filters.location) count++
-    if (filters.keyword) count++
-    if (filters.ageRange[0] !== 18 || filters.ageRange[1] !== 40) count++
-    return count
-  }
+    let count = 0;
+    if (filters.lookingFor) count++;
+    if (filters.religion) count++;
+    if (filters.profession) count++;
+    if (filters.location) count++;
+    if (filters.keyword) count++;
+    if (filters.ageRange[0] !== 18 || filters.ageRange[1] !== 40) count++;
+    return count;
+  };
 
   const getInitials = (name: string) => {
     return name
       .split(" ")
       .map((n) => n[0])
       .join("")
-      .toUpperCase()
-  }
+      .toUpperCase();
+  };
 
   const getProfileColor = (name: string) => {
     const colors = [
@@ -984,10 +1001,32 @@ export default function ProfessionalBiodatasPage() {
       "from-purple-400 to-purple-600",
       "from-amber-400 to-amber-600",
       "from-teal-400 to-teal-600",
-    ]
-    const index = name.length % colors.length
-    return colors[index]
-  }
+    ];
+    const index = name.length % colors.length;
+    return colors[index];
+  };
+
+  React.useEffect(() => {
+    const getAllBioData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+
+        console.log("Biodata fetched:", response.data);
+      } catch (error) {
+        console.error("Failed to fetch biodata:", error);
+      }
+    };
+
+    getAllBioData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
@@ -1003,7 +1042,8 @@ export default function ProfessionalBiodatasPage() {
                 className="border-rose-200 text-rose-700 hover:bg-rose-50"
               >
                 <SlidersHorizontal className="h-4 w-4 mr-2" />
-                Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
+                Filters{" "}
+                {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
               </Button>
             </div>
           </div>
@@ -1025,18 +1065,34 @@ export default function ProfessionalBiodatasPage() {
                     </Label>
                     <RadioGroup
                       value={filters.lookingFor}
-                      onValueChange={(value) => handleFilterChange("lookingFor", value)}
+                      onValueChange={(value) =>
+                        handleFilterChange("lookingFor", value)
+                      }
                       className="flex space-x-6"
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="male" id="male" className="border-2 border-gray-300 text-rose-600" />
-                        <Label htmlFor="male" className="cursor-pointer font-medium">
+                        <RadioGroupItem
+                          value="male"
+                          id="male"
+                          className="border-2 border-gray-300 text-rose-600"
+                        />
+                        <Label
+                          htmlFor="male"
+                          className="cursor-pointer font-medium"
+                        >
                           Male
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="female" id="female" className="border-2 border-gray-300 text-rose-600" />
-                        <Label htmlFor="female" className="cursor-pointer font-medium">
+                        <RadioGroupItem
+                          value="female"
+                          id="female"
+                          className="border-2 border-gray-300 text-rose-600"
+                        />
+                        <Label
+                          htmlFor="female"
+                          className="cursor-pointer font-medium"
+                        >
                           Female
                         </Label>
                       </div>
@@ -1045,14 +1101,24 @@ export default function ProfessionalBiodatasPage() {
 
                   {/* Religion */}
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700">Religion</Label>
-                    <Select value={filters.religion} onValueChange={(value) => handleFilterChange("religion", value)}>
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Religion
+                    </Label>
+                    <Select
+                      value={filters.religion}
+                      onValueChange={(value) =>
+                        handleFilterChange("religion", value)
+                      }
+                    >
                       <SelectTrigger className="border-2 w-full border-gray-200 focus:border-rose-400 rounded-sm">
                         <SelectValue placeholder="Select religion" />
                       </SelectTrigger>
                       <SelectContent>
                         {religions.map((religion) => (
-                          <SelectItem key={religion} value={religion.toLowerCase()}>
+                          <SelectItem
+                            key={religion}
+                            value={religion.toLowerCase()}
+                          >
                             {religion}
                           </SelectItem>
                         ))}
@@ -1062,17 +1128,26 @@ export default function ProfessionalBiodatasPage() {
 
                   {/* Profession */}
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700">Profession</Label>
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Profession
+                    </Label>
                     <Select
                       value={filters.profession}
-                      onValueChange={(value) => handleFilterChange("profession", value)}
+                      onValueChange={(value) =>
+                        handleFilterChange("profession", value)
+                      }
                     >
                       <SelectTrigger className="border-2 w-full border-gray-200 focus:border-rose-400 rounded-sm">
                         <SelectValue placeholder="Select profession" />
                       </SelectTrigger>
                       <SelectContent>
                         {professions.map((profession) => (
-                          <SelectItem key={profession} value={profession.toLowerCase().replace(/\s+/g, "-")}>
+                          <SelectItem
+                            key={profession}
+                            value={profession
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}
+                          >
                             {profession}
                           </SelectItem>
                         ))}
@@ -1090,7 +1165,9 @@ export default function ProfessionalBiodatasPage() {
                       type="text"
                       placeholder="City, State, Country"
                       value={filters.location}
-                      onChange={(e) => handleFilterChange("location", e.target.value)}
+                      onChange={(e) =>
+                        handleFilterChange("location", e.target.value)
+                      }
                       className="border-2 w-full border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-sm"
                     />
                   </div>
@@ -1099,12 +1176,15 @@ export default function ProfessionalBiodatasPage() {
                 {/* Age Range */}
                 <div className="mb-6">
                   <Label className="text-sm font-semibold text-gray-700 mb-4 block">
-                    Age Range: {filters.ageRange[0]} - {filters.ageRange[1]} years
+                    Age Range: {filters.ageRange[0]} - {filters.ageRange[1]}{" "}
+                    years
                   </Label>
                   <div className="px-4">
                     <Slider
                       value={filters.ageRange}
-                      onValueChange={(value) => handleFilterChange("ageRange", value)}
+                      onValueChange={(value) =>
+                        handleFilterChange("ageRange", value)
+                      }
                       max={70}
                       min={18}
                       step={1}
@@ -1152,8 +1232,12 @@ export default function ProfessionalBiodatasPage() {
             <div className="h-24 w-24 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Users className="h-12 w-12 text-rose-500" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">No Profiles Found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your filters to see more results</p>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+              No Profiles Found
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Try adjusting your filters to see more results
+            </p>
             <Button
               onClick={clearFilters}
               className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white"
@@ -1166,14 +1250,21 @@ export default function ProfessionalBiodatasPage() {
             {/* Results Header */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-gray-600">
-                Showing {profiles.length} {profiles.length === 1 ? "profile" : "profiles"}
+                Showing {profiles.length}{" "}
+                {profiles.length === 1 ? "profile" : "profiles"}
                 {getActiveFiltersCount() > 0 && " (filtered)"}
               </p>
               <div className="flex items-center space-x-2">
-                <Badge variant="secondary" className="bg-rose-100 text-rose-700">
+                <Badge
+                  variant="secondary"
+                  className="bg-rose-100 text-rose-700"
+                >
                   {profiles.filter((p) => p.isOnline).length} Online
                 </Badge>
-                <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+                <Badge
+                  variant="secondary"
+                  className="bg-amber-100 text-amber-700"
+                >
                   {profiles.filter((p) => p.premium).length} Premium
                 </Badge>
               </div>
@@ -1202,14 +1293,16 @@ export default function ProfessionalBiodatasPage() {
                       <div className="flex items-center space-x-4">
                         <div
                           className={`h-16 w-16 rounded-full bg-gradient-to-br ${getProfileColor(
-                            profile.name,
+                            profile.name
                           )} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
                         >
                           {getInitials(profile.name)}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="text-xl font-bold text-gray-800">{profile.name}</h3>
+                            <h3 className="text-xl font-bold text-gray-800">
+                              {profile.name}
+                            </h3>
                             {profile.verified && (
                               <div className="h-5 w-5 bg-blue-500 rounded-full flex items-center justify-center">
                                 <Shield className="h-3 w-3 text-white" />
@@ -1231,14 +1324,20 @@ export default function ProfessionalBiodatasPage() {
                         <div className="flex items-center text-gray-600">
                           <Briefcase className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-800 truncate">{profile.profession}</p>
-                            <p className="text-xs text-gray-500">{profile.income}</p>
+                            <p className="text-sm font-medium text-gray-800 truncate">
+                              {profile.profession}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {profile.income}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center text-gray-600">
                           <GraduationCap className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-800 truncate">{profile.education}</p>
+                            <p className="text-sm font-medium text-gray-800 truncate">
+                              {profile.education}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -1247,14 +1346,20 @@ export default function ProfessionalBiodatasPage() {
                         <div className="flex items-center text-gray-600">
                           <MapPin className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-800 truncate">{profile.location}</p>
+                            <p className="text-sm font-medium text-gray-800 truncate">
+                              {profile.location}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center text-gray-600">
                           <Users className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-800">{profile.religion}</p>
-                            <p className="text-xs text-gray-500">{profile.motherTongue}</p>
+                            <p className="text-sm font-medium text-gray-800">
+                              {profile.religion}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {profile.motherTongue}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -1262,17 +1367,26 @@ export default function ProfessionalBiodatasPage() {
 
                     {/* Bio */}
                     <div className="bg-gray-50 rounded-lg p-3">
-                      <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">{profile.bio}</p>
+                      <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">
+                        {profile.bio}
+                      </p>
                     </div>
                     {/* Interests */}
                     <div className="flex flex-wrap gap-2">
                       {profile.interests.slice(0, 3).map((interest) => (
-                        <Badge key={interest} variant="secondary" className="bg-rose-100 text-rose-700 text-xs">
+                        <Badge
+                          key={interest}
+                          variant="secondary"
+                          className="bg-rose-100 text-rose-700 text-xs"
+                        >
                           {interest}
                         </Badge>
                       ))}
                       {profile.interests.length > 3 && (
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
+                        <Badge
+                          variant="secondary"
+                          className="bg-gray-100 text-gray-600 text-xs"
+                        >
                           +{profile.interests.length - 3} more
                         </Badge>
                       )}
@@ -1291,10 +1405,18 @@ export default function ProfessionalBiodatasPage() {
                         size="icon"
                         onClick={() => toggleSaveProfile(profile.id)}
                         className={`border-rose-200 hover:bg-rose-50 ${
-                          savedProfiles.includes(profile.id) ? "bg-rose-50 text-rose-700" : "text-rose-700"
+                          savedProfiles.includes(profile.id)
+                            ? "bg-rose-50 text-rose-700"
+                            : "text-rose-700"
                         }`}
                       >
-                        <Bookmark className={`h-4 w-4 ${savedProfiles.includes(profile.id) ? "fill-current" : ""}`} />
+                        <Bookmark
+                          className={`h-4 w-4 ${
+                            savedProfiles.includes(profile.id)
+                              ? "fill-current"
+                              : ""
+                          }`}
+                        />
                       </Button>
                       <Button
                         variant="outline"
@@ -1322,5 +1444,5 @@ export default function ProfessionalBiodatasPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
