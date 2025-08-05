@@ -44,7 +44,7 @@ interface SubscriptionPlan {
   price: number;
   duration: string;
   features: string[];
-  icon: any;
+  icon:  React.ElementType;
   color: string;
   popular?: boolean;
 }
@@ -158,6 +158,7 @@ export default function BkashManualPayment() {
       // Redirect to success page
     //   window.location.href = "/payment/success";
     } catch (error) {
+      console.log(error)
       toast.error("Submission Failed")
     } finally {
       setIsSubmitting(false);
@@ -237,7 +238,7 @@ export default function BkashManualPayment() {
               <div>
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
                   <Shield className="h-5 w-5 text-green-600" />
-                  What's included:
+                  What&apos;s included:
                 </h3>
                 <div className="space-y-3">
                   {selectedPlan.features.map((feature, index) => (

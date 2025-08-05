@@ -30,24 +30,20 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { IBiodata } from "@/types/bioData";
 import Link from "next/link";
-// import { Label } from "@/components/ui/label"
-// import type { IBiodata } from "@/types/biodata"
-
-// Add this to the top of the component after the imports
-const scrollbarHideStyles = `
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-`;
+// const scrollbarHideStyles = `
+//   .scrollbar-hide {
+//     -ms-overflow-style: none;
+//     scrollbar-width: none;
+//   }
+//   .scrollbar-hide::-webkit-scrollbar {
+//     display: none;
+//   }
+// `;
 
 // Mock data based on the interface
 const mockProfile: IBiodata = {
   _id: "507f1f77bcf86cd799439011",
-  userId: "507f1f77bcf86cd799439012" as any,
+  userId: "507f1f77bcf86cd799439012" as string,
   name: "Sarah Ahmed",
   description:
     "A dedicated healthcare professional seeking a life partner who values family, faith, and personal growth. I believe in maintaining a balance between career aspirations and traditional values.",
@@ -137,23 +133,6 @@ export default function Profile() {
   const profileCompleteness = 92;
   const profileViews = 1247;
   const interests = 45;
-
-  // Add this style injection
-  //   React.useEffect(() => {
-  //     const style = document.createElement("style")
-  //     style.textContent = `
-  //       .scrollbar-hide {
-  //         -ms-overflow-style: none;
-  //         scrollbar-width: none;
-  //       }
-  //       .scrollbar-hide::-webkit-scrollbar {
-  //         display: none;
-  //       }
-  //     `
-  //     document.head.appendChild(style)
-  //     return () => document.head.removeChild(style)
-  //   }, [])
-
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -169,7 +148,7 @@ export default function Profile() {
     className = "",
   }: {
     title: string;
-    icon: any;
+    icon:  React.ElementType;
     children: React.ReactNode;
     className?: string;
   }) => (
@@ -193,7 +172,7 @@ export default function Profile() {
   }: {
     label: string;
     value: string | undefined;
-    icon?: any;
+    icon?:  React.ElementType;
   }) => (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100 last:border-b-0 space-y-1 sm:space-y-0">
       <div className="flex items-center space-x-2">

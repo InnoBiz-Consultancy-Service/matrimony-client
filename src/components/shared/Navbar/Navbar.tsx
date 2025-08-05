@@ -258,11 +258,7 @@ import {
   User,
   LogOut,
   Settings,
-  Crown,
-  Bell,
-  MessageCircle,
   Bookmark,
-  Shield,
   ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
