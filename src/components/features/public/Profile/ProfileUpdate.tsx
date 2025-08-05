@@ -845,7 +845,7 @@ const onSubmit = async (data: ProfileFormData) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <h3 className="text-lg font-semibold mb-4">
-                        Father's Information
+                        Father&apos;s Information
                       </h3>
                       <div className="space-y-4">
                         <FormField
@@ -895,7 +895,7 @@ const onSubmit = async (data: ProfileFormData) => {
 
                     <div>
                       <h3 className="text-lg font-semibold mb-4">
-                        Mother's Information
+                        Mother&apos;s Information
                       </h3>
                       <div className="space-y-4">
                         <FormField
@@ -1418,7 +1418,7 @@ const onSubmit = async (data: ProfileFormData) => {
                     Partner Preferences
                   </CardTitle>
                   <CardDescription>
-                    What you're looking for in a life partner
+                    What you&apos;re looking for in a life partner
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -1460,10 +1460,10 @@ const onSubmit = async (data: ProfileFormData) => {
                                 HSC or equivalent
                               </SelectItem>
                               <SelectItem value="bachelor">
-                                Bachelor's degree
+                                Bachelor&apos;s degree
                               </SelectItem>
                               <SelectItem value="master">
-                                Master's degree
+                                Master&apos;s degree
                               </SelectItem>
                               <SelectItem value="phd">PhD or higher</SelectItem>
                             </SelectContent>

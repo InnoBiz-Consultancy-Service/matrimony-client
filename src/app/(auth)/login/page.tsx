@@ -43,7 +43,7 @@ const authService = {
       }));
       
       return decoded;
-    } catch (error) {
+    } catch {
       throw new Error("Invalid token format");
     }
   },

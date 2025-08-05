@@ -1,797 +1,805 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import {
-  ArrowLeft,
-  Heart,
-  MessageCircle,
-  Share2,
-  Flag,
+  User,
   MapPin,
-  Briefcase,
+  Phone,
+  Mail,
+  Facebook,
   GraduationCap,
   Users,
-  Star,
+  Heart,
   Shield,
+  Edit,
   Camera,
-  Globe,
+  Star,
+  Crown,
+  Activity,
   BookOpen,
-  Music,
-  Dumbbell,
-  Coffee,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  CheckCircle,
+  MessageCircle,
+  Share2,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProfileData } from "@/types/user";
-import Image from "next/image";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import Link from "next/link";
+import axios from "axios";
+import { Profile } from "@/types/bioData";
 
-// Mock profile data
-const mockProfile: ProfileData = {
-  id: "1",
-  name: "Sarah Ahmed",
-  age: 28,
-  gender: "female",
-  profileImage:
-    "https://images.squarespace-cdn.com/content/v1/5b43ad2bf407b4a036d27f06/1667281317685-4HFC3N3NIYQMK25PM6P0/Nourhan+Ali.jpg",
-  gallery: [
-    "https://images.pexels.com/photos/19250805/pexels-photo-19250805/free-photo-of-dark-photo-of-a-muslim-girl-covering-her-eye-with-a-hand.jpeg",
-    "https://static.vecteezy.com/system/resources/thumbnails/024/844/089/small_2x/beautiful-muslim-woman-wearing-hijab-stands-in-a-city-street-generative-ai-photo.jpg",
-    "https://media.istockphoto.com/id/1196190943/photo/young-muslim-modern-woman-portrait.jpg?s=612x612&w=0&k=20&c=V6Kx9iAqy1_-u6rcuQpAxj7OkkbL_JtotxceuF3_RqI=",
-    "https://plus.unsplash.com/premium_photo-1681492164528-71e8a8fdd51b?fm=jpg",
-  ],
-  isOnline: true,
-  lastSeen: "Online now",
-  verified: true,
-  premium: true,
-  profileViews: 1247,
+// API Response Data Structure
+// const apiResponse = {
+//   message: "Biodata fetched",
+//   data: {
+//     description:
+//       "Full Stack Developer, passionate about Islamic lifestyle and technology.",
+//     address: {
+//       present: "Sylhet, Bangladesh",
+//       permanent: "Sylhet, Bangladesh",
+//       country: "Bangladesh",
+//     },
+//     education: {
+//       sscYear: "2015",
+//       sscGroup: "Science",
+//       sscResult: "GPA 5.00",
+//       hscYear: "2017",
+//       hscGroup: "Science",
+//       hscResult: "GPA 5.00",
+//       honours: "BSc in Computer Science & Engineering",
+//     },
+//     familyInfo: {
+//       fatherAlive: "Yes",
+//       fatherOccupation: "Businessman",
+//       motherAlive: "Yes",
+//       motherOccupation: "Homemaker",
+//       brothers: "2",
+//       sisters: "1",
+//       siblingsDetails:
+//         "Elder brother working in IT, younger brother studying HSC, sister married",
+//     },
+//     personalInfo: {
+//       beard: "Yes, Sunnah length",
+//       salat: "5 times regularly",
+//       mahramTravel: "Always with Mahram",
+//       health: "Healthy",
+//       disability: "None",
+//     },
+//     physicalInfo: {
+//       height: "5 feet 8 inches",
+//       bodyColor: "Fair",
+//       bloodGroup: "B+",
+//       weight: "68 kg",
+//     },
+//     maritalInfo: {
+//       maritalStatus: "Unmarried",
+//       childAllow: "Yes",
+//       whyWantToMarry: "To complete half of deen and build a righteous family",
+//       futurePlan:
+//         "Contribute to Islamic IT solutions and support family & community",
+//     },
+//     contactInfo: {
+//       phone: "+8801712345678",
+//       email: "salim@example.com",
+//       facebook: "https://facebook.com/mohammadsalim",
+//     },
+//     preference: {
+//       educationLevel: "Honours or above",
+//       maritalStatus: "Unmarried",
+//       religiousPractice: "Prays 5 times, wears hijab/niqab",
+//       physicalAppearance: "Fair or wheatish, moderate height",
+//       additionalQualities: "Good akhlaq, interest in Islamic knowledge",
+//       ageRange: "20-25",
+//     },
+//     _id: "68832ba1dfb1b0dba19cab3d",
+//     userId: {
+//       _id: "6883291d457b8c6f8185d173",
+//       email: "salim@example.com",
+//       role: "user",
+//     },
+//     name: "Mohammad Salim Ali",
+//     age: 24,
+//     createdAt: "2025-07-25T07:00:49.154Z",
+//     updatedAt: "2025-07-25T07:01:45.572Z",
+//     __v: 0,
+//   },
+// };
 
-  // Basic Information
-  dateOfBirth: "March 15, 1996",
-  height: "5'6\" (168 cm)",
-  weight: "58 kg",
-  bodyType: "Slim",
-  complexion: "Fair",
-  bloodGroup: "O+",
-  physicalStatus: "Normal",
+export default function Biodata({ id }: { id: string }) {
+  const [activeTab, setActiveTab] = React.useState("overview");
+  const [biodata, setBiodata] = React.useState<Profile | undefined>();
 
-  // Location
-  currentLocation: "New York, USA",
-  hometown: "Cairo, Egypt",
-  nationality: "American",
-
-  // Education & Career
-  education: "Master's Degree",
-  educationDetails: "MD in Internal Medicine from Harvard Medical School",
-  profession: "Doctor",
-  workingWith: "Private Hospital",
-  designation: "Senior Resident",
-  annualIncome: "$120,000 - $150,000",
-  workLocation: "Manhattan, New York",
-
-  // Family
-  familyType: "Nuclear Family",
-  fatherOccupation: "Business Owner",
-  motherOccupation: "Teacher",
-  siblings: "1 Brother, 1 Sister",
-  familyLocation: "Cairo, Egypt",
-  familyValues: "Traditional yet Modern",
-
-  // Religious & Cultural
-  religion: "Islam",
-  caste: "Not Specified",
-  subCaste: "Not Specified",
-  motherTongue: "Arabic",
-  knownLanguages: ["Arabic", "English", "French"],
-
-  // Lifestyle
-  diet: "Halal",
-  smoking: "Never",
-  drinking: "Never",
-
-  // Partner Preferences
-  partnerAgeRange: "28 - 35 years",
-  partnerHeight: "5'8\" - 6'2\"",
-  partnerEducation: "Graduate or Higher",
-  partnerProfession: "Doctor, Engineer, or Business",
-  partnerLocation: "USA, Canada, or Middle East",
-  partnerIncome: "$100,000+",
-
-  // Personal
-  bio: "I'm a dedicated healthcare professional who believes in balancing career ambitions with family values. I love traveling, reading, and spending quality time with loved ones. Looking for a life partner who shares similar values and dreams of building a beautiful family together.",
-  interests: ["Reading", "Travel", "Cooking", "Photography", "Volunteering"],
-  hobbies: ["Painting", "Yoga", "Hiking", "Learning Languages"],
-
-  // Contact
-  contactNumber: "+1 (555) 123-4567",
-  email: "sarah.ahmed@email.com",
-  socialMedia: {
-    instagram: "@sarah_ahmed",
-    linkedin: "sarah-ahmed-md",
-  },
-
-  // Additional
-  createdBy: "Self",
-  joinedDate: "January 2024",
-  lastActive: "2 hours ago",
-};
-
-export default function SingleBiodata() {
-  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [isSaved, setIsSaved] = React.useState(false);
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % mockProfile.gallery.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex(
-      (prev) =>
-        (prev - 1 + mockProfile.gallery.length) % mockProfile.gallery.length
-    );
-  };
-
-  const getInterestIcon = (interest: string) => {
-    const iconMap: { [key: string]: React.ReactNode } = {
-      Reading: <BookOpen className="h-4 w-4" />,
-      Travel: <Globe className="h-4 w-4" />,
-      Cooking: <Coffee className="h-4 w-4" />,
-      Photography: <Camera className="h-4 w-4" />,
-      Music: <Music className="h-4 w-4" />,
-      Fitness: <Dumbbell className="h-4 w-4" />,
-      Yoga: <Dumbbell className="h-4 w-4" />,
-      Hiking: <Dumbbell className="h-4 w-4" />,
+  React.useEffect(() => {
+    const getbiodata = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/${id}`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+        setBiodata(response.data?.data);
+        // console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    return iconMap[interest] || <Star className="h-4 w-4" />;
+    getbiodata();
+  }, [id]);
+
+  const biodataCompleteness = 92;
+  const biodataViews = 1247;
+  const interests = 45;
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
   };
+
+  const InfoCard = ({
+    title,
+    icon: Icon,
+    children,
+    className = "",
+  }: {
+    title: string;
+    icon: React.ElementType;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <Card
+      className={`border-rose-100 hover:shadow-lg transition-all duration-300 ${className}`}
+    >
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg font-semibold text-gray-800 flex items-center">
+          <Icon className="h-5 w-5 mr-2 text-rose-600" />
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">{children}</CardContent>
+    </Card>
+  );
+
+  const InfoRow = ({
+    label,
+    value,
+    icon: Icon,
+  }: {
+    label: string;
+    value: string | undefined;
+    icon?:  React.ElementType;
+  }) => (
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100 last:border-b-0 space-y-1 sm:space-y-0">
+      <div className="flex items-center space-x-2">
+        {Icon && <Icon className="h-4 w-4 text-gray-500" />}
+        <span className="text-gray-600 font-medium text-sm sm:text-base">
+          {label}:
+        </span>
+      </div>
+      <span className="text-gray-800 font-semibold text-sm sm:text-base break-words">
+        {value || "Not specified"}
+      </span>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
       {/* Header */}
-      <div className="bg-white border-b border-rose-100 sticky top-0 z-40">
-        <div className="container mx-auto px-4 lg:px-8 py-4">
+      <div className="bg-white border-b border-rose-100">
+        <div className="container mx-auto px-4 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <Link href="/biodatas">
+            <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
-                className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 group"
+                className="text-rose-600 hover:bg-rose-50"
               >
-                <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                Back to Profiles
+                <Settings className="h-4 w-4 mr-2" />
+                Account Settings
               </Button>
-            </Link>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-600 hover:text-rose-600 hover:bg-rose-50"
-              >
-                <Share2 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-600 hover:text-red-600 hover:bg-red-50"
-              >
-                <Flag className="h-4 w-4" />
-              </Button>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Link href={"/biodata/update"}>
+                <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 cursor-pointer text-white">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit biodata
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile Image & Gallery */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left Sidebar - biodata Summary */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Main Profile Image */}
-            <Card className="overflow-hidden border-0 shadow-xl">
-              <div className="relative">
-                <div className="aspect-[3/4] relative overflow-hidden">
-                  <Image
-                    width={500}
-                    height={500}
-                    src={
-                      mockProfile.gallery[currentImageIndex] ||
-                      mockProfile.profileImage
-                    }
-                    alt={mockProfile.name}
-                    className="w-full h-full object-cover"
-                  />
-
-                  {/* Navigation Arrows */}
-                  {mockProfile.gallery.length > 1 && (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={prevImage}
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={nextImage}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </>
-                  )}
-
-                  {/* Image Counter */}
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                    {currentImageIndex + 1} / {mockProfile.gallery.length}
-                  </div>
-
-                  {/* Status Badges */}
-                  <div className="absolute top-4 left-4 space-y-2">
-                    {mockProfile.isOnline && (
-                      <Badge className="bg-green-500 text-white border-0">
-                        <div className="h-2 w-2 bg-white rounded-full mr-1 animate-pulse"></div>
-                        Online
-                      </Badge>
-                    )}
-                    {mockProfile.premium && (
-                      <Badge className="bg-gradient-to-r from-amber-400 to-amber-500 text-white border-0">
-                        <Star className="h-3 w-3 mr-1 fill-current" />
-                        Premium
-                      </Badge>
-                    )}
-                  </div>
-
-                  {/* Verification Badge */}
-                  {mockProfile.verified && (
-                    <div className="absolute top-4 right-4">
-                      <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
-                        <CheckCircle className="h-5 w-5 text-white" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Card>
-
-            {/* Gallery Thumbnails */}
-            {mockProfile.gallery.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {mockProfile.gallery.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                      currentImageIndex === index
-                        ? "border-rose-500"
-                        : "border-gray-200 hover:border-rose-300"
-                    }`}
-                  >
-                    <Image
-                      width={500}
-                      height={500}
-                      src={image || "/placeholder.svg"}
-                      alt={`Gallery ${index + 1}`}
-                      className="w-full h-full object-cover"
+            {/* biodata Card */}
+            <Card className="border-rose-100 shadow-xl">
+              <CardContent className="p-6 text-center">
+                <div className="relative inline-block mb-4">
+                  <Avatar className="h-32 w-32 rounded-2xl shadow-lg ring-4 ring-rose-100">
+                    <AvatarImage
+                      src="/placeholder.svg?height=128&width=128"
+                      alt={biodata?.name}
                     />
-                  </button>
-                ))}
-              </div>
-            )}
+                    {biodata?.name && (
+                      <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white text-2xl font-bold rounded-2xl">
+                        {getInitials(biodata.name)}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
+                  <Button
+                    size="icon"
+                    className="absolute -bottom-2 -right-2 h-10 w-10 rounded-full bg-rose-600 hover:bg-rose-700 shadow-lg"
+                  >
+                    <Camera className="h-4 w-4" />
+                  </Button>
+                </div>
 
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              <Button className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg py-3">
-                <MessageCircle className="mr-2 h-4 w-4" />
-                Send Message
-              </Button>
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsLiked(!isLiked)}
-                  className={`border-rose-200 hover:bg-rose-50 ${
-                    isLiked
-                      ? "bg-rose-50 text-rose-700 border-rose-300"
-                      : "text-rose-700"
-                  }`}
-                >
-                  <Heart
-                    className={`mr-2 h-4 w-4 ${isLiked ? "fill-current" : ""}`}
-                  />
-                  {isLiked ? "Liked" : "Like"}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsSaved(!isSaved)}
-                  className={`border-rose-200 hover:bg-rose-50 ${
-                    isSaved
-                      ? "bg-rose-50 text-rose-700 border-rose-300"
-                      : "text-rose-700"
-                  }`}
-                >
-                  <Star
-                    className={`mr-2 h-4 w-4 ${isSaved ? "fill-current" : ""}`}
-                  />
-                  {isSaved ? "Saved" : "Save"}
-                </Button>
-              </div>
-            </div>
+                <div className="space-y-2 mb-4">
+                  <h1 className="text-2xl font-bold text-gray-800 flex items-center justify-center">
+                    {biodata?.name}
+                    <Shield className="h-5 w-5 ml-2 text-blue-500" />
+                    <Crown className="h-5 w-5 ml-1 text-amber-500" />
+                  </h1>
+                  <p className="text-gray-600">{biodata?.education?.honours}</p>
+                  <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                    <MapPin className="h-4 w-4" />
+                    <span>{biodata?.address?.present}</span>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    Age: {biodata?.age} years
+                  </div>
+                </div>
 
-            {/* Profile Stats */}
-            <Card className="border-rose-100">
-              <CardContent className="p-4">
+                <div className="flex justify-center space-x-2 mb-4">
+                  <Badge className="bg-green-100 text-green-700">
+                    <div className="h-2 w-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                    Online
+                  </Badge>
+                  <Badge className="bg-blue-100 text-blue-700">Verified</Badge>
+                  <Badge className="bg-amber-100 text-amber-700">Premium</Badge>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-rose-600">
-                      {mockProfile.profileViews}
+                      {biodataViews}
                     </div>
-                    <div className="text-sm text-gray-600">Profile Views</div>
+                    <div className="text-sm text-gray-600">biodata Views</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-rose-600">
-                      <Eye className="h-5 w-5 inline mr-1" />
-                      {mockProfile.isOnline ? "Online" : "Offline"}
+                      {interests}
                     </div>
-                    <div className="text-sm text-gray-600">
-                      {mockProfile.lastSeen}
-                    </div>
+                    <div className="text-sm text-gray-600">Interests</div>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* biodata Completeness */}
+            <Card className="border-rose-100">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-gray-800">
+                      biodata Completeness
+                    </h3>
+                    <span className="text-2xl font-bold text-rose-600">
+                      {biodataCompleteness}%
+                    </span>
+                  </div>
+                  <Progress value={biodataCompleteness} className="h-3" />
+                  <p className="text-sm text-gray-600">
+                    Complete your biodata to get more visibility and better
+                    matches.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card className="border-rose-100">
+              <CardContent className="p-6 space-y-3">
+                <h3 className="font-semibold text-gray-800 mb-4">
+                  Quick Actions
+                </h3>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  View Messages
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
+                >
+                  <Heart className="h-4 w-4 mr-2" />
+                  My Interests
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Share biodata
+                </Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Right Column - Profile Details */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Profile Header */}
-            <Card className="border-rose-100">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-bold text-gray-800 flex items-center">
-                      {mockProfile.name}
-                      {mockProfile.verified && (
-                        <Shield className="ml-2 h-6 w-6 text-blue-500" />
-                      )}
-                    </h1>
-                    <p className="text-lg text-gray-600 mt-1">
-                      {mockProfile.age} years • {mockProfile.height}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-gray-500">
-                      Profile ID: {mockProfile.id}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      Joined: {mockProfile.joinedDate}
-                    </div>
-                  </div>
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <div className="w-full">
+              {/* Mobile Tab Navigation - Horizontal Scroll */}
+              <div className="block md:hidden mb-6">
+                <div className="flex overflow-x-auto scrollbar-hide space-x-2 pb-2">
+                  {[
+                    { value: "overview", label: "Overview", icon: User },
+                    { value: "personal", label: "Personal", icon: BookOpen },
+                    { value: "family", label: "Family", icon: Users },
+                    {
+                      value: "education",
+                      label: "Education",
+                      icon: GraduationCap,
+                    },
+                    { value: "contact", label: "Contact", icon: Phone },
+                    { value: "preferences", label: "Preferences", icon: Heart },
+                  ].map((tab) => (
+                    <button
+                      key={tab.value}
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg whitespace-nowrap text-sm font-medium transition-all duration-200 ${
+                        activeTab === tab.value
+                          ? "bg-rose-600 text-white shadow-lg"
+                          : "bg-white text-gray-600 border border-gray-200 hover:bg-rose-50 hover:text-rose-600"
+                      }`}
+                    >
+                      <tab.icon className="h-4 w-4" />
+                      <span>{tab.label}</span>
+                    </button>
+                  ))}
                 </div>
+              </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="flex items-center text-gray-600">
-                    <MapPin className="h-4 w-4 mr-2 text-rose-500" />
-                    {mockProfile.currentLocation}
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Briefcase className="h-4 w-4 mr-2 text-rose-500" />
-                    {mockProfile.profession}
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <GraduationCap className="h-4 w-4 mr-2 text-rose-500" />
-                    {mockProfile.education}
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Users className="h-4 w-4 mr-2 text-rose-500" />
-                    {mockProfile.religion}
-                  </div>
-                </div>
+              {/* Desktop Tab Navigation */}
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
+                <TabsList className="hidden md:grid w-full grid-cols-6 bg-rose-50 mb-8">
+                  <TabsTrigger
+                    value="overview"
+                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                  >
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="personal"
+                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                  >
+                    Personal
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="family"
+                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                  >
+                    Family
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="education"
+                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                  >
+                    Education
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="contact"
+                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                  >
+                    Contact
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="preferences"
+                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                  >
+                    Preferences
+                  </TabsTrigger>
+                </TabsList>
 
-                <p className="text-gray-700 leading-relaxed">
-                  {mockProfile.bio}
-                </p>
-              </CardContent>
-            </Card>
+                {/* Tab Content */}
+                <div className="space-y-6 overflow-x-auto">
+                  {/* Overview Tab */}
+                  {activeTab === "overview" && (
+                    <div className="space-y-6">
+                      {/* About Me */}
+                      <Card className="border-rose-100">
+                        <CardHeader>
+                          <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 flex items-center">
+                            <User className="h-5 w-5 mr-2 text-rose-600" />
+                            About Me
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-700 leading-relaxed text-base md:text-lg">
+                            {biodata?.description}
+                          </p>
+                        </CardContent>
+                      </Card>
 
-            {/* Detailed Information Tabs */}
-            <Card className="border-rose-100">
-              <Tabs defaultValue="basic" className="w-full">
-                <CardHeader className="pb-4">
-                  <TabsList className="grid w-full grid-cols-5 bg-rose-50">
-                    <TabsTrigger
-                      value="basic"
-                      className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
-                    >
-                      Basic
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="education"
-                      className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
-                    >
-                      Education
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="family"
-                      className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
-                    >
-                      Family
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="lifestyle"
-                      className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
-                    >
-                      Lifestyle
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="preferences"
-                      className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
-                    >
-                      Preferences
-                    </TabsTrigger>
-                  </TabsList>
-                </CardHeader>
+                      {/* Key Information Grid */}
+                      <div className="grid grid-cols-1 gap-6">
+                        <InfoCard title="Physical Information" icon={Activity}>
+                          <div className="grid grid-cols-2 gap-4">
+                            <InfoRow
+                              label="Height"
+                              value={biodata?.physicalInfo?.height}
+                            />
+                            <InfoRow
+                              label="Weight"
+                              value={biodata?.physicalInfo?.weight}
+                            />
+                            <InfoRow
+                              label="Body Color"
+                              value={biodata?.physicalInfo?.bodyColor}
+                            />
+                            <InfoRow
+                              label="Blood Group"
+                              value={biodata?.physicalInfo?.bloodGroup}
+                            />
+                          </div>
+                        </InfoCard>
 
-                <CardContent>
-                  {/* Basic Information */}
-                  <TabsContent value="basic" className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                          Personal Details
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Date of Birth:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.dateOfBirth}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Height:</span>
-                            <span className="font-medium">
-                              {mockProfile.height}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Weight:</span>
-                            <span className="font-medium">
-                              {mockProfile.weight}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Body Type:</span>
-                            <span className="font-medium">
-                              {mockProfile.bodyType}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Complexion:</span>
-                            <span className="font-medium">
-                              {mockProfile.complexion}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Blood Group:</span>
-                            <span className="font-medium">
-                              {mockProfile.bloodGroup}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                          Location & Culture
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Current Location:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.currentLocation}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Hometown:</span>
-                            <span className="font-medium">
-                              {mockProfile.hometown}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Nationality:</span>
-                            <span className="font-medium">
-                              {mockProfile.nationality}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Religion:</span>
-                            <span className="font-medium">
-                              {mockProfile.religion}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Mother Tongue:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.motherTongue}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Languages:</span>
-                            <span className="font-medium">
-                              {mockProfile.knownLanguages.join(", ")}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </TabsContent>
-
-                  {/* Education & Career */}
-                  <TabsContent value="education" className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                          Education
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Highest Education:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.education}
-                            </span>
-                          </div>
-                          <div className="col-span-2">
-                            <span className="text-gray-600">Details:</span>
-                            <p className="font-medium mt-1">
-                              {mockProfile.educationDetails}
+                        <InfoCard title="Marital Status" icon={Heart}>
+                          <InfoRow
+                            label="Status"
+                            value={biodata?.maritalInfo?.maritalStatus}
+                          />
+                          <InfoRow
+                            label="Children Allowed"
+                            value={biodata?.maritalInfo?.childAllow}
+                          />
+                          <div className="pt-3">
+                            <p className="text-sm text-gray-600 font-medium mb-2">
+                              Why want to marry:
+                            </p>
+                            <p className="text-gray-700 text-sm leading-relaxed">
+                              {biodata?.maritalInfo?.whyWantToMarry}
                             </p>
                           </div>
-                        </div>
+                        </InfoCard>
                       </div>
 
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                          Career
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Profession:</span>
-                            <span className="font-medium">
-                              {mockProfile.profession}
-                            </span>
+                      {/* Address Information */}
+                      <InfoCard title="Address Information" icon={MapPin}>
+                        <div className="space-y-6">
+                          <div>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Present Address
+                            </h4>
+                            <div className="space-y-2">
+                              <InfoRow
+                                label="Location"
+                                value={biodata?.address?.present}
+                              />
+                              <InfoRow
+                                label="Country"
+                                value={biodata?.address?.country}
+                              />
+                            </div>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Working With:</span>
-                            <span className="font-medium">
-                              {mockProfile.workingWith}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Designation:</span>
-                            <span className="font-medium">
-                              {mockProfile.designation}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Annual Income:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.annualIncome}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Work Location:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.workLocation}
-                            </span>
+                          <Separator />
+                          <div>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Permanent Address
+                            </h4>
+                            <div className="space-y-2">
+                              <InfoRow
+                                label="Location"
+                                value={biodata?.address?.permanent}
+                              />
+                              <InfoRow
+                                label="Country"
+                                value={biodata?.address?.country}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </InfoCard>
                     </div>
-                  </TabsContent>
+                  )}
 
-                  {/* Family Information */}
-                  <TabsContent value="family" className="space-y-6">
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                        Family Background
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Family Type:</span>
-                            <span className="font-medium">
-                              {mockProfile.familyType}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Father&apos;s Occupation:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.fatherOccupation}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Mother&apos;s Occupation:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.motherOccupation}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Siblings:</span>
-                            <span className="font-medium">
-                              {mockProfile.siblings}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Family Location:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.familyLocation}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">
-                              Family Values:
-                            </span>
-                            <span className="font-medium">
-                              {mockProfile.familyValues}
-                            </span>
-                          </div>
-                        </div>
+                  {/* Personal Tab */}
+                  {activeTab === "personal" && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 gap-6">
+                        <InfoCard title="Religious Practice" icon={BookOpen}>
+                          <InfoRow
+                            label="Salat"
+                            value={biodata?.personalInfo?.salat}
+                          />
+                          <InfoRow
+                            label="Mahram Travel"
+                            value={biodata?.personalInfo?.mahramTravel}
+                          />
+                          <InfoRow
+                            label="Beard"
+                            value={biodata?.personalInfo?.beard}
+                          />
+                        </InfoCard>
+
+                        <InfoCard title="Health Information" icon={Activity}>
+                          <InfoRow
+                            label="Health Status"
+                            value={biodata?.personalInfo?.health}
+                          />
+                          <InfoRow
+                            label="Disability"
+                            value={biodata?.personalInfo?.disability}
+                          />
+                        </InfoCard>
                       </div>
+
+                      <InfoCard title="Future Plans" icon={Star}>
+                        <div className="bg-rose-50 rounded-lg p-4">
+                          <p className="text-gray-700 leading-relaxed">
+                            {biodata?.maritalInfo?.futurePlan}
+                          </p>
+                        </div>
+                      </InfoCard>
                     </div>
-                  </TabsContent>
+                  )}
 
-                  {/* Lifestyle */}
-                  <TabsContent value="lifestyle" className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                          Lifestyle Choices
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Diet:</span>
-                            <span className="font-medium">
-                              {mockProfile.diet}
-                            </span>
+                  {/* Family Tab */}
+                  {activeTab === "family" && (
+                    <div className="space-y-6">
+                      <InfoCard title="Family Information" icon={Users}>
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-3">
+                              <InfoRow
+                                label="Father Status"
+                                value={biodata?.familyInfo?.fatherAlive}
+                              />
+                              <InfoRow
+                                label="Father's Occupation"
+                                value={biodata?.familyInfo?.fatherOccupation}
+                              />
+                              <InfoRow
+                                label="Mother Status"
+                                value={biodata?.familyInfo?.motherAlive}
+                              />
+                              <InfoRow
+                                label="Mother's Occupation"
+                                value={biodata?.familyInfo?.motherOccupation}
+                              />
+                            </div>
+                            <div className="space-y-3">
+                              <InfoRow
+                                label="Brothers"
+                                value={biodata?.familyInfo?.brothers}
+                              />
+                              <InfoRow
+                                label="Sisters"
+                                value={biodata?.familyInfo?.sisters}
+                              />
+                            </div>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Smoking:</span>
-                            <span className="font-medium">
-                              {mockProfile.smoking}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Drinking:</span>
-                            <span className="font-medium">
-                              {mockProfile.drinking}
-                            </span>
+
+                          <Separator className="my-4" />
+
+                          <div>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Siblings Details
+                            </h4>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <p className="text-gray-700">
+                                {biodata?.familyInfo?.siblingsDetails}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </InfoCard>
+                    </div>
+                  )}
 
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                          Interests & Hobbies
-                        </h3>
+                  {/* Education Tab */}
+                  {activeTab === "education" && (
+                    <div className="space-y-6">
+                      <InfoCard
+                        title="Educational Background"
+                        icon={GraduationCap}
+                      >
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-1 gap-4">
+                            <div className="bg-blue-50 rounded-lg p-4">
+                              <h4 className="font-semibold text-blue-800 mb-3">
+                                SSC
+                              </h4>
+                              <div className="space-y-2">
+                                <InfoRow
+                                  label="Year"
+                                  value={biodata?.education?.sscYear}
+                                />
+                                <InfoRow
+                                  label="Group"
+                                  value={biodata?.education?.sscGroup}
+                                />
+                                <InfoRow
+                                  label="Result"
+                                  value={biodata?.education?.sscResult}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="bg-green-50 rounded-lg p-4">
+                              <h4 className="font-semibold text-green-800 mb-3">
+                                HSC
+                              </h4>
+                              <div className="space-y-2">
+                                <InfoRow
+                                  label="Year"
+                                  value={biodata?.education?.hscYear}
+                                />
+                                <InfoRow
+                                  label="Group"
+                                  value={biodata?.education?.hscGroup}
+                                />
+                                <InfoRow
+                                  label="Result"
+                                  value={biodata?.education?.hscResult}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="bg-purple-50 rounded-lg p-4">
+                              <h4 className="font-semibold text-purple-800 mb-3">
+                                Higher Education
+                              </h4>
+                              <p className="text-purple-700 font-medium">
+                                {biodata?.education?.honours}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </InfoCard>
+                    </div>
+                  )}
+
+                  {/* Contact Tab */}
+                  {activeTab === "contact" && (
+                    <div className="space-y-6">
+                      <InfoCard title="Contact Information" icon={Phone}>
                         <div className="space-y-4">
-                          <div>
-                            <span className="text-gray-600 block mb-2">
-                              Interests:
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                              {mockProfile.interests.map((interest) => (
-                                <Badge
-                                  key={interest}
-                                  variant="secondary"
-                                  className="bg-rose-100 text-rose-700"
-                                >
-                                  {getInterestIcon(interest)}
-                                  <span className="ml-1">{interest}</span>
-                                </Badge>
-                              ))}
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-green-50 rounded-lg space-y-3 sm:space-y-0">
+                            <div className="flex items-center space-x-3">
+                              <Phone className="h-5 w-5 text-green-600" />
+                              <div>
+                                <p className="font-medium text-gray-800">
+                                  Phone Number
+                                </p>
+                                <p className="text-green-700 font-semibold">
+                                  {biodata?.contactInfo.phone}
+                                </p>
+                              </div>
                             </div>
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
+                            >
+                              Call Now
+                            </Button>
                           </div>
-                          <div>
-                            <span className="text-gray-600 block mb-2">
-                              Hobbies:
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                              {mockProfile.hobbies.map((hobby) => (
-                                <Badge
-                                  key={hobby}
-                                  variant="secondary"
-                                  className="bg-blue-100 text-blue-700"
-                                >
-                                  {getInterestIcon(hobby)}
-                                  <span className="ml-1">{hobby}</span>
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </TabsContent>
 
-                  {/* Partner Preferences */}
-                  <TabsContent value="preferences" className="space-y-6">
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-gray-800 border-b border-rose-100 pb-2">
-                        Partner Preferences
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Age Range:</span>
-                            <span className="font-medium">
-                              {mockProfile.partnerAgeRange}
-                            </span>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-blue-50 rounded-lg space-y-3 sm:space-y-0">
+                            <div className="flex items-center space-x-3">
+                              <Mail className="h-5 w-5 text-blue-600" />
+                              <div>
+                                <p className="font-medium text-gray-800">
+                                  Email Address
+                                </p>
+                                <p className="text-blue-700 font-semibold break-all">
+                                  {biodata?.contactInfo.email}
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="border-blue-200 text-blue-700 hover:bg-blue-50 bg-transparent w-full sm:w-auto"
+                            >
+                              Send Email
+                            </Button>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Height:</span>
-                            <span className="font-medium">
-                              {mockProfile.partnerHeight}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Education:</span>
-                            <span className="font-medium">
-                              {mockProfile.partnerEducation}
-                            </span>
-                          </div>
+
+                          {biodata?.contactInfo.facebook && (
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-indigo-50 rounded-lg space-y-3 sm:space-y-0">
+                              <div className="flex items-center space-x-3">
+                                <Facebook className="h-5 w-5 text-indigo-600" />
+                                <div>
+                                  <p className="font-medium text-gray-800">
+                                    Facebook
+                                  </p>
+                                  <p className="text-indigo-700 font-semibold break-all">
+                                    {biodata?.contactInfo?.facebook}
+                                  </p>
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 bg-transparent w-full sm:w-auto"
+                              >
+                                Visit biodata
+                              </Button>
+                            </div>
+                          )}
                         </div>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Profession:</span>
-                            <span className="font-medium">
-                              {mockProfile.partnerProfession}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Location:</span>
-                            <span className="font-medium">
-                              {mockProfile.partnerLocation}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Income:</span>
-                            <span className="font-medium">
-                              {mockProfile.partnerIncome}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                      </InfoCard>
                     </div>
-                  </TabsContent>
-                </CardContent>
+                  )}
+
+                  {/* Preferences Tab */}
+                  {activeTab === "preferences" && (
+                    <div className="space-y-6">
+                      <InfoCard title="Partner Preferences" icon={Heart}>
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-1 gap-4">
+                            <div className="space-y-3">
+                              <InfoRow
+                                label="Age Range"
+                                value={biodata?.preference?.ageRange}
+                              />
+                              <InfoRow
+                                label="Education Level"
+                                value={biodata?.preference?.educationLevel}
+                              />
+                              <InfoRow
+                                label="Marital Status"
+                                value={biodata?.preference?.maritalStatus}
+                              />
+                              <InfoRow
+                                label="Religious Practice"
+                                value={biodata?.preference?.religiousPractice}
+                              />
+                              <InfoRow
+                                label="Physical Appearance"
+                                value={biodata?.preference?.physicalAppearance}
+                              />
+                            </div>
+                          </div>
+
+                          <Separator className="my-4" />
+
+                          <div>
+                            <h4 className="font-semibold text-gray-800 mb-3">
+                              Additional Qualities
+                            </h4>
+                            <div className="bg-rose-50 rounded-lg p-4">
+                              <p className="text-gray-700 leading-relaxed">
+                                {biodata?.preference?.additionalQualities}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </InfoCard>
+                    </div>
+                  )}
+                </div>
               </Tabs>
-            </Card>
+            </div>
           </div>
         </div>
       </div>

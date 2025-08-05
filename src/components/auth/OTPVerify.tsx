@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, use } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { ArrowLeft, Shield, CheckCircle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -66,7 +66,7 @@ export default function OTPVerify() {
     if (email) {
       sendInitialOtp();
     }
-  }, [email]);
+  });
 
   // API Calls
   const sendOtpToEmail = async (emailAddress: string): Promise<ApiResponse> => {
@@ -184,8 +184,12 @@ export default function OTPVerify() {
         "Account verified successfully! You can now continue to your dashboard."
       );
       setError("");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if(err instanceof Error) {
+        setError(err.message);
+      }else{
+        setError("Something went wrong please try again or contact support.")
+      }
       setEmailOtp(["", "", "", "", "", ""]);
       setEmailVerified(false);
       setUserVerified(false);
@@ -199,28 +203,33 @@ export default function OTPVerify() {
   };
 
   const handleEmailResend = async () => {
-    if (countdown > 0) return;
+  if (countdown > 0) return;
 
-    setIsSendingOtp(true);
-    setEmailOtp(["", "", "", "", "", ""]);
-    setError("");
-    setSuccess("");
-    setEmailVerified(false);
-    setUserVerified(false);
+  setIsSendingOtp(true);
+  setEmailOtp(["", "", "", "", "", ""]);
+  setError("");
+  setSuccess("");
+  setEmailVerified(false);
+  setUserVerified(false);
 
-    try {
-      await sendOtpToEmail(email);
-      setSuccess("New OTP sent to your email!");
-      setCountdown(60);
-      setTimeout(() => {
-        emailInputRefs.current[0]?.focus();
-      }, 100);
-    } catch (err: any) {
+  try {
+    await sendOtpToEmail(email);
+    setSuccess("New OTP sent to your email!");
+    setCountdown(60);
+    setTimeout(() => {
+      emailInputRefs.current[0]?.focus();
+    }, 100);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
       setError(err.message);
-    } finally {
-      setIsSendingOtp(false);
+    } else {
+      setError("Failed to send OTP.");
     }
-  };
+  } finally {
+    setIsSendingOtp(false);
+  }
+};
+
 
   const sendInitialOtp = async () => {
     setIsSendingOtp(true);
@@ -231,8 +240,12 @@ export default function OTPVerify() {
       setTimeout(() => {
         emailInputRefs.current[0]?.focus();
       }, 100);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if(err instanceof Error){
+        setError(err.message);
+      }else{
+        setError('Something went wrong!');
+      }
     } finally {
       setIsSendingOtp(false);
     }
@@ -337,7 +350,7 @@ export default function OTPVerify() {
                   Verify Your Email
                 </h1>
                 <p className="text-gray-600 max-w-md mx-auto">
-                  We've sent a verification code to your email address. Please
+                  We&apos;ve sent a verification code to your email address. Please
                   enter the 6-digit code below to verify your account.
                 </p>
               </div>
@@ -452,7 +465,7 @@ export default function OTPVerify() {
 
             {/* Help Section */}
             <div className="pt-6 border-t border-gray-100 text-center space-y-4">
-              <p className="text-sm text-gray-600">Didn't receive the code?</p>
+              <p className="text-sm text-gray-600">Didn&apos;t receive the code?</p>
               <div className="flex flex-col sm:flex-row gap-2 justify-center">
                 <Button
                   variant="ghost"
