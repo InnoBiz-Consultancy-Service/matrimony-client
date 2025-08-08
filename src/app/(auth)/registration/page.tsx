@@ -125,7 +125,7 @@ export default function RegistrationPage() {
         JSON.stringify({ email: data.email, phone: data.phone })
       );
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`,
+        `api/auth/registration`,
         {
           agreeToPrivacy: data.agreeToPrivacy,
           agreeToTerms: data.agreeToTerms,

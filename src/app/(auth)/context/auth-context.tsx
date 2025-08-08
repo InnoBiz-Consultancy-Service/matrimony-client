@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     initializeAuth();
-  });
+  }, []);
 
   const initializeAuth = () => {
     const token = getCookie('accessToken') || localStorage.getItem('token');

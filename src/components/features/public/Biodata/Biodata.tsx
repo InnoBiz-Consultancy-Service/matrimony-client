@@ -228,8 +228,8 @@ export default function ProfessionalBiodatasPage() {
         setFilteredProfiles([]);
       }
     } catch (error) {
-      console.error("Failed to fetch biodata:", error);
-      setError("Failed to load profiles. Please try again later.");
+      // console.error("Failed to fetch biodata:", error);
+      setError(`You are not authorized to view this page. Please login first.`);
       setProfiles([]);
       setFilteredProfiles([]);
     } finally {
@@ -460,18 +460,16 @@ export default function ProfessionalBiodatasPage() {
               <Users className="h-12 w-12 text-rose-500" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              No Profiles Found
+              You are not authorized to view this page. Please login first.
             </h3>
             <p className="text-gray-600 mb-6">
-              {error
-                ? "Please check your connection and try again"
-                : "Try adjusting your filters to see more results"}
+              {error &&
+                "Please login to view view profiles or try again later."}
             </p>
-            <Button
-              onClick={error ? getAllBioData : clearFilters}
-              className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white"
-            >
-              {error ? "Retry" : "Clear Filters"}
+            <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white">
+              <Link href="/login" className="flex items-center">
+                Login to View Profiles
+              </Link>
             </Button>
           </div>
         ) : (
@@ -597,7 +595,10 @@ export default function ProfessionalBiodatasPage() {
 
                     {/* Action Buttons */}
                     <div className="flex space-x-2 pt-4 border-t border-gray-100">
-                      <Link href={`/biodatas/${profile._id}`} className="flex-1">
+                      <Link
+                        href={`/biodatas/${profile._id}`}
+                        className="flex-1"
+                      >
                         <Button className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white">
                           <Eye className="h-4 w-4 mr-2" />
                           View Profile

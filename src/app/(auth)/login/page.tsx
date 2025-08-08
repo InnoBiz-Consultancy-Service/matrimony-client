@@ -16,7 +16,7 @@ import { toast } from "sonner";
 const authService = {
   login: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+      `/api/auth/login`,
       credentials,
       { 
         headers: { "Content-Type": "application/json" },
@@ -86,6 +86,7 @@ export default function LoginPage() {
       // Redirect with success feedback
       toast.success("Login successful!");
       router.push("/");
+      router.refresh();
       
     } catch (error: unknown) {
       authService.clearAuthData();
