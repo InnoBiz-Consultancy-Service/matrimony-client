@@ -144,10 +144,7 @@ export default function SearchFilters() {
     setIsSearching(true);
 
     try {
-      // Simulate API call (replace with real API call)
       await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Generate and update URL params
       const params = generateSearchParams(filters);
       router.push(`/biodatas?${params.toString()}`, { scroll: false });
     } finally {

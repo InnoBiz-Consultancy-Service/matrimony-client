@@ -11,7 +11,6 @@ import {
   Users,
   Heart,
   Shield,
-  Edit,
   Camera,
   Star,
   Crown,
@@ -19,7 +18,6 @@ import {
   BookOpen,
   MessageCircle,
   Share2,
-  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,86 +26,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import Link from "next/link";
 import axios from "axios";
 import { Profile } from "@/types/bioData";
-
-// API Response Data Structure
-// const apiResponse = {
-//   message: "Biodata fetched",
-//   data: {
-//     description:
-//       "Full Stack Developer, passionate about Islamic lifestyle and technology.",
-//     address: {
-//       present: "Sylhet, Bangladesh",
-//       permanent: "Sylhet, Bangladesh",
-//       country: "Bangladesh",
-//     },
-//     education: {
-//       sscYear: "2015",
-//       sscGroup: "Science",
-//       sscResult: "GPA 5.00",
-//       hscYear: "2017",
-//       hscGroup: "Science",
-//       hscResult: "GPA 5.00",
-//       honours: "BSc in Computer Science & Engineering",
-//     },
-//     familyInfo: {
-//       fatherAlive: "Yes",
-//       fatherOccupation: "Businessman",
-//       motherAlive: "Yes",
-//       motherOccupation: "Homemaker",
-//       brothers: "2",
-//       sisters: "1",
-//       siblingsDetails:
-//         "Elder brother working in IT, younger brother studying HSC, sister married",
-//     },
-//     personalInfo: {
-//       beard: "Yes, Sunnah length",
-//       salat: "5 times regularly",
-//       mahramTravel: "Always with Mahram",
-//       health: "Healthy",
-//       disability: "None",
-//     },
-//     physicalInfo: {
-//       height: "5 feet 8 inches",
-//       bodyColor: "Fair",
-//       bloodGroup: "B+",
-//       weight: "68 kg",
-//     },
-//     maritalInfo: {
-//       maritalStatus: "Unmarried",
-//       childAllow: "Yes",
-//       whyWantToMarry: "To complete half of deen and build a righteous family",
-//       futurePlan:
-//         "Contribute to Islamic IT solutions and support family & community",
-//     },
-//     contactInfo: {
-//       phone: "+8801712345678",
-//       email: "salim@example.com",
-//       facebook: "https://facebook.com/mohammadsalim",
-//     },
-//     preference: {
-//       educationLevel: "Honours or above",
-//       maritalStatus: "Unmarried",
-//       religiousPractice: "Prays 5 times, wears hijab/niqab",
-//       physicalAppearance: "Fair or wheatish, moderate height",
-//       additionalQualities: "Good akhlaq, interest in Islamic knowledge",
-//       ageRange: "20-25",
-//     },
-//     _id: "68832ba1dfb1b0dba19cab3d",
-//     userId: {
-//       _id: "6883291d457b8c6f8185d173",
-//       email: "salim@example.com",
-//       role: "user",
-//     },
-//     name: "Mohammad Salim Ali",
-//     age: 24,
-//     createdAt: "2025-07-25T07:00:49.154Z",
-//     updatedAt: "2025-07-25T07:01:45.572Z",
-//     __v: 0,
-//   },
-// };
 
 export default function Biodata({ id }: { id: string }) {
   const [activeTab, setActiveTab] = React.useState("overview");
@@ -177,7 +97,7 @@ export default function Biodata({ id }: { id: string }) {
   }: {
     label: string;
     value: string | undefined;
-    icon?:  React.ElementType;
+    icon?: React.ElementType;
   }) => (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100 last:border-b-0 space-y-1 sm:space-y-0">
       <div className="flex items-center space-x-2">
@@ -194,31 +114,6 @@ export default function Biodata({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
-      {/* Header */}
-      <div className="bg-white border-b border-rose-100">
-        <div className="container mx-auto px-4 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                className="text-rose-600 hover:bg-rose-50"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Account Settings
-              </Button>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Link href={"/biodata/update"}>
-                <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 cursor-pointer text-white">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit biodata
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="container mx-auto px-4 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left Sidebar - biodata Summary */}
@@ -263,10 +158,6 @@ export default function Biodata({ id }: { id: string }) {
                 </div>
 
                 <div className="flex justify-center space-x-2 mb-4">
-                  <Badge className="bg-green-100 text-green-700">
-                    <div className="h-2 w-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
-                    Online
-                  </Badge>
                   <Badge className="bg-blue-100 text-blue-700">Verified</Badge>
                   <Badge className="bg-amber-100 text-amber-700">Premium</Badge>
                 </div>
@@ -286,57 +177,9 @@ export default function Biodata({ id }: { id: string }) {
                   </div>
                 </div>
               </CardContent>
-            </Card>
-
-            {/* biodata Completeness */}
-            <Card className="border-rose-100">
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-gray-800">
-                      biodata Completeness
-                    </h3>
-                    <span className="text-2xl font-bold text-rose-600">
-                      {biodataCompleteness}%
-                    </span>
-                  </div>
-                  <Progress value={biodataCompleteness} className="h-3" />
-                  <p className="text-sm text-gray-600">
-                    Complete your biodata to get more visibility and better
-                    matches.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card className="border-rose-100">
-              <CardContent className="p-6 space-y-3">
-                <h3 className="font-semibold text-gray-800 mb-4">
-                  Quick Actions
-                </h3>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
-                >
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  View Messages
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
-                >
-                  <Heart className="h-4 w-4 mr-2" />
-                  My Interests
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start border-rose-200 hover:bg-rose-50 bg-transparent"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share biodata
-                </Button>
-              </CardContent>
+              <div className="px-5">
+                <Button className="cursor-pointer w-full">Send Interest</Button>
+              </div>
             </Card>
           </div>
 
