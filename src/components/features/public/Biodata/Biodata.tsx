@@ -13,64 +13,16 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
 import { ProfileSkeleton } from "@/components/common/Loader";
-// import { useSearchParams } from "next/navigation";
-// import { useSearchFilters } from "@/hooks/useSearchFilters";
-import axios from "axios";
-import { FilterState, Profile } from "@/types/bioData";
-
-const religions = [
-  "Islam",
-  "Christianity",
-  "Hinduism",
-  "Buddhism",
-  "Judaism",
-  "Sikhism",
-  "Other",
-  "No Preference",
-];
-
-// const professions = [
-//   "Doctor",
-//   "Engineer",
-//   "Teacher",
-//   "Business Owner",
-//   "Software Developer",
-//   "Lawyer",
-//   "Accountant",
-//   "Nurse",
-//   "Architect",
-//   "Designer",
-//   "Marketing Professional",
-//   "Sales Professional",
-//   "Government Employee",
-//   "Student",
-//   "Other",
-//   "Any Profession",
-// ];
+import axios, { AxiosError } from "axios";
+import { Profile } from "@/types/bioData";
+import { useSearchParams, useRouter } from "next/navigation";
+import SearchFilters from "../Home/SearchFilters/SearchFilters";
 
 export default function ProfessionalBiodatasPage() {
-  const [filters, setFilters] = React.useState<FilterState>({
-    lookingFor: "",
-    ageRange: [18, 40],
-    religion: "",
-    profession: "",
-    location: "",
-    keyword: "",
-    sortBy: "newest",
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [showFilters, setShowFilters] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -78,91 +30,6 @@ export default function ProfessionalBiodatasPage() {
   const [filteredProfiles, setFilteredProfiles] = React.useState<Profile[]>([]);
   const [savedProfiles, setSavedProfiles] = React.useState<string[]>([]);
   const [error, setError] = React.useState<string>("");
-
-  // const filter = useSearchFilters();
-
-  const handleFilterChange = (key: keyof FilterState, value: unknown) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
-  // Frontend filtering function
-  const applyFilters = () => {
-    let filtered = [...profiles];
-
-    // Age filter
-    if (filters.ageRange[0] !== 18 || filters.ageRange[1] !== 40) {
-      filtered = filtered.filter((profile) => {
-        const age = profile.age || 0;
-        return age >= filters.ageRange[0] && age <= filters.ageRange[1];
-      });
-    }
-
-    // Location filter
-    if (filters.location) {
-      filtered = filtered.filter(
-        (profile) =>
-          profile.address.present
-            .toLowerCase()
-            .includes(filters.location.toLowerCase()) ||
-          profile.address.country
-            .toLowerCase()
-            .includes(filters.location.toLowerCase())
-      );
-    }
-
-    // Profession filter (checking father's occupation as profession)
-    if (filters.profession) {
-      filtered = filtered.filter((profile) =>
-        profile.familyInfo.fatherOccupation
-          .toLowerCase()
-          .includes(filters.profession.toLowerCase())
-      );
-    }
-
-    // Keyword search
-    if (filters.keyword) {
-      const keyword = filters.keyword.toLowerCase();
-      filtered = filtered.filter(
-        (profile) =>
-          profile.name.toLowerCase().includes(keyword) ||
-          profile.description.toLowerCase().includes(keyword) ||
-          profile.education.honours.toLowerCase().includes(keyword) ||
-          profile.familyInfo.fatherOccupation.toLowerCase().includes(keyword)
-      );
-    }
-
-    // Sort by
-    if (filters.sortBy === "newest") {
-      filtered.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-    } else if (filters.sortBy === "oldest") {
-      filtered.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-    }
-
-    setFilteredProfiles(filtered);
-  };
-
-  const handleSearch = () => {
-    applyFilters();
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      lookingFor: "",
-      ageRange: [18, 40],
-      religion: "",
-      profession: "",
-      location: "",
-      keyword: "",
-      sortBy: "newest",
-    });
-    setFilteredProfiles(profiles);
-  };
 
   const toggleSaveProfile = (profileId: string) => {
     setSavedProfiles((prev) =>
@@ -172,18 +39,8 @@ export default function ProfessionalBiodatasPage() {
     );
   };
 
-  const getActiveFiltersCount = () => {
-    let count = 0;
-    if (filters.lookingFor) count++;
-    if (filters.religion) count++;
-    if (filters.profession) count++;
-    if (filters.location) count++;
-    if (filters.keyword) count++;
-    if (filters.ageRange[0] !== 18 || filters.ageRange[1] !== 40) count++;
-    return count;
-  };
-
   const getInitials = (name: string) => {
+    if (!name) return "NA";
     return name
       .split(" ")
       .map((n) => n[0])
@@ -200,36 +57,123 @@ export default function ProfessionalBiodatasPage() {
       "from-amber-400 to-amber-600",
       "from-teal-400 to-teal-600",
     ];
-    const index = name.length % colors.length;
+    const index = (name?.length || 0) % colors.length;
     return colors[index];
   };
-
+  const divisionMap: Record<string, string> = {
+    "1": "Chattagram",
+    "2": "Rajshahi",
+    "3": "Khulna",
+    "4": "Barisal",
+    "5": "Sylhet",
+    "6": "Dhaka",
+    "7": "Rangpur",
+    "8": "Mymensingh",
+  };
   const getAllBioData = async () => {
     try {
       setIsLoading(true);
       setError("");
       const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Authentication token not found. Please login first.");
+        router.push("/login");
+        return;
+      }
+
+      // Get search parameters from URL
+      const lookingFor = searchParams.get("lookingFor") || "";
+      const minAge = searchParams.get("minAge");
+      const maxAge = searchParams.get("maxAge");
+      const division = searchParams.get("division") || "";
+      const district = searchParams.get("district") || "";
+      const upazila = searchParams.get("upazila") || "";
+      const profession = searchParams.get("profession") || "";
+      const education = searchParams.get("education") || "";
+      const maritalStatus = searchParams.get("maritalStatus") || "";
+      const incomeRange = searchParams.get("incomeRange") || "";
+
+      // Build query parameters
+      const queryParams: Record<string, string | number> = {};
+
+      if (lookingFor) queryParams.lookingFor = lookingFor;
+      if (minAge) queryParams.minAge = minAge;
+      if (maxAge) queryParams.maxAge = maxAge;
+      if (division) {
+        const divisionName = divisionMap[division];
+        if (divisionName) {
+          queryParams["address.present.division"] = divisionName;
+        }
+      }
+      if (district) queryParams["address.present.district"] = district;
+      if (upazila) queryParams["address.present.upazila"] = upazila;
+      if (profession) queryParams.profession = profession;
+      if (education) queryParams.education = education;
+      if (maritalStatus)
+        queryParams["maritalInfo.maritalStatus"] = maritalStatus;
+      if (incomeRange) queryParams.incomeRange = incomeRange;
+
+      console.log("Frontend sending these params:", queryParams);
+
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
         {
           headers: {
             Authorization: `${token}`,
+            "Content-Type": "application/json",
           },
+          params: queryParams,
+          timeout: 10000,
         }
       );
 
-      // console.log("Biodata fetched:", response.data);
+      console.log("Backend response:", response.data);
 
-      if (response.data && response.data.data) {
-        setProfiles(response.data.data);
-        setFilteredProfiles(response.data.data);
+      if (response.data?.success || response.data?.data) {
+        const profilesData = Array.isArray(response.data.data)
+          ? response.data.data
+          : [];
+        setProfiles(profilesData);
+        setFilteredProfiles(profilesData);
+
+        if (profilesData.length === 0) {
+          setError("No profiles found matching your criteria.");
+        }
       } else {
+        setError("No profiles found or invalid response format.");
         setProfiles([]);
         setFilteredProfiles([]);
       }
     } catch (error) {
-      // console.error("Failed to fetch biodata:", error);
-      setError(`You are not authorized to view this page. Please login first.`);
+      console.error("Error fetching biodata:", error);
+
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response?.status === 401) {
+        setError("You are not authorized. Please login first.");
+        router.push("/login");
+      } else if (axiosError.response?.status === 403) {
+        setError("Access denied. You don't have permission to view profiles.");
+      } else if (axiosError.response?.status === 404) {
+        setError("Biodata service not found. Please contact support.");
+      } else if (axiosError.code === "ECONNABORTED") {
+        setError(
+          "Request timeout. Please check your internet connection and try again."
+        );
+      } else if (!navigator.onLine) {
+        setError(
+          "No internet connection. Please check your network and try again."
+        );
+      } else {
+        setError(
+          (axiosError.response?.data && typeof axiosError.response.data === "object" && "message" in axiosError.response.data
+            ? (axiosError.response.data as { message?: string }).message
+            : undefined) ||
+            "Failed to fetch profiles. Please try again later."
+        );
+      }
+
       setProfiles([]);
       setFilteredProfiles([]);
     } finally {
@@ -239,12 +183,12 @@ export default function ProfessionalBiodatasPage() {
 
   React.useEffect(() => {
     getAllBioData();
-  }, []);
+  }, [searchParams]); 
 
-  // Apply filters whenever filters change
-  React.useEffect(() => {
-    applyFilters();
-  }, [filters, profiles]);
+  const handleRetry = () => {
+    setError("");
+    getAllBioData();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
@@ -253,7 +197,6 @@ export default function ProfessionalBiodatasPage() {
         <div className="container mx-auto px-4 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              {/* Filter Toggle */}
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
@@ -261,8 +204,17 @@ export default function ProfessionalBiodatasPage() {
               >
                 <SlidersHorizontal className="h-4 w-4 mr-2" />
                 Filters{" "}
-                {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
               </Button>
+
+              {error && (
+                <Button
+                  variant="outline"
+                  onClick={handleRetry}
+                  className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                >
+                  Retry
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -270,187 +222,31 @@ export default function ProfessionalBiodatasPage() {
 
       {/* Filters Panel */}
       {showFilters && (
-        <div className="bg-white border-b border-rose-100 shadow-lg">
-          <div className="container mx-auto px-4 lg:px-8 py-6">
-            <Card className="border-rose-100">
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                  {/* Looking For */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <Users className="h-4 w-4 mr-2 text-rose-500" />
-                      Looking For
-                    </Label>
-                    <RadioGroup
-                      value={filters.lookingFor}
-                      onValueChange={(value) =>
-                        handleFilterChange("lookingFor", value)
-                      }
-                      className="flex space-x-6"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="male"
-                          id="male"
-                          className="border-2 border-gray-300 text-rose-600"
-                        />
-                        <Label
-                          htmlFor="male"
-                          className="cursor-pointer font-medium"
-                        >
-                          Male
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="female"
-                          id="female"
-                          className="border-2 border-gray-300 text-rose-600"
-                        />
-                        <Label
-                          htmlFor="female"
-                          className="cursor-pointer font-medium"
-                        >
-                          Female
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-
-                  {/* Religion */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700">
-                      Religion
-                    </Label>
-                    <Select
-                      value={filters.religion}
-                      onValueChange={(value) =>
-                        handleFilterChange("religion", value)
-                      }
-                    >
-                      <SelectTrigger className="border-2 w-full border-gray-200 focus:border-rose-400 rounded-sm">
-                        <SelectValue placeholder="Select religion" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {religions.map((religion) => (
-                          <SelectItem
-                            key={religion}
-                            value={religion.toLowerCase()}
-                          >
-                            {religion}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Profession */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700">
-                      Profession
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder="Enter profession"
-                      value={filters.profession}
-                      onChange={(e) =>
-                        handleFilterChange("profession", e.target.value)
-                      }
-                      className="border-2 w-full border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-sm"
-                    />
-                  </div>
-
-                  {/* Location */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <MapPin className="h-4 w-4 mr-2 text-rose-500" />
-                      Location
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder="City, State, Country"
-                      value={filters.location}
-                      onChange={(e) =>
-                        handleFilterChange("location", e.target.value)
-                      }
-                      className="border-2 w-full border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Keyword Search */}
-                <div className="mb-6">
-                  <Label className="text-sm font-semibold text-gray-700 mb-3 block">
-                    Search Keywords
-                  </Label>
-                  <Input
-                    type="text"
-                    placeholder="Search by name, description, education..."
-                    value={filters.keyword}
-                    onChange={(e) =>
-                      handleFilterChange("keyword", e.target.value)
-                    }
-                    className="border-2 w-full border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-sm"
-                  />
-                </div>
-
-                {/* Age Range */}
-                <div className="mb-6">
-                  <Label className="text-sm font-semibold text-gray-700 mb-4 block">
-                    Age Range: {filters.ageRange[0]} - {filters.ageRange[1]}{" "}
-                    years
-                  </Label>
-                  <div className="px-4">
-                    <Slider
-                      value={filters.ageRange}
-                      onValueChange={(value) =>
-                        handleFilterChange("ageRange", value)
-                      }
-                      max={70}
-                      min={18}
-                      step={1}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between text-sm text-gray-500 mt-2">
-                      <span>18</span>
-                      <span>70</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Filter Actions */}
-                <div className="flex justify-between items-center">
-                  <Button
-                    variant="ghost"
-                    onClick={clearFilters}
-                    className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                  >
-                    Clear All Filters
-                  </Button>
-                  <Button
-                    onClick={handleSearch}
-                    className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white px-8"
-                  >
-                    Apply Filters
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        <>
+          <SearchFilters />
+        </>
       )}
 
       {/* Results */}
       <div className="container mx-auto px-4 lg:px-8 py-8">
+        {/* Error Display */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-            {error}
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6 flex items-center justify-between">
+            <span>{error}</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setError("")}
+              className="text-red-700 hover:text-red-800"
+            >
+              ✕
+            </Button>
           </div>
         )}
 
         {isLoading ? (
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(8)].map((_, i) => (
               <ProfileSkeleton key={i} />
             ))}
           </div>
@@ -460,17 +256,31 @@ export default function ProfessionalBiodatasPage() {
               <Users className="h-12 w-12 text-rose-500" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              You are not authorized to view this page. Please login first.
+              {error ? "Unable to Load Profiles" : "No Profiles Found"}
             </h3>
             <p className="text-gray-600 mb-6">
-              {error &&
-                "Please login to view view profiles or try again later."}
+              {error
+                ? "Please check your connection and try again."
+                : "Try adjusting your search filters or check back later."}
             </p>
-            <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white">
-              <Link href="/login" className="flex items-center">
-                Login to View Profiles
+            <div className="space-x-4">
+              {error && (
+                <Button
+                  onClick={handleRetry}
+                  className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white"
+                >
+                  Try Again
+                </Button>
+              )}
+              <Link href="/login">
+                <Button
+                  variant="outline"
+                  className="border-rose-200 text-rose-700 hover:bg-rose-50"
+                >
+                  Login
+                </Button>
               </Link>
-            </Button>
+            </div>
           </div>
         ) : (
           <>
@@ -479,7 +289,6 @@ export default function ProfessionalBiodatasPage() {
               <p className="text-gray-600">
                 Showing {filteredProfiles.length} of {profiles.length}{" "}
                 {filteredProfiles.length === 1 ? "profile" : "profiles"}
-                {getActiveFiltersCount() > 0 && " (filtered)"}
               </p>
             </div>
 
@@ -492,19 +301,18 @@ export default function ProfessionalBiodatasPage() {
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
-                      {/* Profile Avatar with Initials */}
                       <div className="flex items-center space-x-4">
                         <div
                           className={`h-16 w-16 rounded-full bg-gradient-to-br ${getProfileColor(
-                            profile.name
+                            profile.name || ""
                           )} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
                         >
-                          {getInitials(profile.name)}
+                          {getInitials(profile.name || "")}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
                             <h3 className="text-xl font-bold text-gray-800">
-                              {profile.name}
+                              {profile.name || "Name not provided"}
                             </h3>
                           </div>
                           <p className="text-gray-600 font-medium">
@@ -512,7 +320,7 @@ export default function ProfessionalBiodatasPage() {
                               ? `${profile.age} years`
                               : "Age not specified"}{" "}
                             •{" "}
-                            {profile.physicalInfo.height ||
+                            {profile.physicalInfo?.height ||
                               "Height not specified"}
                           </p>
                         </div>
@@ -524,7 +332,7 @@ export default function ProfessionalBiodatasPage() {
                     {/* Professional Details */}
                     <div className="grid grid-cols-1 gap-4">
                       <div className="space-y-3">
-                        {profile.familyInfo.fatherOccupation && (
+                        {profile.familyInfo?.fatherOccupation && (
                           <div className="flex items-center text-gray-600">
                             <Briefcase className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                             <div className="min-w-0">
@@ -535,7 +343,7 @@ export default function ProfessionalBiodatasPage() {
                           </div>
                         )}
 
-                        {profile.education.honours && (
+                        {profile.education?.honours && (
                           <div className="flex items-center text-gray-600">
                             <GraduationCap className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                             <div className="min-w-0">
@@ -550,8 +358,11 @@ export default function ProfessionalBiodatasPage() {
                           <MapPin className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-gray-800 truncate">
-                              {profile.address.present},{" "}
-                              {profile.address.country}
+                              {profile.address?.present ||
+                                "Location not specified"}
+                              ,{" "}
+                              {profile.address?.country ||
+                                "Country not specified"}
                             </p>
                           </div>
                         </div>
@@ -561,22 +372,22 @@ export default function ProfessionalBiodatasPage() {
                     {/* Physical Info */}
                     <div className="bg-gray-50 rounded-lg p-3">
                       <div className="grid grid-cols-2 gap-2 text-xs">
-                        {profile.physicalInfo.weight && (
+                        {profile.physicalInfo?.weight && (
                           <p className="text-gray-600">
                             Weight: {profile.physicalInfo.weight}
                           </p>
                         )}
-                        {profile.physicalInfo.bloodGroup && (
+                        {profile.physicalInfo?.bloodGroup && (
                           <p className="text-gray-600">
                             Blood: {profile.physicalInfo.bloodGroup}
                           </p>
                         )}
-                        {profile.physicalInfo.bodyColor && (
+                        {profile.physicalInfo?.bodyColor && (
                           <p className="text-gray-600">
                             Complexion: {profile.physicalInfo.bodyColor}
                           </p>
                         )}
-                        {profile.maritalInfo.maritalStatus && (
+                        {profile.maritalInfo?.maritalStatus && (
                           <p className="text-gray-600">
                             Status: {profile.maritalInfo.maritalStatus}
                           </p>
@@ -640,9 +451,10 @@ export default function ProfessionalBiodatasPage() {
               <Button
                 variant="outline"
                 className="border-rose-200 text-rose-700 hover:bg-rose-50 px-8 py-3 bg-transparent"
-                onClick={() => getAllBioData()}
+                onClick={handleRetry}
+                disabled={isLoading}
               >
-                Refresh Profiles
+                {isLoading ? "Loading..." : "Refresh Profiles"}
               </Button>
             </div>
           </>

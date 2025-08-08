@@ -2,6 +2,7 @@ import * as z from "zod";
 export const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
+  age: z.string().min(2, "Age must be at least 2 characters"),
   // Address
   presentDivision: z.string().optional(),
   presentDistrict: z.string().optional(),
