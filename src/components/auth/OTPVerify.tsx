@@ -66,7 +66,7 @@ export default function OTPVerify() {
     if (email) {
       sendInitialOtp();
     }
-  });
+  }, []);
 
   // API Calls
   const sendOtpToEmail = async (emailAddress: string): Promise<ApiResponse> => {
@@ -75,11 +75,15 @@ export default function OTPVerify() {
         `${process.env.NEXT_PUBLIC_BASE_URL}/send-otp`,
         {
           email: emailAddress,
+        },
+        {
+          withCredentials: true,
         }
       );
       return response.data;
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
+      console.log(error);
       throw new Error(
         err.response?.data?.message || "Failed to send OTP. Please try again."
       );
@@ -185,10 +189,10 @@ export default function OTPVerify() {
       );
       setError("");
     } catch (err: unknown) {
-      if(err instanceof Error) {
+      if (err instanceof Error) {
         setError(err.message);
-      }else{
-        setError("Something went wrong please try again or contact support.")
+      } else {
+        setError("Something went wrong please try again or contact support.");
       }
       setEmailOtp(["", "", "", "", "", ""]);
       setEmailVerified(false);
@@ -203,33 +207,32 @@ export default function OTPVerify() {
   };
 
   const handleEmailResend = async () => {
-  if (countdown > 0) return;
+    if (countdown > 0) return;
 
-  setIsSendingOtp(true);
-  setEmailOtp(["", "", "", "", "", ""]);
-  setError("");
-  setSuccess("");
-  setEmailVerified(false);
-  setUserVerified(false);
+    setIsSendingOtp(true);
+    setEmailOtp(["", "", "", "", "", ""]);
+    setError("");
+    setSuccess("");
+    setEmailVerified(false);
+    setUserVerified(false);
 
-  try {
-    await sendOtpToEmail(email);
-    setSuccess("New OTP sent to your email!");
-    setCountdown(60);
-    setTimeout(() => {
-      emailInputRefs.current[0]?.focus();
-    }, 100);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      setError(err.message);
-    } else {
-      setError("Failed to send OTP.");
+    try {
+      await sendOtpToEmail(email);
+      setSuccess("New OTP sent to your email!");
+      setCountdown(60);
+      setTimeout(() => {
+        emailInputRefs.current[0]?.focus();
+      }, 100);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to send OTP.");
+      }
+    } finally {
+      setIsSendingOtp(false);
     }
-  } finally {
-    setIsSendingOtp(false);
-  }
-};
-
+  };
 
   const sendInitialOtp = async () => {
     setIsSendingOtp(true);
@@ -241,10 +244,10 @@ export default function OTPVerify() {
         emailInputRefs.current[0]?.focus();
       }, 100);
     } catch (err: unknown) {
-      if(err instanceof Error){
+      if (err instanceof Error) {
         setError(err.message);
-      }else{
-        setError('Something went wrong!');
+      } else {
+        setError("Something went wrong!");
       }
     } finally {
       setIsSendingOtp(false);
@@ -350,8 +353,8 @@ export default function OTPVerify() {
                   Verify Your Email
                 </h1>
                 <p className="text-gray-600 max-w-md mx-auto">
-                  We&apos;ve sent a verification code to your email address. Please
-                  enter the 6-digit code below to verify your account.
+                  We&apos;ve sent a verification code to your email address.
+                  Please enter the 6-digit code below to verify your account.
                 </p>
               </div>
             </div>
@@ -465,7 +468,9 @@ export default function OTPVerify() {
 
             {/* Help Section */}
             <div className="pt-6 border-t border-gray-100 text-center space-y-4">
-              <p className="text-sm text-gray-600">Didn&apos;t receive the code?</p>
+              <p className="text-sm text-gray-600">
+                Didn&apos;t receive the code?
+              </p>
               <div className="flex flex-col sm:flex-row gap-2 justify-center">
                 <Button
                   variant="ghost"
