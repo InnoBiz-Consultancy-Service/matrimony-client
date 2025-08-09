@@ -128,7 +128,7 @@ export default function ProfessionalBiodatasPage() {
         }
       );
 
-      console.log("Backend response:", response.data);
+      // console.log("Backend response:", response.data);
 
       if (response.data?.success || response.data?.data) {
         const profilesData = Array.isArray(response.data.data)

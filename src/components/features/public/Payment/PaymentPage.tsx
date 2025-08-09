@@ -397,7 +397,7 @@ interface SubscriptionPlan {
   price: number;
   duration: string;
   features: string[];
-  icon:  React.ElementType;
+  icon: React.ElementType;
   color: string;
   popular?: boolean;
 }
@@ -479,7 +479,16 @@ export default function PaymentPage() {
       //   }
       // );
       // console.log(response.data);
-      router.push(`/bkash-manual?plan=${planId}`)
+
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({
+          email,
+          name,
+          phone,
+        })
+      );
+      router.push(`/bkash-manual?plan=${planId}`);
 
       toast.success(
         `${selectedPlan.name} plan has been activated successfully`

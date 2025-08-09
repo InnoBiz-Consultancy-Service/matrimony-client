@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -37,6 +37,8 @@ import {
   Clock,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 interface SubscriptionPlan {
   id: string;
@@ -44,7 +46,7 @@ interface SubscriptionPlan {
   price: number;
   duration: string;
   features: string[];
-  icon:  React.ElementType;
+  icon: React.ElementType;
   color: string;
   popular?: boolean;
 }
@@ -52,7 +54,7 @@ interface SubscriptionPlan {
 const subscriptionPlans: Record<string, SubscriptionPlan> = {
   premium: {
     id: "premium",
-    name: "Premium",
+    name: "premium",
     price: 999,
     duration: "1 Month",
     features: [
@@ -68,7 +70,7 @@ const subscriptionPlans: Record<string, SubscriptionPlan> = {
   },
   vip: {
     id: "vip",
-    name: "VIP",
+    name: "vip",
     price: 1999,
     duration: "3 Months",
     features: [
@@ -124,6 +126,9 @@ export default function BkashManualPayment() {
   const selectedPlan = subscriptionPlans[planId];
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { user } = useAuth();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -135,31 +140,50 @@ export default function BkashManualPayment() {
     },
   });
 
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
 
     try {
-      // Validate amount matches plan price
       const paidAmount = Number.parseFloat(values.paidAmount);
       if (selectedPlan && paidAmount !== selectedPlan.price) {
-       toast.error(`Please pay exactly ৳${selectedPlan.price} for ${selectedPlan.name} plan`)
+        toast.error(
+          `Please pay exactly ৳${selectedPlan.price} for ${selectedPlan.name} plan`
+        );
         setIsSubmitting(false);
         return;
       }
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Here you would typically send the form data to your backend
-      console.log("Form data:", values);
-
-      toast.success("Payment Submitted Successfully!")
-
-      // Redirect to success page
-    //   window.location.href = "/payment/success";
+            const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/payment/create`,
+        {
+          ...values,
+          name: userInfo.name,
+          email: userInfo.email,
+          phone: userInfo.phone,
+          approvalStatus: "pending",
+          durationInMonths: selectedPlan?.duration,
+          subscriptionType: selectedPlan?.name,
+          userId: user?.userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          }
+        }
+      );
+      console.log("Payment submission response:", response.data);
+      localStorage.removeItem("userInfo");
+      toast.success("Payment Submitted Successfully!");
+      router.push("/payment/success");
     } catch (error) {
-      console.log(error)
-      toast.error("Submission Failed")
+      console.log(error);
+      toast.error("Submission Failed");
     } finally {
       setIsSubmitting(false);
     }
