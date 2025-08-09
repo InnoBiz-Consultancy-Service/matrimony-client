@@ -25,14 +25,15 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
 import axios from "axios";
 import { Profile } from "@/types/bioData";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 export default function Biodata({ id }: { id: string }) {
   const [activeTab, setActiveTab] = React.useState("overview");
   const [biodata, setBiodata] = React.useState<Profile | undefined>();
 
+  const { user } = useAuth();
   React.useEffect(() => {
     const getbiodata = async () => {
       try {
@@ -53,7 +54,27 @@ export default function Biodata({ id }: { id: string }) {
     };
     getbiodata();
   }, [id]);
-
+  console.log(biodata?.userId?._id)
+  const handleSendInterest = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
+        {
+          sender: user?.userId,
+          receiver: biodata?._id,
+          status: "sent",
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("Interest sent successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending interest:", error);
+    }
+  };
   const biodataCompleteness = 92;
   const biodataViews = 1247;
   const interests = 45;
@@ -178,7 +199,14 @@ export default function Biodata({ id }: { id: string }) {
                 </div>
               </CardContent>
               <div className="px-5">
-                <Button className="cursor-pointer w-full">Send Interest</Button>
+                <Button
+                  onClick={() =>
+                    handleSendInterest({ id: biodata?.userId?._id })
+                  }
+                  className="cursor-pointer w-full"
+                >
+                  Send Interest
+                </Button>
               </div>
             </Card>
           </div>
