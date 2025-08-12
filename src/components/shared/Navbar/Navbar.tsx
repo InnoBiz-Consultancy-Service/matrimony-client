@@ -192,24 +192,37 @@ export default function Navbar() {
 
                     {/* Menu Items */}
                     <div className="py-2">
-                      <Link href="/profile">
-                        <button
-                          onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-rose-50 transition-colors duration-200 group cursor-pointer"
-                        >
-                          <div className="h-9 w-9 rounded-lg bg-rose-100 flex items-center justify-center group-hover:bg-rose-200 transition-colors">
-                            <User className="h-4 w-4 text-rose-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">
-                              My Profile
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              View and edit your profile
-                            </p>
-                          </div>
-                        </button>
-                      </Link>
+                      <button
+                        onClick={() => setIsProfileOpen(false)}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-rose-50 transition-colors duration-200 group cursor-pointer"
+                      >
+                        <div className="h-9 w-9 rounded-lg bg-rose-100 flex items-center justify-center group-hover:bg-rose-200 transition-colors">
+                          <User className="h-4 w-4 text-rose-600" />
+                        </div>
+                        {user?.role === "admin" ? (
+                          <Link href={"/profile"}>
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-800">
+                                Admin Dashboard
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                Manage users and content
+                              </p>
+                            </div>
+                          </Link>
+                        ) : (
+                          <Link href={"/dashboard"}>
+                            <div>
+                              <p className="font-medium text-gray-800">
+                                My Profile
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                View and edit your profile
+                              </p>
+                            </div>
+                          </Link>
+                        )}
+                      </button>
 
                       <Link href="/favorites">
                         <button
