@@ -16,8 +16,6 @@ import {
   Crown,
   Activity,
   BookOpen,
-  MessageCircle,
-  Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -55,14 +53,14 @@ export default function Biodata({ id }: { id: string }) {
     getbiodata();
   }, [id]);
   // console.log(biodata?.userId?._id)
-  console.log(user)
+  console.log(user);
   const handleSendInterest = async () => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
         {
           sender: user?.userId,
-          receiver: biodata?.userId?._id,
+          receiverId: biodata?.userId?._id,
           status: "sent",
         },
         {

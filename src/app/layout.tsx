@@ -21,7 +21,7 @@ export default function RootLayout({
       <body>
         <main>
           <AuthProvider>
-            <CheckProfileProgress />
+            {/* <CheckProfileProgress /> */}
             {children}
             <Toaster />
           </AuthProvider>
