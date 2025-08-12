@@ -154,7 +154,7 @@ export default function BkashManualPayment() {
         setIsSubmitting(false);
         return;
       }
-            const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("No authentication token found");
       }
@@ -166,7 +166,7 @@ export default function BkashManualPayment() {
           email: userInfo.email,
           phone: userInfo.phone,
           approvalStatus: "pending",
-          durationInMonths: selectedPlan?.duration,
+          durationInMonths: selectedPlan?.duration === "3 Month" ? 3 : 1,
           subscriptionType: selectedPlan?.name,
           userId: user?.userId,
         },
@@ -174,7 +174,7 @@ export default function BkashManualPayment() {
           headers: {
             "Content-Type": "application/json",
             Authorization: `${token}`,
-          }
+          },
         }
       );
       console.log("Payment submission response:", response.data);
