@@ -1,6 +1,7 @@
 import { AuthProvider } from "./(auth)/context/auth-context";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import CheckProfileProgress from "@/components/features/public/Home/check-profile-progress/CheckProfileProgress";
 export const metadata = {
   title: "Nikah",
   description:
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body>
         <main>
           <AuthProvider>
+            <CheckProfileProgress />
             {children}
             <Toaster />
           </AuthProvider>

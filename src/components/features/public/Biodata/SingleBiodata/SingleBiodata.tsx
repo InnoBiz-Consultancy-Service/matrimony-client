@@ -47,21 +47,22 @@ export default function Biodata({ id }: { id: string }) {
           }
         );
         setBiodata(response.data?.data);
-        // console.log(response.data);
+        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
     };
     getbiodata();
   }, [id]);
-  console.log(biodata?.userId?._id)
+  // console.log(biodata?.userId?._id)
+  console.log(user)
   const handleSendInterest = async () => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
         {
           sender: user?.userId,
-          receiver: biodata?._id,
+          receiver: biodata?.userId?._id,
           status: "sent",
         },
         {
