@@ -3,7 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
 /* custom button style */
 .primary-color {
   @apply block bg-gradient-to-r from-rose-600 via-rose-500 to-pink-500 bg-clip-text text-transparent;
