@@ -54,7 +54,7 @@ export default function Biodata({ id }: { id: string }) {
   }, [id]);
   // console.log(biodata?.userId?._id)
   console.log(user);
-  const handleSendInterest = async (p0: { id: string | undefined }) => {
+  const handleSendInterest = async () => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
@@ -74,7 +74,6 @@ export default function Biodata({ id }: { id: string }) {
       console.error("Error sending interest:", error);
     }
   };
-  const biodataCompleteness = 92;
   const biodataViews = 1247;
   const interests = 45;
 
@@ -199,9 +198,7 @@ export default function Biodata({ id }: { id: string }) {
               </CardContent>
               <div className="px-5">
                 <Button
-                  onClick={() =>
-                    handleSendInterest({ id: biodata?.userId?._id })
-                  }
+                  onClick={() => handleSendInterest()}
                   className="cursor-pointer w-full"
                 >
                   Send Interest

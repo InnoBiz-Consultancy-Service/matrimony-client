@@ -9,8 +9,6 @@ import {
   X,
   User,
   LogOut,
-  Settings,
-  Bookmark,
   ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import femaleAvatar from "../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../public/men_avatar.webp";
