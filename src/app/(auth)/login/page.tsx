@@ -2,7 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Heart,
+  Mail,
+  Lock,
+  ArrowRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,47 +18,52 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import { toast } from "sonner"; 
+import { toast } from "sonner";
 // Auth service abstraction
 const authService = {
-  login: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
-    const response = await axios.post(
-      `/api/auth/login`,
-      credentials,
-      { 
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true
-      }
-    );
-    
+  login: async (credentials: {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+  }) => {
+    const response = await axios.post(`/api/auth/login`, credentials, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+
     if (!response.data?.token) {
       throw new Error("Authentication failed: No token received");
     }
-    
+
     return response.data;
   },
-  
+
   storeAuthData: (token: string) => {
     try {
-      const decoded = jwtDecode<{ id: string; email: string; exp: number }>(token);
-      
+      const decoded = jwtDecode<{ id: string; email: string; exp: number }>(
+        token
+      );
+
       // Store only necessary non-sensitive data
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({
-        id: decoded.id,
-        email: decoded.email
-      }));
-      
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: decoded.id,
+          email: decoded.email,
+        })
+      );
+
       return decoded;
     } catch {
       throw new Error("Invalid token format");
     }
   },
-  
+
   clearAuthData: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-  }
+  },
 };
 
 export default function LoginPage() {
@@ -77,30 +89,38 @@ export default function LoginPage() {
         throw new Error("Please enter a valid email address");
       }
 
-      const { token } = await authService.login({ email, password, rememberMe });
+      const { token } = await authService.login({
+        email,
+        password,
+        rememberMe,
+      });
       const userData = authService.storeAuthData(token);
 
       // Log success (remove in production)
       console.log("Login successful", userData);
-      
+
       // Redirect with success feedback
       toast.success("Login successful!");
       router.push("/");
       router.refresh();
-      
-    } catch (error: unknown) {
+    } catch (err: unknown) {
       authService.clearAuthData();
-      
-      let errorMessage = "An unexpected error occurred";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message || "Login failed";
+
+      let message = "Something went wrong!";
+
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        message = err.response.data.message;
       }
-      
-      toast.error(errorMessage);
-      console.error("Login error:", error);
-      
+
+      toast.error(message, {
+        position: "top-center",
+        className: "bg-red-600 text-white font-semibold shadow-lg",
+        style: {
+          border: "2px solid #ef4444",
+          padding: "12px",
+          borderRadius: "8px",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -114,7 +134,11 @@ export default function LoginPage() {
       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
       aria-label={showPassword ? "Hide password" : "Show password"}
     >
-      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+      {showPassword ? (
+        <EyeOff className="h-5 w-5" />
+      ) : (
+        <Eye className="h-5 w-5" />
+      )}
     </button>
   );
 
