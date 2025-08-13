@@ -1,13 +1,6 @@
 import {
-  Inbox,
-  ShoppingBag,
   BarChart3,
   Users,
-  CreditCard,
-  SquareUserRound,
-  PackagePlus,
-  UserPlus,
-  AlarmClockCheck,
   Wallet,
 } from "lucide-react";
 
