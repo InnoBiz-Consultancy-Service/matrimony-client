@@ -2,14 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Eye,
-  EyeOff,
-  Heart,
-  Mail,
-  Lock,
-  ArrowRight,
-} from "lucide-react";
+import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,15 +87,17 @@ export default function LoginPage() {
         password,
         rememberMe,
       });
-      const userData = authService.storeAuthData(token);
-
-      // Log success (remove in production)
-      console.log("Login successful", userData);
-
-      // Redirect with success feedback
-      toast.success("Login successful!");
-      router.push("/");
-      router.refresh();
+      authService.storeAuthData(token);
+      window.location.href = "/";
+      toast.success("Login success", {
+        position: "top-center",
+        className: "bg-red-600 text-white font-semibold shadow-lg",
+        style: {
+          border: "2px solid #34A853",
+          padding: "12px",
+          borderRadius: "8px",
+        },
+      });
     } catch (err: unknown) {
       authService.clearAuthData();
 
