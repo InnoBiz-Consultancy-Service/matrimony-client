@@ -1,5 +1,5 @@
+import { Toaster } from "sonner";
 import { AuthProvider } from "./(auth)/context/auth-context";
-import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import CheckProfileProgress from "@/components/features/public/Home/check-profile-progress/CheckProfileProgress";
 export const metadata = {
