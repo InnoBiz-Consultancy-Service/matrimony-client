@@ -30,105 +30,123 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { IBiodata } from "@/types/bioData";
 import Link from "next/link";
-// const scrollbarHideStyles = `
-//   .scrollbar-hide {
-//     -ms-overflow-style: none;
-//     scrollbar-width: none;
-//   }
-//   .scrollbar-hide::-webkit-scrollbar {
-//     display: none;
-//   }
-// `;
+import axios from "axios";
 
-// Mock data based on the interface
-const mockProfile: IBiodata = {
-  _id: "507f1f77bcf86cd799439011",
-  userId: "507f1f77bcf86cd799439012" as string,
-  name: "Sarah Ahmed",
-  description:
-    "A dedicated healthcare professional seeking a life partner who values family, faith, and personal growth. I believe in maintaining a balance between career aspirations and traditional values.",
+// const profile?: IBiodata = {
+//   _id: "507f1f77bcf86cd799439011",
+//   userId: "507f1f77bcf86cd799439012" as string,
+//   name: "Sarah Ahmed",
+//   description:
+//     "A dedicated healthcare professional seeking a life partner who values family, faith, and personal growth. I believe in maintaining a balance between career aspirations and traditional values.",
 
-  address: {
-    present: {
-      division: "Dhaka",
-      district: "Dhaka",
-      upazila: "Dhanmondi",
-      details: "House 15, Road 7, Dhanmondi R/A",
-    },
-    permanent: {
-      division: "Chittagong",
-      district: "Chittagong",
-      upazila: "Kotwali",
-      details: "Village: Halishahar, Post: Chittagong",
-    },
-    country: "Bangladesh",
-  },
+//   address: {
+//     present: {
+//       division: "Dhaka",
+//       district: "Dhaka",
+//       upazila: "Dhanmondi",
+//       details: "House 15, Road 7, Dhanmondi R/A",
+//     },
+//     permanent: {
+//       division: "Chittagong",
+//       district: "Chittagong",
+//       upazila: "Kotwali",
+//       details: "Village: Halishahar, Post: Chittagong",
+//     },
+//     country: "Bangladesh",
+//   },
 
-  education: {
-    sscYear: "2015",
-    sscGroup: "Science",
-    sscResult: "GPA 5.00",
-    hscYear: "2017",
-    hscGroup: "Science",
-    hscResult: "GPA 5.00",
-    honours: "MBBS from Dhaka Medical College",
-  },
+//   education: {
+//     sscYear: "2015",
+//     sscGroup: "Science",
+//     sscResult: "GPA 5.00",
+//     hscYear: "2017",
+//     hscGroup: "Science",
+//     hscResult: "GPA 5.00",
+//     honours: "MBBS from Dhaka Medical College",
+//   },
 
-  familyInfo: {
-    fatherAlive: "Yes",
-    fatherOccupation: "Business Owner",
-    motherAlive: "Yes",
-    motherOccupation: "Teacher",
-    brothers: "1",
-    sisters: "1",
-    siblingsDetails: "1 elder brother (married), 1 younger sister (student)",
-  },
+//   familyInfo: {
+//     fatherAlive: "Yes",
+//     fatherOccupation: "Business Owner",
+//     motherAlive: "Yes",
+//     motherOccupation: "Teacher",
+//     brothers: "1",
+//     sisters: "1",
+//     siblingsDetails: "1 elder brother (married), 1 younger sister (student)",
+//   },
 
-  personalInfo: {
-    beard: "N/A",
-    salat: "Regular",
-    mahramTravel: "Yes",
-    health: "Excellent",
-    disability: "None",
-  },
+//   personalInfo: {
+//     beard: "N/A",
+//     salat: "Regular",
+//     mahramTravel: "Yes",
+//     health: "Excellent",
+//     disability: "None",
+//   },
 
-  physicalInfo: {
-    height: "5'6\"",
-    bodyColor: "Fair",
-    bloodGroup: "O+",
-    weight: "58 kg",
-  },
+//   physicalInfo: {
+//     height: "5'6\"",
+//     bodyColor: "Fair",
+//     bloodGroup: "O+",
+//     weight: "58 kg",
+//   },
 
-  maritalInfo: {
-    maritalStatus: "Never Married",
-    childAllow: "Yes",
-    whyWantToMarry:
-      "To complete half of my deen and build a beautiful family together",
-    futurePlan:
-      "Continue medical practice while raising a family with Islamic values",
-  },
+//   maritalInfo: {
+//     maritalStatus: "Never Married",
+//     childAllow: "Yes",
+//     whyWantToMarry:
+//       "To complete half of my deen and build a beautiful family together",
+//     futurePlan:
+//       "Continue medical practice while raising a family with Islamic values",
+//   },
 
-  contactInfo: {
-    phone: "+880 1712-345678",
-    email: "sarah.ahmed@email.com",
-    facebook: "sarah.ahmed.official",
-  },
+//   contactInfo: {
+//     phone: "+880 1712-345678",
+//     email: "sarah.ahmed@email.com",
+//     facebook: "sarah.ahmed.official",
+//   },
 
-  preference: {
-    ageRange: "28-35 years",
-    educationLevel: "Graduate or higher",
-    maritalStatus: "Never married preferred",
-    religiousPractice: "Practicing Muslim",
-    physicalAppearance: "Average height, healthy",
-    additionalQualities: "Family-oriented, honest, and career-minded",
-  },
+//   preference: {
+//     ageRange: "28-35 years",
+//     educationLevel: "Graduate or higher",
+//     maritalStatus: "Never married preferred",
+//     religiousPractice: "Practicing Muslim",
+//     physicalAppearance: "Average height, healthy",
+//     additionalQualities: "Family-oriented, honest, and career-minded",
+//   },
 
-  createdAt: new Date("2024-01-15"),
-  updatedAt: new Date("2024-01-20"),
-};
+//   createdAt: new Date("2024-01-15"),
+//   updatedAt: new Date("2024-01-20"),
+// };
 
 export default function Profile() {
   const [activeTab, setActiveTab] = React.useState("overview");
+  const [profile, setProfile] = React.useState<IBiodata>();
+
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/my-biodata`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+
+        // console.log("Profile progress:", response.data);
+        setProfile(response?.data?.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        console.log("finished get biodata");
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const profileCompleteness = 92;
   const profileViews = 1247;
@@ -148,7 +166,7 @@ export default function Profile() {
     className = "",
   }: {
     title: string;
-    icon:  React.ElementType;
+    icon: React.ElementType;
     children: React.ReactNode;
     className?: string;
   }) => (
@@ -172,7 +190,7 @@ export default function Profile() {
   }: {
     label: string;
     value: string | undefined;
-    icon?:  React.ElementType;
+    icon?: React.ElementType;
   }) => (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100 last:border-b-0 space-y-1 sm:space-y-0">
       <div className="flex items-center space-x-2">
@@ -203,12 +221,6 @@ export default function Profile() {
               </Button>
             </div>
             <div className="flex items-center space-x-3">
-              {/* <div className="flex items-center space-x-2">
-                <Label htmlFor="profile-visibility" className="text-sm font-medium">
-                  Profile Visible
-                </Label>
-                <Switch id="profile-visibility" checked={profileVisibility} onCheckedChange={setProfileVisibility} />
-              </div> */}
               <Link href={"/profile/update"}>
                 <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 cursor-pointer text-white">
                   <Edit className="h-4 w-4 mr-2" />
@@ -231,11 +243,11 @@ export default function Profile() {
                   <Avatar className="h-32 w-32 rounded-2xl shadow-lg ring-4 ring-rose-100">
                     <AvatarImage
                       src="/placeholder.svg?height=128&width=128"
-                      alt={mockProfile.name}
+                      alt={profile?.name}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white text-2xl font-bold rounded-2xl">
-                      {getInitials(mockProfile.name)}
-                    </AvatarFallback>
+                    {/* <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white text-2xl font-bold rounded-2xl">
+                      {getInitials(profile?.name)}
+                    </AvatarFallback> */}
                   </Avatar>
                   <Button
                     size="icon"
@@ -247,18 +259,18 @@ export default function Profile() {
 
                 <div className="space-y-2 mb-4">
                   <h1 className="text-2xl font-bold text-gray-800 flex items-center justify-center">
-                    {mockProfile.name}
+                    {profile?.name}
                     <Shield className="h-5 w-5 ml-2 text-blue-500" />
                     <Crown className="h-5 w-5 ml-1 text-amber-500" />
                   </h1>
                   <p className="text-gray-600">
-                    {mockProfile.education?.honours}
+                    {profile?.education?.honours}
                   </p>
                   <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
                     <MapPin className="h-4 w-4" />
                     <span>
-                      {mockProfile.address?.present?.district},{" "}
-                      {mockProfile.address?.country}
+                      {profile?.address?.present?.district},{" "}
+                      {profile?.address?.country}
                     </span>
                   </div>
                 </div>
@@ -435,7 +447,7 @@ export default function Profile() {
                         </CardHeader>
                         <CardContent>
                           <p className="text-gray-700 leading-relaxed text-base md:text-lg">
-                            {mockProfile.description}
+                            {profile?.description}
                           </p>
                         </CardContent>
                       </Card>
@@ -446,19 +458,19 @@ export default function Profile() {
                           <div className="grid grid-cols-2 gap-4">
                             <InfoRow
                               label="Height"
-                              value={mockProfile.physicalInfo?.height}
+                              value={profile?.physicalInfo?.height}
                             />
                             <InfoRow
                               label="Weight"
-                              value={mockProfile.physicalInfo?.weight}
+                              value={profile?.physicalInfo?.weight}
                             />
                             <InfoRow
                               label="Body Color"
-                              value={mockProfile.physicalInfo?.bodyColor}
+                              value={profile?.physicalInfo?.bodyColor}
                             />
                             <InfoRow
                               label="Blood Group"
-                              value={mockProfile.physicalInfo?.bloodGroup}
+                              value={profile?.physicalInfo?.bloodGroup}
                             />
                           </div>
                         </InfoCard>
@@ -466,18 +478,18 @@ export default function Profile() {
                         <InfoCard title="Marital Status" icon={Heart}>
                           <InfoRow
                             label="Status"
-                            value={mockProfile.maritalInfo?.maritalStatus}
+                            value={profile?.maritalInfo?.maritalStatus}
                           />
                           <InfoRow
                             label="Children Allowed"
-                            value={mockProfile.maritalInfo?.childAllow}
+                            value={profile?.maritalInfo?.childAllow}
                           />
                           <div className="pt-3">
                             <p className="text-sm text-gray-600 font-medium mb-2">
                               Why want to marry:
                             </p>
                             <p className="text-gray-700 text-sm leading-relaxed">
-                              {mockProfile.maritalInfo?.whyWantToMarry}
+                              {profile?.maritalInfo?.whyWantToMarry}
                             </p>
                           </div>
                         </InfoCard>
@@ -493,19 +505,19 @@ export default function Profile() {
                             <div className="space-y-2">
                               <InfoRow
                                 label="Division"
-                                value={mockProfile.address?.present?.division}
+                                value={profile?.address?.present?.division}
                               />
                               <InfoRow
                                 label="District"
-                                value={mockProfile.address?.present?.district}
+                                value={profile?.address?.present?.district}
                               />
                               <InfoRow
                                 label="Upazila"
-                                value={mockProfile.address?.present?.upazila}
+                                value={profile?.address?.present?.upazila}
                               />
                               <InfoRow
                                 label="Details"
-                                value={mockProfile.address?.present?.details}
+                                value={profile?.address?.present?.details}
                               />
                             </div>
                           </div>
@@ -517,19 +529,19 @@ export default function Profile() {
                             <div className="space-y-2">
                               <InfoRow
                                 label="Division"
-                                value={mockProfile.address?.permanent?.division}
+                                value={profile?.address?.permanent?.division}
                               />
                               <InfoRow
                                 label="District"
-                                value={mockProfile.address?.permanent?.district}
+                                value={profile?.address?.permanent?.district}
                               />
                               <InfoRow
                                 label="Upazila"
-                                value={mockProfile.address?.permanent?.upazila}
+                                value={profile?.address?.permanent?.upazila}
                               />
                               <InfoRow
                                 label="Details"
-                                value={mockProfile.address?.permanent?.details}
+                                value={profile?.address?.permanent?.details}
                               />
                             </div>
                           </div>
@@ -545,26 +557,26 @@ export default function Profile() {
                         <InfoCard title="Religious Practice" icon={BookOpen}>
                           <InfoRow
                             label="Salat"
-                            value={mockProfile.personalInfo?.salat}
+                            value={profile?.personalInfo?.salat}
                           />
                           <InfoRow
                             label="Mahram Travel"
-                            value={mockProfile.personalInfo?.mahramTravel}
+                            value={profile?.personalInfo?.mahramTravel}
                           />
                           <InfoRow
                             label="Beard"
-                            value={mockProfile.personalInfo?.beard}
+                            value={profile?.personalInfo?.beard}
                           />
                         </InfoCard>
 
                         <InfoCard title="Health Information" icon={Activity}>
                           <InfoRow
                             label="Health Status"
-                            value={mockProfile.personalInfo?.health}
+                            value={profile?.personalInfo?.health}
                           />
                           <InfoRow
                             label="Disability"
-                            value={mockProfile.personalInfo?.disability}
+                            value={profile?.personalInfo?.disability}
                           />
                         </InfoCard>
                       </div>
@@ -572,7 +584,7 @@ export default function Profile() {
                       <InfoCard title="Future Plans" icon={Star}>
                         <div className="bg-rose-50 rounded-lg p-4">
                           <p className="text-gray-700 leading-relaxed">
-                            {mockProfile.maritalInfo?.futurePlan}
+                            {profile?.maritalInfo?.futurePlan}
                           </p>
                         </div>
                       </InfoCard>
@@ -588,29 +600,29 @@ export default function Profile() {
                             <div className="space-y-3">
                               <InfoRow
                                 label="Father Status"
-                                value={mockProfile.familyInfo?.fatherAlive}
+                                value={profile?.familyInfo?.fatherAlive}
                               />
                               <InfoRow
                                 label="Father's Occupation"
-                                value={mockProfile.familyInfo?.fatherOccupation}
+                                value={profile?.familyInfo?.fatherOccupation}
                               />
                               <InfoRow
                                 label="Mother Status"
-                                value={mockProfile.familyInfo?.motherAlive}
+                                value={profile?.familyInfo?.motherAlive}
                               />
                               <InfoRow
                                 label="Mother's Occupation"
-                                value={mockProfile.familyInfo?.motherOccupation}
+                                value={profile?.familyInfo?.motherOccupation}
                               />
                             </div>
                             <div className="space-y-3">
                               <InfoRow
                                 label="Brothers"
-                                value={mockProfile.familyInfo?.brothers}
+                                value={profile?.familyInfo?.brothers}
                               />
                               <InfoRow
                                 label="Sisters"
-                                value={mockProfile.familyInfo?.sisters}
+                                value={profile?.familyInfo?.sisters}
                               />
                             </div>
                           </div>
@@ -623,7 +635,7 @@ export default function Profile() {
                             </h4>
                             <div className="bg-gray-50 rounded-lg p-4">
                               <p className="text-gray-700">
-                                {mockProfile.familyInfo?.siblingsDetails}
+                                {profile?.familyInfo?.siblingsDetails}
                               </p>
                             </div>
                           </div>
@@ -648,15 +660,15 @@ export default function Profile() {
                               <div className="space-y-2">
                                 <InfoRow
                                   label="Year"
-                                  value={mockProfile.education?.sscYear}
+                                  value={profile?.education?.sscYear}
                                 />
                                 <InfoRow
                                   label="Group"
-                                  value={mockProfile.education?.sscGroup}
+                                  value={profile?.education?.sscGroup}
                                 />
                                 <InfoRow
                                   label="Result"
-                                  value={mockProfile.education?.sscResult}
+                                  value={profile?.education?.sscResult}
                                 />
                               </div>
                             </div>
@@ -668,15 +680,15 @@ export default function Profile() {
                               <div className="space-y-2">
                                 <InfoRow
                                   label="Year"
-                                  value={mockProfile.education?.hscYear}
+                                  value={profile?.education?.hscYear}
                                 />
                                 <InfoRow
                                   label="Group"
-                                  value={mockProfile.education?.hscGroup}
+                                  value={profile?.education?.hscGroup}
                                 />
                                 <InfoRow
                                   label="Result"
-                                  value={mockProfile.education?.hscResult}
+                                  value={profile?.education?.hscResult}
                                 />
                               </div>
                             </div>
@@ -686,7 +698,7 @@ export default function Profile() {
                                 Higher Education
                               </h4>
                               <p className="text-purple-700 font-medium">
-                                {mockProfile.education?.honours}
+                                {profile?.education?.honours}
                               </p>
                             </div>
                           </div>
@@ -708,7 +720,7 @@ export default function Profile() {
                                   Phone Number
                                 </p>
                                 <p className="text-green-700 font-semibold">
-                                  {mockProfile.contactInfo.phone}
+                                  {profile?.contactInfo.phone}
                                 </p>
                               </div>
                             </div>
@@ -728,7 +740,7 @@ export default function Profile() {
                                   Email Address
                                 </p>
                                 <p className="text-blue-700 font-semibold break-all">
-                                  {mockProfile.contactInfo.email}
+                                  {profile?.contactInfo.email}
                                 </p>
                               </div>
                             </div>
@@ -741,7 +753,7 @@ export default function Profile() {
                             </Button>
                           </div>
 
-                          {mockProfile.contactInfo.facebook && (
+                          {profile?.contactInfo.facebook && (
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-indigo-50 rounded-lg space-y-3 sm:space-y-0">
                               <div className="flex items-center space-x-3">
                                 <Facebook className="h-5 w-5 text-indigo-600" />
@@ -750,7 +762,7 @@ export default function Profile() {
                                     Facebook
                                   </p>
                                   <p className="text-indigo-700 font-semibold break-all">
-                                    {mockProfile.contactInfo.facebook}
+                                    {profile?.contactInfo.facebook}
                                   </p>
                                 </div>
                               </div>
@@ -777,26 +789,26 @@ export default function Profile() {
                             <div className="space-y-3">
                               <InfoRow
                                 label="Age Range"
-                                value={mockProfile.preference?.ageRange}
+                                value={profile?.preference?.ageRange}
                               />
                               <InfoRow
                                 label="Education Level"
-                                value={mockProfile.preference?.educationLevel}
+                                value={profile?.preference?.educationLevel}
                               />
                               <InfoRow
                                 label="Marital Status"
-                                value={mockProfile.preference?.maritalStatus}
+                                value={profile?.preference?.maritalStatus}
                               />
                               <InfoRow
                                 label="Religious Practice"
                                 value={
-                                  mockProfile.preference?.religiousPractice
+                                  profile?.preference?.religiousPractice
                                 }
                               />
                               <InfoRow
                                 label="Physical Appearance"
                                 value={
-                                  mockProfile.preference?.physicalAppearance
+                                  profile?.preference?.physicalAppearance
                                 }
                               />
                             </div>
@@ -810,7 +822,7 @@ export default function Profile() {
                             </h4>
                             <div className="bg-rose-50 rounded-lg p-4">
                               <p className="text-gray-700 leading-relaxed">
-                                {mockProfile.preference?.additionalQualities}
+                                {profile?.preference?.additionalQualities}
                               </p>
                             </div>
                           </div>
