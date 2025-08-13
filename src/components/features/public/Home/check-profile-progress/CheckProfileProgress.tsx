@@ -124,6 +124,7 @@ import { useAuth } from "@/app/(auth)/context/auth-context";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SpinnerLoader } from "@/components/common/Loader";
+import Link from "next/link";
 
 export default function CheckProfileProgress() {
   const { user } = useAuth();
@@ -134,30 +135,29 @@ export default function CheckProfileProgress() {
     const fetchProfileProgress = async () => {
       // Reset loading state
       setIsLoading(true);
-      
+
       if (!user?.userId) {
         setIsLoading(false);
         return;
       }
 
       const token = localStorage.getItem("token");
-      
+
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/${user.userId}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/my-biodata`,
           {
             headers: {
               Authorization: `${token}`,
             },
           }
         );
-        
+
         console.log("Profile progress:", response.data);
         setStatus(response.status);
-        
       } catch (error) {
         console.error("Error fetching profile progress:", error);
-        
+
         if (axios.isAxiosError(error) && error.response) {
           setStatus(error.response.status);
         } else {
@@ -224,19 +224,21 @@ export default function CheckProfileProgress() {
 
                   <p className="text-gray-600 text-lg mb-8">
                     Join thousands of happy couples who found their perfect
-                    match through our platform. Your journey to happiness
-                    starts with a complete profile.
+                    match through our platform. Your journey to happiness starts
+                    with a complete profile.
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <Button
-                      size="lg"
-                      className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
-                    >
-                      <User className="h-5 w-5 mr-2" />
-                      Create Biodata
-                      <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                    <Link href={"/profile/create-biodata"}>
+                      <Button
+                        size="lg"
+                        className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                      >
+                        <User className="h-5 w-5 mr-2" />
+                        Create Biodata
+                        <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
                   </div>
 
                   <div className="mt-6 flex items-center justify-center space-x-4 text-sm text-gray-500">

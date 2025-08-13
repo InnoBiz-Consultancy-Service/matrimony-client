@@ -54,7 +54,7 @@ export default function Biodata({ id }: { id: string }) {
   }, [id]);
   // console.log(biodata?.userId?._id)
   console.log(user);
-  const handleSendInterest = async () => {
+  const handleSendInterest = async (p0: { id: string | undefined }) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,

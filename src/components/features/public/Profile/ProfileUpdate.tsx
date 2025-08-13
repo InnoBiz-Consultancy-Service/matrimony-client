@@ -188,6 +188,14 @@ export default function ProfileUpdate() {
         phone: data.phone,
         facebook: data.facebook,
       },
+      preference: {
+        additionalQualities: data.additionalQualities,
+        ageRange: data.ageRange,
+        educationLevel: data.educationLevel,
+        maritalStatus: data.maritalStatus,
+        physicalAppearance: data.physicalAppearance,
+        religiousPractice: data.religiousPractice,
+      },
       additionalQualities: data.additionalQualities,
       ageRange: data.ageRange,
     };

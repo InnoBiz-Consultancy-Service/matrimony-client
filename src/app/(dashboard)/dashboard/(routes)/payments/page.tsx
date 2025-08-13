@@ -1,11 +1,12 @@
-import React from 'react'
+import PaymentPage from "@/components/features/admin/payment/PaymentPage";
+import React from "react";
 
 const PaymentsPage = () => {
   return (
     <div>
-      This is payment page.
+      <PaymentPage />
     </div>
-  )
-}
+  );
+};
 
-export default PaymentsPage
+export default PaymentsPage;

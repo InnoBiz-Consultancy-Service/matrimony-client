@@ -200,7 +200,7 @@ export default function Navbar() {
                           <User className="h-4 w-4 text-rose-600" />
                         </div>
                         {user?.role === "admin" ? (
-                          <Link href={"/profile"}>
+                          <Link href={"/dashboard"}>
                             <div className="flex-1">
                               <p className="font-medium text-gray-800">
                                 Admin Dashboard
@@ -211,7 +211,7 @@ export default function Navbar() {
                             </div>
                           </Link>
                         ) : (
-                          <Link href={"/dashboard"}>
+                          <Link href={"/profile"}>
                             <div>
                               <p className="font-medium text-gray-800">
                                 My Profile
@@ -224,7 +224,7 @@ export default function Navbar() {
                         )}
                       </button>
 
-                      <Link href="/favorites">
+                      {/* <Link href="/favorites">
                         <button
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-rose-50 transition-colors duration-200 group cursor-pointer"
@@ -266,7 +266,7 @@ export default function Navbar() {
                             </p>
                           </div>
                         </button>
-                      </Link>
+                      </Link> */}
 
                       <Separator className="my-2 bg-rose-100" />
 
@@ -421,7 +421,7 @@ export default function Navbar() {
                         <span className="font-medium">My Profile</span>
                       </Link>
 
-                      <Link
+                      {/* <Link
                         href="/favorites"
                         onClick={() => setIsOpen(false)}
                         className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-rose-700 hover:bg-rose-50 transition-all duration-200 mx-2 rounded-lg"
@@ -443,7 +443,7 @@ export default function Navbar() {
                       >
                         <Settings className="h-5 w-5" />
                         <span className="font-medium">Settings</span>
-                      </Link>
+                      </Link> */}
                     </>
                   )}
                 </nav>
