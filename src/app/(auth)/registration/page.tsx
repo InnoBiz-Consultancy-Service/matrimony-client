@@ -40,7 +40,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ButtonLoader } from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 enum UserRole {
   USER = "user",
@@ -124,27 +125,25 @@ export default function RegistrationPage() {
         "userInfo",
         JSON.stringify({ email: data.email, phone: data.phone })
       );
-      const response = await axios.post(
-        `api/auth/registration`,
-        {
-          agreeToPrivacy: data.agreeToPrivacy,
-          agreeToTerms: data.agreeToTerms,
-          role: data.role,
-          gender: data.gender,
-          password: data.password,
-          phone: data.phone,
-          email: data.email,
-          name: data.name,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          isVerified: false,
-        }
-      );
+      const response = await axios.post(`api/auth/registration`, {
+        agreeToPrivacy: data.agreeToPrivacy,
+        agreeToTerms: data.agreeToTerms,
+        role: data.role,
+        gender: data.gender,
+        password: data.password,
+        phone: data.phone,
+        email: data.email,
+        name: data.name,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isVerified: false,
+      });
       console.log("Registration response:", response.data);
       localStorage.setItem("userId", JSON.stringify(response.data.userId));
       router.push("verify-otp");
-    } catch (error) {
-      console.error("Registration failed:", error);
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || "Something went wrong");
     } finally {
       setIsSubmitting(false);
     }
@@ -178,10 +177,10 @@ export default function RegistrationPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center p-4">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl"></div>
       </div>
 
@@ -191,14 +190,14 @@ export default function RegistrationPage() {
           {/* Logo */}
           <Link href={"/"}>
             <div className="flex items-center justify-center lg:justify-start space-x-3">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
                 <Heart className="h-6 w-6 text-white fill-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                   Nikah
                 </span>
-                <span className="text-sm text-rose-500/70 font-medium -mt-1">
+                <span className="text-sm text-emerald-500/70 font-medium -mt-1">
                   Find Your Perfect Match
                 </span>
               </div>
@@ -209,7 +208,7 @@ export default function RegistrationPage() {
           <div className="space-y-6">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
               Start Your
-              <span className="block bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                 Love Journey
               </span>
               Today
@@ -229,8 +228,8 @@ export default function RegistrationPage() {
               "24/7 Customer Support",
             ].map((feature, index) => (
               <div key={index} className="flex items-center space-x-3">
-                <div className="h-6 w-6 bg-rose-100 rounded-full flex items-center justify-center">
-                  <Check className="h-4 w-4 text-rose-600" />
+                <div className="h-6 w-6 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <Check className="h-4 w-4 text-emerald-600" />
                 </div>
                 <span className="text-gray-700">{feature}</span>
               </div>
@@ -244,10 +243,10 @@ export default function RegistrationPage() {
             <CardHeader className="space-y-4 pb-8">
               {/* Mobile Logo */}
               <div className="flex lg:hidden items-center justify-center space-x-3 mb-4">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
                   <Heart className="h-5 w-5 text-white fill-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                   Nikah
                 </span>
               </div>
@@ -259,7 +258,7 @@ export default function RegistrationPage() {
                     <div
                       className={`h-10 w-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
                         currentStep >= step.number
-                          ? "bg-gradient-to-r from-rose-500 to-rose-600 text-white"
+                          ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white"
                           : "bg-gray-200 text-gray-500"
                       }`}
                     >
@@ -273,7 +272,7 @@ export default function RegistrationPage() {
                       <div
                         className={`w-16 h-1 mx-2 transition-all duration-300 ${
                           currentStep > step.number
-                            ? "bg-rose-500"
+                            ? "bg-emerald-500"
                             : "bg-gray-200"
                         }`}
                       ></div>
@@ -316,11 +315,11 @@ export default function RegistrationPage() {
                                 <Input
                                   {...field}
                                   placeholder="Enter your name"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                                 />
                               </div>
                             </FormControl>
-                            <FormMessage className="text-rose-600" />
+                            <FormMessage className="text-emerald-600" />
                           </FormItem>
                         )}
                       />
@@ -341,11 +340,11 @@ export default function RegistrationPage() {
                                   {...field}
                                   type="email"
                                   placeholder="Enter your email address"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                                 />
                               </div>
                             </FormControl>
-                            <FormMessage className="text-rose-600" />
+                            <FormMessage className="text-emerald-600" />
                           </FormItem>
                         )}
                       />
@@ -354,7 +353,7 @@ export default function RegistrationPage() {
                       <Button
                         type="button"
                         onClick={nextStep}
-                        className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
+                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
                       >
                         Continue
                         <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -381,7 +380,7 @@ export default function RegistrationPage() {
                                   {...field}
                                   type={showPassword ? "text" : "password"}
                                   placeholder="Create a strong password"
-                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                                 />
                                 <button
                                   type="button"
@@ -396,7 +395,7 @@ export default function RegistrationPage() {
                                 </button>
                               </div>
                             </FormControl>
-                            <FormMessage className="text-rose-600" />
+                            <FormMessage className="text-emerald-600" />
                           </FormItem>
                         )}
                       />
@@ -419,7 +418,7 @@ export default function RegistrationPage() {
                                     showConfirmPassword ? "text" : "password"
                                   }
                                   placeholder="Confirm your password"
-                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                                 />
                                 <button
                                   type="button"
@@ -436,7 +435,7 @@ export default function RegistrationPage() {
                                 </button>
                               </div>
                             </FormControl>
-                            <FormMessage className="text-rose-600" />
+                            <FormMessage className="text-emerald-600" />
                           </FormItem>
                         )}
                       />
@@ -457,11 +456,11 @@ export default function RegistrationPage() {
                                   {...field}
                                   type="tel"
                                   placeholder="+1 (555) 123-4567"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                                 />
                               </div>
                             </FormControl>
-                            <FormMessage className="text-rose-600" />
+                            <FormMessage className="text-emerald-600" />
                           </FormItem>
                         )}
                       />
@@ -485,7 +484,7 @@ export default function RegistrationPage() {
                                   <RadioGroupItem
                                     value="male"
                                     id="male"
-                                    className="border-2 border-gray-300 text-rose-600"
+                                    className="border-2 border-gray-300 text-emerald-600"
                                   />
                                   <Label
                                     htmlFor="male"
@@ -498,7 +497,7 @@ export default function RegistrationPage() {
                                   <RadioGroupItem
                                     value="female"
                                     id="female"
-                                    className="border-2 border-gray-300 text-rose-600"
+                                    className="border-2 border-gray-300 text-emerald-600"
                                   />
                                   <Label
                                     htmlFor="female"
@@ -509,7 +508,7 @@ export default function RegistrationPage() {
                                 </div>
                               </RadioGroup>
                             </FormControl>
-                            <FormMessage className="text-rose-600" />
+                            <FormMessage className="text-emerald-600" />
                           </FormItem>
                         )}
                       />
@@ -553,7 +552,7 @@ export default function RegistrationPage() {
                                 <Checkbox
                                   checked={field.value}
                                   onCheckedChange={field.onChange}
-                                  className="border-2 border-gray-300 data-[state=checked]:bg-rose-600 data-[state=checked]:border-rose-600"
+                                  className="border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
@@ -561,12 +560,12 @@ export default function RegistrationPage() {
                                   I agree to the{" "}
                                   <Link
                                     href="/terms"
-                                    className="text-rose-600 hover:text-rose-700 underline"
+                                    className="text-emerald-600 hover:text-emerald-700 underline"
                                   >
                                     Terms and Conditions
                                   </Link>
                                 </FormLabel>
-                                <FormMessage className="text-rose-600" />
+                                <FormMessage className="text-emerald-600" />
                               </div>
                             </FormItem>
                           )}
@@ -581,7 +580,7 @@ export default function RegistrationPage() {
                                 <Checkbox
                                   checked={field.value}
                                   onCheckedChange={field.onChange}
-                                  className="border-2 border-gray-300 data-[state=checked]:bg-rose-600 data-[state=checked]:border-rose-600"
+                                  className="border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
@@ -589,12 +588,12 @@ export default function RegistrationPage() {
                                   I agree to the{" "}
                                   <Link
                                     href="/privacy"
-                                    className="text-rose-600 hover:text-rose-700 underline"
+                                    className="text-emerald-600 hover:text-emerald-700 underline"
                                   >
                                     Privacy Policy
                                   </Link>
                                 </FormLabel>
-                                <FormMessage className="text-rose-600" />
+                                <FormMessage className="text-emerald-600" />
                               </div>
                             </FormItem>
                           )}
@@ -607,7 +606,7 @@ export default function RegistrationPage() {
                           type="button"
                           onClick={prevStep}
                           variant="outline"
-                          className="flex-1 border-2 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 font-semibold py-3 rounded-xl bg-transparent"
+                          className="flex-1 border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 font-semibold py-3 rounded-xl bg-transparent"
                         >
                           <ArrowLeft className="mr-2 h-5 w-5" />
                           Back
@@ -615,7 +614,7 @@ export default function RegistrationPage() {
                         <Button
                           type="submit"
                           disabled={isSubmitting}
-                          className="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold py-3 rounded-xl"
+                          className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl"
                         >
                           {isSubmitting ? (
                             <ButtonLoader size="sm" />
@@ -635,7 +634,7 @@ export default function RegistrationPage() {
                   Already have an account?{" "}
                   <Link
                     href="/login"
-                    className="text-rose-600 hover:text-rose-700 font-semibold"
+                    className="text-emerald-600 hover:text-emerald-700 font-semibold"
                   >
                     Sign In
                   </Link>

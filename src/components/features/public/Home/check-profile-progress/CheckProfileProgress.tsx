@@ -43,14 +43,14 @@
 
 //   if (status === 200) {
 //     return (
-//       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+//       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50">
 //         <div className="container mx-auto px-4 lg:px-8 py-12">
 //           <div className="max-w-4xl mx-auto">
 //             {/* Header Section */}
 //             <div className="text-center mb-12">
 //               <div className="relative inline-block mb-6">
-//                 <div className="h-32 w-32 bg-gradient-to-br from-rose-100 to-rose-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-//                   <User className="h-16 w-16 text-rose-600" />
+//                 <div className="h-32 w-32 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
+//                   <User className="h-16 w-16 text-emerald-600" />
 //                 </div>
 //                 <div className="absolute -top-2 -right-2 h-12 w-12 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center shadow-lg">
 //                   <Sparkles className="h-6 w-6 text-white" />
@@ -63,17 +63,17 @@
 //               <p className="text-xl text-gray-600 mb-2">
 //                 Complete your biodata to start your matrimonial journey
 //               </p>
-//               <Badge className="bg-rose-100 text-rose-700 px-4 py-2 text-sm font-medium">
+//               <Badge className="bg-emerald-100 text-emerald-700 px-4 py-2 text-sm font-medium">
 //                 Profile Not Found
 //               </Badge>
 //             </div>
 
 //             <div className="text-center">
-//               <Card className="border-rose-200 shadow-xl bg-gradient-to-r from-white to-rose-50/50">
+//               <Card className="border-emerald-200 shadow-xl bg-gradient-to-r from-white to-emerald-50/50">
 //                 <CardContent className="p-8 md:p-12">
 //                   <div className="max-w-2xl mx-auto">
 //                     <div className="flex items-center justify-center space-x-2 mb-4">
-//                       <Heart className="h-6 w-6 text-rose-500 fill-current" />
+//                       <Heart className="h-6 w-6 text-emerald-500 fill-current" />
 //                       <h3 className="text-2xl md:text-3xl font-bold text-gray-800">
 //                         Ready to Find Your Soulmate?
 //                       </h3>
@@ -88,7 +88,7 @@
 //                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
 //                       <Button
 //                         size="lg"
-//                         className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
+//                         className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
 //                       >
 //                         <User className="h-5 w-5 mr-2" />
 //                         Create Biodata
@@ -186,14 +186,14 @@ export default function CheckProfileProgress() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50">
       <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Header Section */}
           <div className="text-center mb-12">
             <div className="relative inline-block mb-6">
-              <div className="h-32 w-32 bg-gradient-to-br from-rose-100 to-rose-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                <User className="h-16 w-16 text-rose-600" />
+              <div className="h-32 w-32 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                <User className="h-16 w-16 text-emerald-600" />
               </div>
               <div className="absolute -top-2 -right-2 h-12 w-12 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center shadow-lg">
                 <Sparkles className="h-6 w-6 text-white" />
@@ -206,17 +206,17 @@ export default function CheckProfileProgress() {
             <p className="text-xl text-gray-600 mb-2">
               Complete your biodata to start your matrimonial journey
             </p>
-            <Badge className="bg-rose-100 text-rose-700 px-4 py-2 text-sm font-medium">
+            <Badge className="bg-emerald-100 text-emerald-700 px-4 py-2 text-sm font-medium">
               Profile Not Found
             </Badge>
           </div>
 
           <div className="text-center">
-            <Card className="border-rose-200 shadow-xl bg-gradient-to-r from-white to-rose-50/50">
+            <Card className="border-emerald-200 shadow-xl bg-gradient-to-r from-white to-emerald-50/50">
               <CardContent className="p-8 md:p-12">
                 <div className="max-w-2xl mx-auto">
                   <div className="flex items-center justify-center space-x-2 mb-4">
-                    <Heart className="h-6 w-6 text-rose-500 fill-current" />
+                    <Heart className="h-6 w-6 text-emerald-500 fill-current" />
                     <h3 className="text-2xl md:text-3xl font-bold text-gray-800">
                       Ready to Find Your Soulmate?
                     </h3>
@@ -232,7 +232,7 @@ export default function CheckProfileProgress() {
                     <Link href={"/profile/create-biodata"}>
                       <Button
                         size="lg"
-                        className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                        className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
                       >
                         <User className="h-5 w-5 mr-2" />
                         Create Biodata

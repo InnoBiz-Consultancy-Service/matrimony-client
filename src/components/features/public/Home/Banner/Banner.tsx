@@ -6,12 +6,12 @@ import Image from "next/image"
 
 export default function Banner() {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 overflow-hidden">
+    <section className="relative min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-rose-100/10 to-pink-100/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-emerald-100/10 to-pink-100/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative container mx-auto px-4 lg:px-8 pt-20 pb-16">
@@ -19,7 +19,7 @@ export default function Banner() {
           {/* Left Content */}
           <div className="space-y-8 text-center lg:text-left">
             {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium">
+            <div className="inline-flex items-center space-x-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium">
               <Heart className="h-4 w-4 fill-current" />
               <span>Trusted by Happy Couples</span>
             </div>
@@ -49,7 +49,7 @@ export default function Banner() {
               {/* </Link> */}
               <Button
                 variant="outline"
-                className="border-2 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 font-semibold px-8 py-4 text-lg rounded-xl group bg-transparent"
+                className="border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 font-semibold px-8 py-4 text-lg rounded-xl group bg-transparent"
               >
                 <Play className="mr-2 h-5 w-5" />
                 Watch Success Stories
@@ -59,15 +59,15 @@ export default function Banner() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8">
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-rose-600">0</div>
+                <div className="text-2xl md:text-3xl font-bold text-emerald-600">0</div>
                 <div className="text-sm text-gray-600">Happy Couples</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-rose-600">0</div>
+                <div className="text-2xl md:text-3xl font-bold text-emerald-600">0</div>
                 <div className="text-sm text-gray-600">Active Members</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-rose-600">0</div>
+                <div className="text-2xl md:text-3xl font-bold text-emerald-600">0</div>
                 <div className="text-sm text-gray-600">Success Rate</div>
               </div>
             </div>
@@ -77,7 +77,7 @@ export default function Banner() {
           <div className="relative hidden lg:flex">
             {/* Main Hero Image Placeholder */}
             <div className="relative">
-              <div className="w-full h-[500px] bg-gradient-to-br from-rose-100 to-pink-100 rounded-3xl shadow-2xl overflow-hidden">
+              <div className="w-full h-[500px] bg-gradient-to-br from-emerald-100 to-pink-100 rounded-3xl shadow-2xl overflow-hidden">
                 <Image
                   width={500}
                   height={500}
@@ -91,11 +91,11 @@ export default function Banner() {
                 <CardContent className="p-4">
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2">
-                      <Shield className="h-5 w-5 text-rose-600" />
+                      <Shield className="h-5 w-5 text-emerald-600" />
                       <span className="font-semibold text-gray-800">100% Verified</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Users className="h-5 w-5 text-rose-600" />
+                      <Users className="h-5 w-5 text-emerald-600" />
                       <span className="font-semibold text-gray-800">Privacy Protected</span>
                     </div>
                     <div className="text-sm text-gray-600">All profiles are manually verified for your safety</div>

@@ -97,11 +97,11 @@ export default function Biodata({ id }: { id: string }) {
     className?: string;
   }) => (
     <Card
-      className={`border-rose-100 hover:shadow-lg transition-all duration-300 ${className}`}
+      className={`border-emerald-100 hover:shadow-lg transition-all duration-300 ${className}`}
     >
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-gray-800 flex items-center">
-          <Icon className="h-5 w-5 mr-2 text-rose-600" />
+          <Icon className="h-5 w-5 mr-2 text-emerald-600" />
           {title}
         </CardTitle>
       </CardHeader>
@@ -132,29 +132,29 @@ export default function Biodata({ id }: { id: string }) {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50">
       <div className="container mx-auto px-4 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left Sidebar - biodata Summary */}
           <div className="lg:col-span-1 space-y-6">
             {/* biodata Card */}
-            <Card className="border-rose-100 shadow-xl">
+            <Card className="border-emerald-100 shadow-xl">
               <CardContent className="p-6 text-center">
                 <div className="relative inline-block mb-4">
-                  <Avatar className="h-32 w-32 rounded-2xl shadow-lg ring-4 ring-rose-100">
+                  <Avatar className="h-32 w-32 rounded-2xl shadow-lg ring-4 ring-emerald-100">
                     <AvatarImage
                       src="/placeholder.svg?height=128&width=128"
                       alt={biodata?.name}
                     />
                     {biodata?.name && (
-                      <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white text-2xl font-bold rounded-2xl">
+                      <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white text-2xl font-bold rounded-2xl">
                         {getInitials(biodata.name)}
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <Button
                     size="icon"
-                    className="absolute -bottom-2 -right-2 h-10 w-10 rounded-full bg-rose-600 hover:bg-rose-700 shadow-lg"
+                    className="absolute -bottom-2 -right-2 h-10 w-10 rounded-full bg-emerald-600 hover:bg-emerald-700 shadow-lg"
                   >
                     <Camera className="h-4 w-4" />
                   </Button>
@@ -183,13 +183,13 @@ export default function Biodata({ id }: { id: string }) {
 
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <div className="text-2xl font-bold text-rose-600">
+                    <div className="text-2xl font-bold text-emerald-600">
                       {biodataViews}
                     </div>
                     <div className="text-sm text-gray-600">biodata Views</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-rose-600">
+                    <div className="text-2xl font-bold text-emerald-600">
                       {interests}
                     </div>
                     <div className="text-sm text-gray-600">Interests</div>
@@ -230,8 +230,8 @@ export default function Biodata({ id }: { id: string }) {
                       onClick={() => setActiveTab(tab.value)}
                       className={`flex items-center space-x-2 px-4 py-3 rounded-lg whitespace-nowrap text-sm font-medium transition-all duration-200 ${
                         activeTab === tab.value
-                          ? "bg-rose-600 text-white shadow-lg"
-                          : "bg-white text-gray-600 border border-gray-200 hover:bg-rose-50 hover:text-rose-600"
+                          ? "bg-emerald-600 text-white shadow-lg"
+                          : "bg-white text-gray-600 border border-gray-200 hover:bg-emerald-50 hover:text-emerald-600"
                       }`}
                     >
                       <tab.icon className="h-4 w-4" />
@@ -247,40 +247,40 @@ export default function Biodata({ id }: { id: string }) {
                 onValueChange={setActiveTab}
                 className="w-full"
               >
-                <TabsList className="hidden md:grid w-full grid-cols-6 bg-rose-50 mb-8">
+                <TabsList className="hidden md:grid w-full grid-cols-6 bg-emerald-50 mb-8">
                   <TabsTrigger
                     value="overview"
-                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                   >
                     Overview
                   </TabsTrigger>
                   <TabsTrigger
                     value="personal"
-                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                   >
                     Personal
                   </TabsTrigger>
                   <TabsTrigger
                     value="family"
-                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                   >
                     Family
                   </TabsTrigger>
                   <TabsTrigger
                     value="education"
-                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                   >
                     Education
                   </TabsTrigger>
                   <TabsTrigger
                     value="contact"
-                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                   >
                     Contact
                   </TabsTrigger>
                   <TabsTrigger
                     value="preferences"
-                    className="data-[state=active]:bg-rose-600 data-[state=active]:text-white"
+                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                   >
                     Preferences
                   </TabsTrigger>
@@ -292,10 +292,10 @@ export default function Biodata({ id }: { id: string }) {
                   {activeTab === "overview" && (
                     <div className="space-y-6">
                       {/* About Me */}
-                      <Card className="border-rose-100">
+                      <Card className="border-emerald-100">
                         <CardHeader>
                           <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 flex items-center">
-                            <User className="h-5 w-5 mr-2 text-rose-600" />
+                            <User className="h-5 w-5 mr-2 text-emerald-600" />
                             About Me
                           </CardTitle>
                         </CardHeader>
@@ -420,7 +420,7 @@ export default function Biodata({ id }: { id: string }) {
                       </div>
 
                       <InfoCard title="Future Plans" icon={Star}>
-                        <div className="bg-rose-50 rounded-lg p-4">
+                        <div className="bg-emerald-50 rounded-lg p-4">
                           <p className="text-gray-700 leading-relaxed">
                             {biodata?.maritalInfo?.futurePlan}
                           </p>
@@ -654,7 +654,7 @@ export default function Biodata({ id }: { id: string }) {
                             <h4 className="font-semibold text-gray-800 mb-3">
                               Additional Qualities
                             </h4>
-                            <div className="bg-rose-50 rounded-lg p-4">
+                            <div className="bg-emerald-50 rounded-lg p-4">
                               <p className="text-gray-700 leading-relaxed">
                                 {biodata?.preference?.additionalQualities}
                               </p>

@@ -23,7 +23,7 @@ export default function Footer() {
             {/* Company Info */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
                   <Heart className="h-5 w-5 text-white fill-white" />
                 </div>
                 <div>
@@ -40,25 +40,25 @@ export default function Footer() {
               <div className="flex space-x-4">
                 <Link
                   href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-rose-600 rounded-full flex items-center justify-center transition-colors duration-300"
+                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
                 >
                   <Facebook className="h-5 w-5" />
                 </Link>
                 <Link
                   href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-rose-600 rounded-full flex items-center justify-center transition-colors duration-300"
+                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
                 >
                   <Twitter className="h-5 w-5" />
                 </Link>
                 <Link
                   href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-rose-600 rounded-full flex items-center justify-center transition-colors duration-300"
+                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
                 >
                   <Instagram className="h-5 w-5" />
                 </Link>
                 <Link
                   href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-rose-600 rounded-full flex items-center justify-center transition-colors duration-300"
+                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
                 >
                   <Youtube className="h-5 w-5" />
                 </Link>
@@ -80,7 +80,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-gray-300 hover:text-rose-400 transition-colors duration-200 flex items-center group"
+                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-200 flex items-center group"
                     >
                       <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
                     </Link>
@@ -104,7 +104,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-gray-300 hover:text-rose-400 transition-colors duration-200 flex items-center group"
+                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-200 flex items-center group"
                     >
                       <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
                     </Link>
@@ -118,26 +118,26 @@ export default function Footer() {
               <h4 className="text-lg font-semibold text-white">Get in Touch</h4>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <MapPin className="h-5 w-5 text-rose-400 mt-1 flex-shrink-0" />
+                  <MapPin className="h-5 w-5 text-emerald-400 mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-gray-300">123 Love Street</p>
                     <p className="text-gray-300">Heart City, HC 12345</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-rose-400 flex-shrink-0" />
-                  <Link href="tel:+1234567890" className="text-gray-300 hover:text-rose-400 transition-colors">
+                  <Phone className="h-5 w-5 text-emerald-400 flex-shrink-0" />
+                  <Link href="tel:+1234567890" className="text-gray-300 hover:text-emerald-400 transition-colors">
                     +1 (234) 567-8900
                   </Link>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-rose-400 flex-shrink-0" />
-                  <Link href="mailto:support@nikah.com" className="text-gray-300 hover:text-rose-400 transition-colors">
+                  <Mail className="h-5 w-5 text-emerald-400 flex-shrink-0" />
+                  <Link href="mailto:support@nikah.com" className="text-gray-300 hover:text-emerald-400 transition-colors">
                     support@nikah.com
                   </Link>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Clock className="h-5 w-5 text-rose-400 flex-shrink-0" />
+                  <Clock className="h-5 w-5 text-emerald-400 flex-shrink-0" />
                   <div>
                     <p className="text-gray-300">24/7 Support</p>
                     <p className="text-sm text-gray-400">Always here to help</p>
@@ -156,16 +156,16 @@ export default function Footer() {
               © 2025 Nikah. All rights reserved.
             </div>
             <div className="flex items-center space-x-6 text-sm">
-              <Link href="/privacy" className="text-gray-400 hover:text-rose-400 transition-colors">
+              <Link href="/privacy" className="text-gray-400 hover:text-emerald-400 transition-colors">
                 Privacy
               </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-rose-400 transition-colors">
+              <Link href="/terms" className="text-gray-400 hover:text-emerald-400 transition-colors">
                 Terms
               </Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-rose-400 transition-colors">
+              <Link href="/cookies" className="text-gray-400 hover:text-emerald-400 transition-colors">
                 Cookies
               </Link>
-              <Link href="/sitemap" className="text-gray-400 hover:text-rose-400 transition-colors">
+              <Link href="/sitemap" className="text-gray-400 hover:text-emerald-400 transition-colors">
                 Sitemap
               </Link>
             </div>
