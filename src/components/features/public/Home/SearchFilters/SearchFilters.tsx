@@ -198,12 +198,12 @@ export default function SearchFilters() {
   };
 
   return (
-    <section className="bg-gradient-to-r from-white to-rose-50/30 py-12">
+    <section className="bg-gradient-to-r from-white to-emerald-50/30 py-12">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Heart className="h-6 w-6 text-rose-500 fill-current" />
+            <Heart className="h-6 w-6 text-emerald-500 fill-current" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
               Find Your Perfect Match
             </h2>
@@ -230,7 +230,7 @@ export default function SearchFilters() {
                     render={({ field }) => (
                       <FormItem className="space-y-4">
                         <FormLabel className="text-sm font-semibold text-gray-700 flex items-center">
-                          <Users className="h-4 w-4 mr-2 text-rose-500" />
+                          <Users className="h-4 w-4 mr-2 text-emerald-500" />
                           Looking For
                         </FormLabel>
                         <FormControl>
@@ -243,7 +243,7 @@ export default function SearchFilters() {
                               <RadioGroupItem
                                 value="male"
                                 id="male"
-                                className="border-2 border-gray-300 text-rose-600"
+                                className="border-2 border-gray-300 text-emerald-600"
                               />
                               <Label
                                 htmlFor="male"
@@ -256,7 +256,7 @@ export default function SearchFilters() {
                               <RadioGroupItem
                                 value="female"
                                 id="female"
-                                className="border-2 border-gray-300 text-rose-600"
+                                className="border-2 border-gray-300 text-emerald-600"
                               />
                               <Label
                                 htmlFor="female"
@@ -279,7 +279,7 @@ export default function SearchFilters() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700 flex items-center">
-                          <MapPin className="h-4 w-4 mr-2 text-rose-500" />
+                          <MapPin className="h-4 w-4 mr-2 text-emerald-500" />
                           Division
                         </FormLabel>
                         <Select
@@ -287,7 +287,7 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                               <SelectValue placeholder="Select Division" />
                             </SelectTrigger>
                           </FormControl>
@@ -322,7 +322,7 @@ export default function SearchFilters() {
                           disabled={!selectedDivision}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                               <SelectValue placeholder="Select District" />
                             </SelectTrigger>
                           </FormControl>
@@ -357,7 +357,7 @@ export default function SearchFilters() {
                           disabled={!selectedDistrict}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                               <SelectValue placeholder="Select Upazila" />
                             </SelectTrigger>
                           </FormControl>
@@ -393,7 +393,7 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                               <SelectValue placeholder="Select profession" />
                             </SelectTrigger>
                           </FormControl>
@@ -428,7 +428,7 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                           </FormControl>
@@ -487,7 +487,7 @@ export default function SearchFilters() {
                     type="button"
                     variant="ghost"
                     onClick={() => setShowAdvanced(!showAdvanced)}
-                    className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 font-medium text-base px-6 py-3"
+                    className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-medium text-base px-6 py-3"
                   >
                     <Filter className="h-5 w-5 mr-2" />
                     {showAdvanced ? "Hide" : "Show"} Advanced Filters
@@ -496,7 +496,7 @@ export default function SearchFilters() {
 
                 {/* Advanced Filters */}
                 {showAdvanced && (
-                  <div className="border-t border-rose-100 pt-8">
+                  <div className="border-t border-emerald-100 pt-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       {/* Education */}
                       <FormField
@@ -512,7 +512,7 @@ export default function SearchFilters() {
                               value={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                                <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                                   <SelectValue placeholder="Select education" />
                                 </SelectTrigger>
                               </FormControl>
@@ -548,7 +548,7 @@ export default function SearchFilters() {
                               value={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="border-2 border-gray-200 focus:border-rose-400 h-12 w-full">
+                                <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
                                   <SelectValue placeholder="Select income" />
                                 </SelectTrigger>
                               </FormControl>
@@ -575,7 +575,7 @@ export default function SearchFilters() {
 
                 {/* Active Filters */}
                 {getActiveFiltersCount() > 0 && (
-                  <div className="bg-rose-50/50 rounded-lg p-6">
+                  <div className="bg-emerald-50/50 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                       <Label className="text-base font-semibold text-gray-700">
                         Active Filters ({getActiveFiltersCount()})
@@ -585,7 +585,7 @@ export default function SearchFilters() {
                         variant="ghost"
                         size="sm"
                         onClick={clearFilters}
-                        className="text-rose-600 hover:text-rose-700 hover:bg-rose-100 font-medium"
+                        className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-100 font-medium"
                       >
                         Clear All
                       </Button>
@@ -594,7 +594,7 @@ export default function SearchFilters() {
                       {watchedValues.lookingFor && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           Looking for: {watchedValues.lookingFor}
                           <X
@@ -606,7 +606,7 @@ export default function SearchFilters() {
                       {watchedValues.division && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           Division:{" "}
                           {
@@ -626,7 +626,7 @@ export default function SearchFilters() {
                       {watchedValues.district && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           District: {watchedValues.district}
                           <X
@@ -641,7 +641,7 @@ export default function SearchFilters() {
                       {watchedValues.upazila && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           Upazila: {watchedValues.upazila}
                           <X
@@ -653,7 +653,7 @@ export default function SearchFilters() {
                       {watchedValues.profession && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           Profession:{" "}
                           {professions.find(
@@ -670,7 +670,7 @@ export default function SearchFilters() {
                       {watchedValues.maritalStatus && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           Status:{" "}
                           {maritalStatuses.find(
@@ -688,7 +688,7 @@ export default function SearchFilters() {
                         watchedValues.ageRange[1] !== 40) && (
                         <Badge
                           variant="secondary"
-                          className="bg-rose-100 text-rose-700 hover:bg-rose-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
                         >
                           Age: {watchedValues.ageRange[0]}-
                           {watchedValues.ageRange[1]}
@@ -709,7 +709,7 @@ export default function SearchFilters() {
                   <Button
                     type="submit"
                     disabled={isSearching}
-                    className="bg-rose-600 hover:bg-rose-700 text-white px-12 py-4 rounded-lg font-semibold transition-all duration-200 text-lg shadow-lg hover:shadow-xl"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-12 py-4 rounded-lg font-semibold transition-all duration-200 text-lg shadow-lg hover:shadow-xl"
                   >
                     {isSearching ? (
                       <div className="flex items-center space-x-3">

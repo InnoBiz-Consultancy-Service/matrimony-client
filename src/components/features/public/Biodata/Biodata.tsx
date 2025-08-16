@@ -50,7 +50,7 @@ export default function ProfessionalBiodatasPage() {
 
   const getProfileColor = (name: string) => {
     const colors = [
-      "from-rose-400 to-rose-600",
+      "from-emerald-400 to-emerald-600",
       "from-blue-400 to-blue-600",
       "from-green-400 to-green-600",
       "from-purple-400 to-purple-600",
@@ -191,16 +191,16 @@ export default function ProfessionalBiodatasPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50">
       {/* Header */}
-      <div className="bg-white border-b border-rose-100">
+      <div className="bg-white border-b border-emerald-100">
         <div className="container mx-auto px-4 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
-                className="border-rose-200 text-rose-700 hover:bg-rose-50"
+                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
               >
                 <SlidersHorizontal className="h-4 w-4 mr-2" />
                 Filters{" "}
@@ -252,8 +252,8 @@ export default function ProfessionalBiodatasPage() {
           </div>
         ) : filteredProfiles.length === 0 ? (
           <div className="text-center py-16">
-            <div className="h-24 w-24 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Users className="h-12 w-12 text-rose-500" />
+            <div className="h-24 w-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Users className="h-12 w-12 text-emerald-500" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-4">
               {error ? "Unable to Load Profiles" : "No Profiles Found"}
@@ -267,7 +267,7 @@ export default function ProfessionalBiodatasPage() {
               {error && (
                 <Button
                   onClick={handleRetry}
-                  className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white"
+                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
                 >
                   Try Again
                 </Button>
@@ -275,7 +275,7 @@ export default function ProfessionalBiodatasPage() {
               <Link href="/login">
                 <Button
                   variant="outline"
-                  className="border-rose-200 text-rose-700 hover:bg-rose-50"
+                  className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
                 >
                   Login
                 </Button>
@@ -334,7 +334,7 @@ export default function ProfessionalBiodatasPage() {
                       <div className="space-y-3">
                         {profile.familyInfo?.fatherOccupation && (
                           <div className="flex items-center text-gray-600">
-                            <Briefcase className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
+                            <Briefcase className="h-4 w-4 mr-2 text-emerald-500 flex-shrink-0" />
                             <div className="min-w-0">
                               <p className="text-sm font-medium text-gray-800 truncate">
                                 Father: {profile.familyInfo.fatherOccupation}
@@ -345,7 +345,7 @@ export default function ProfessionalBiodatasPage() {
 
                         {profile.education?.honours && (
                           <div className="flex items-center text-gray-600">
-                            <GraduationCap className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
+                            <GraduationCap className="h-4 w-4 mr-2 text-emerald-500 flex-shrink-0" />
                             <div className="min-w-0">
                               <p className="text-sm font-medium text-gray-800 truncate">
                                 {profile.education.honours}
@@ -355,7 +355,7 @@ export default function ProfessionalBiodatasPage() {
                         )}
 
                         <div className="flex items-center text-gray-600">
-                          <MapPin className="h-4 w-4 mr-2 text-rose-500 flex-shrink-0" />
+                          <MapPin className="h-4 w-4 mr-2 text-emerald-500 flex-shrink-0" />
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-gray-800 truncate">
                               {profile.address?.present ||
@@ -410,7 +410,7 @@ export default function ProfessionalBiodatasPage() {
                         href={`/biodatas/${profile._id}`}
                         className="flex-1"
                       >
-                        <Button className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white">
+                        <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white">
                           <Eye className="h-4 w-4 mr-2" />
                           View Profile
                         </Button>
@@ -419,10 +419,10 @@ export default function ProfessionalBiodatasPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => toggleSaveProfile(profile._id)}
-                        className={`border-rose-200 hover:bg-rose-50 ${
+                        className={`border-emerald-200 hover:bg-emerald-50 ${
                           savedProfiles.includes(profile._id)
-                            ? "bg-rose-50 text-rose-700"
-                            : "text-rose-700"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "text-emerald-700"
                         }`}
                       >
                         <Bookmark
@@ -436,7 +436,7 @@ export default function ProfessionalBiodatasPage() {
                       <Button
                         variant="outline"
                         size="icon"
-                        className="border-rose-200 text-rose-700 hover:bg-rose-50 bg-transparent"
+                        className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
                       >
                         <Heart className="h-4 w-4" />
                       </Button>
@@ -450,7 +450,7 @@ export default function ProfessionalBiodatasPage() {
             <div className="text-center mt-12">
               <Button
                 variant="outline"
-                className="border-rose-200 text-rose-700 hover:bg-rose-50 px-8 py-3 bg-transparent"
+                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 px-8 py-3 bg-transparent"
                 onClick={handleRetry}
                 disabled={isLoading}
               >

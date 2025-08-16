@@ -278,8 +278,8 @@ export default function OTPVerify() {
                 : emailVerified
                 ? "border-blue-400 bg-blue-50 text-blue-700"
                 : digit
-                ? "border-rose-400 bg-rose-50 text-rose-700"
-                : "border-gray-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                : "border-gray-200 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             }`}
             aria-label={`OTP digit ${index + 1}`}
           />
@@ -292,8 +292,8 @@ export default function OTPVerify() {
     if (isVerifyingEmail && !isVerifyingUser) {
       return (
         <div className="flex justify-center">
-          <div className="flex items-center space-x-2 text-rose-600">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600" />
+          <div className="flex items-center space-x-2 text-emerald-600">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-600" />
             <span className="text-sm">Verifying email...</span>
           </div>
         </div>
@@ -315,12 +315,12 @@ export default function OTPVerify() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center p-4">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-rose-100/10 to-pink-100/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-emerald-100/10 to-pink-100/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-2xl mx-auto">
@@ -331,7 +331,7 @@ export default function OTPVerify() {
               <Link href="/registration" passHref>
                 <Button
                   variant="ghost"
-                  className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 group"
+                  className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 group"
                   asChild
                 >
                   <div>
@@ -344,7 +344,7 @@ export default function OTPVerify() {
 
             {/* Logo & Header */}
             <div className="space-y-4">
-              <div className="h-16 w-16 bg-gradient-to-br from-rose-500 to-rose-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+              <div className="h-16 w-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
                 <Shield className="h-8 w-8 text-white" />
               </div>
 
@@ -424,11 +424,11 @@ export default function OTPVerify() {
                       size="sm"
                       onClick={handleEmailResend}
                       disabled={countdown > 0 || isSendingOtp}
-                      className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+                      className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 disabled:opacity-50"
                     >
                       {isSendingOtp ? (
                         <>
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-200 border-t-rose-600 mr-2" />
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-600 mr-2" />
                           Sending...
                         </>
                       ) : countdown > 0 ? (
@@ -458,7 +458,7 @@ export default function OTPVerify() {
                   </span>
                 </div>
                 <Link href="/login" passHref>
-                  <Button className="w-full primary-btn text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold py-4 text-lg rounded-xl">
+                  <Button className="w-full primary-btn text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-4 text-lg rounded-xl">
                     <CheckCircle className="mr-2 h-5 w-5" />
                     Continue to Dashboard
                   </Button>
@@ -475,7 +475,7 @@ export default function OTPVerify() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                  className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                 >
                   Contact Support
                 </Button>

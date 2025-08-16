@@ -3,14 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Menu,
-  Heart,
-  X,
-  User,
-  LogOut,
-  ChevronDown,
-} from "lucide-react";
+import { Menu, Heart, X, User, LogOut, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -76,8 +69,8 @@ export default function Navbar() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-lg border-rose-100"
-          : "bg-white border-rose-50"
+          ? "bg-white/95 backdrop-blur-md shadow-lg border-emerald-100"
+          : "bg-white border-emerald-50"
       )}
     >
       <div className="container mx-auto px-4 lg:px-8">
@@ -85,16 +78,16 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg group-hover:shadow-rose-200 transition-all duration-300 group-hover:scale-105">
+              <div className="h-10 w-10 rounded-full bg-[#50C878] flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 transition-all duration-300 group-hover:scale-105">
                 <Heart className="h-5 w-5 text-white fill-white" />
               </div>
               <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 opacity-80 animate-pulse"></div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-emerald-600 bg-clip-text text-transparent">
                 Nikah
               </span>
-              <span className="text-xs text-rose-500/70 font-medium -mt-1">
+              <span className="text-xs text-[#50C878] font-medium -mt-1">
                 Find Your Perfect Match
               </span>
             </div>
@@ -107,17 +100,17 @@ export default function Navbar() {
                 key={item.title}
                 href={item.href}
                 className={cn(
-                  "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-rose-50 group",
+                  "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-emerald-50 group",
                   pathname === item.href
-                    ? "text-rose-700 bg-rose-50"
-                    : "text-gray-700 hover:text-rose-700"
+                    ? "text-[#50C878] bg-emerald-50"
+                    : "text-gray-700 hover:text-emerald-400"
                 )}
               >
                 {item.title}
                 {pathname === item.href && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-rose-600 rounded-full"></div>
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-600 rounded-full"></div>
                 )}
-                <div className="absolute inset-0 rounded-lg bg-rose-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10"></div>
+                <div className="absolute inset-0 rounded-lg bg-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10"></div>
               </Link>
             ))}
           </nav>
@@ -131,9 +124,9 @@ export default function Navbar() {
                   <PopoverTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="flex items-center space-x-2 hover:bg-rose-50 transition-all duration-200 p-2 rounded-lg cursor-pointer"
+                      className="flex items-center space-x-2 hover:bg-emerald-50 transition-all duration-200 p-2 rounded-lg cursor-pointer"
                     >
-                      <Avatar className="h-8 w-8 rounded-lg ring-2 ring-rose-100 hover:ring-rose-200 transition-all duration-200">
+                      <Avatar className="h-8 w-8 rounded-lg ring-2 ring-emerald-100 hover:ring-emerald-200 transition-all duration-200">
                         <AvatarImage
                           src={
                             user?.gender === "male"
@@ -142,7 +135,7 @@ export default function Navbar() {
                           }
                           alt={user?.name}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white font-semibold text-sm">
+                        <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold text-sm">
                           {getInitials(user?.name || "")}
                         </AvatarFallback>
                       </Avatar>
@@ -154,7 +147,7 @@ export default function Navbar() {
                     align="end"
                   >
                     {/* User Info Header */}
-                    <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100">
+                    <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 border-b border-emerald-100">
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white shadow-md">
                           <AvatarImage
@@ -165,7 +158,7 @@ export default function Navbar() {
                             }
                             alt={user?.name}
                           />
-                          <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white font-semibold text-lg">
+                          <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold text-lg">
                             {getInitials(user?.name || "")}
                           </AvatarFallback>
                         </Avatar>
@@ -192,10 +185,10 @@ export default function Navbar() {
                     <div className="py-2">
                       <button
                         onClick={() => setIsProfileOpen(false)}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-rose-50 transition-colors duration-200 group cursor-pointer"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
                       >
-                        <div className="h-9 w-9 rounded-lg bg-rose-100 flex items-center justify-center group-hover:bg-rose-200 transition-colors">
-                          <User className="h-4 w-4 text-rose-600" />
+                        <div className="h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                          <User className="h-4 w-4 text-emerald-600" />
                         </div>
                         {user?.role === "admin" ? (
                           <Link href={"/dashboard"}>
@@ -225,7 +218,7 @@ export default function Navbar() {
                       {/* <Link href="/favorites">
                         <button
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-rose-50 transition-colors duration-200 group cursor-pointer"
+                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
                         >
                           <div className="h-9 w-9 rounded-lg bg-pink-100 flex items-center justify-center group-hover:bg-pink-200 transition-colors">
                             <Bookmark className="h-4 w-4 text-pink-600" />
@@ -250,7 +243,7 @@ export default function Navbar() {
                       <Link href="/settings">
                         <button
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-rose-50 transition-colors duration-200 group cursor-pointer"
+                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
                         >
                           <div className="h-9 w-9 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                             <Settings className="h-4 w-4 text-blue-600" />
@@ -266,14 +259,14 @@ export default function Navbar() {
                         </button>
                       </Link> */}
 
-                      <Separator className="my-2 bg-rose-100" />
+                      <Separator className="my-2 bg-emerald-100" />
 
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-red-50 transition-colors duration-200 group cursor-pointer"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
                       >
-                        <div className="h-9 w-9 rounded-lg bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                          <LogOut className="h-4 w-4 text-red-600" />
+                        <div className="h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                          <LogOut className="h-4 w-4 text-emerald-600" />
                         </div>
                         <div>
                           <p className="font-medium text-gray-800">Sign Out</p>
@@ -304,13 +297,13 @@ export default function Navbar() {
                 <Link href="/login">
                   <Button
                     variant="ghost"
-                    className="text-rose-700 hover:text-rose-800 hover:bg-rose-50 font-medium transition-all duration-200"
+                    className="text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50 font-medium transition-all duration-200"
                   >
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/registration">
-                  <Button className="bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg hover:shadow-rose-200 transition-all duration-300 font-medium px-6">
+                  <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-emerald-200 transition-all duration-300 font-medium px-6">
                     Join Free
                   </Button>
                 </Link>
@@ -325,7 +318,7 @@ export default function Navbar() {
                 variant="ghost"
                 size="icon"
                 aria-label="Menu"
-                className="text-rose-700 hover:bg-rose-50 transition-all duration-200"
+                className="text-emerald-700 hover:bg-emerald-50 transition-all duration-200"
               >
                 <Menu className="h-6 w-6" />
               </Button>
@@ -336,12 +329,12 @@ export default function Navbar() {
             >
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
-                <div className="flex items-center justify-between p-4 border-b border-rose-100">
+                <div className="flex items-center justify-between p-4 border-b border-emerald-100">
                   <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-md">
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md">
                       <Heart className="h-4 w-4 text-white fill-white" />
                     </div>
-                    <span className="text-xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                    <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                       Nikah
                     </span>
                   </div>
@@ -357,7 +350,7 @@ export default function Navbar() {
 
                 {/* User Info in Mobile */}
                 {isAuthenticated && (
-                  <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100">
+                  <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 border-b border-emerald-100">
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white shadow-md">
                         <AvatarImage
@@ -368,7 +361,7 @@ export default function Navbar() {
                           }
                           alt={user?.name}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-rose-500 to-rose-600 text-white font-semibold">
+                        <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold">
                           {getInitials(user?.name || "")}
                         </AvatarFallback>
                       </Avatar>
@@ -397,8 +390,8 @@ export default function Navbar() {
                       className={cn(
                         "flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 mx-2",
                         pathname === item.href
-                          ? "text-rose-700 bg-rose-50 border-l-4 border-rose-600 shadow-sm"
-                          : "text-gray-700 hover:text-rose-700 hover:bg-rose-50"
+                          ? "text-emerald-700 bg-emerald-50 border-l-4 border-emerald-600 shadow-sm"
+                          : "text-gray-700 hover:text-emerald-700 hover:bg-emerald-50"
                       )}
                     >
                       {item.title}
@@ -408,12 +401,12 @@ export default function Navbar() {
                   {/* Mobile User Menu Items */}
                   {isAuthenticated && (
                     <>
-                      <Separator className="my-4 bg-rose-100" />
+                      <Separator className="my-4 bg-emerald-100" />
 
                       <Link
                         href="/profile"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-rose-700 hover:bg-rose-50 transition-all duration-200 mx-2 rounded-lg"
+                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
                       >
                         <User className="h-5 w-5" />
                         <span className="font-medium">My Profile</span>
@@ -422,7 +415,7 @@ export default function Navbar() {
                       {/* <Link
                         href="/favorites"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-rose-700 hover:bg-rose-50 transition-all duration-200 mx-2 rounded-lg"
+                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
                       >
                         <Bookmark className="h-5 w-5" />
                         <span className="font-medium">Favorites</span>
@@ -437,7 +430,7 @@ export default function Navbar() {
                       <Link
                         href="/settings"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-rose-700 hover:bg-rose-50 transition-all duration-200 mx-2 rounded-lg"
+                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
                       >
                         <Settings className="h-5 w-5" />
                         <span className="font-medium">Settings</span>
@@ -447,11 +440,11 @@ export default function Navbar() {
                 </nav>
 
                 {/* Mobile CTA Buttons */}
-                <div className="border-t border-rose-100 p-4 space-y-3">
+                <div className="border-t border-emerald-100 p-4 space-y-3">
                   {isAuthenticated ? (
                     <Button
                       onClick={handleLogout}
-                      className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg transition-all duration-300"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
                       Sign Out
@@ -461,7 +454,7 @@ export default function Navbar() {
                       <Link href="/login" className="block">
                         <Button
                           variant="outline"
-                          className="w-full border-rose-200 text-rose-700 hover:bg-rose-50 bg-transparent transition-all duration-200"
+                          className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent transition-all duration-200"
                           onClick={() => setIsOpen(false)}
                         >
                           Sign In
@@ -469,7 +462,7 @@ export default function Navbar() {
                       </Link>
                       <Link href="/registration" className="block">
                         <Button
-                          className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-lg transition-all duration-300"
+                          className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg transition-all duration-300"
                           onClick={() => setIsOpen(false)}
                         >
                           Join Free

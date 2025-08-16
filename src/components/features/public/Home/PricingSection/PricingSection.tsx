@@ -66,7 +66,7 @@ export default function PricingSection() {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-rose-50 to-pink-50">
+    <section className="py-16 bg-gradient-to-br from-emerald-50 to-pink-50">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -85,12 +85,12 @@ export default function PricingSection() {
                 key={index}
                 className={`relative transition-all duration-300 hover:shadow-xl ${
                   plan.popular
-                    ? "border-rose-500 shadow-lg scale-105 bg-white"
-                    : "border-gray-200 hover:border-rose-300 bg-white"
+                    ? "border-emerald-500 shadow-lg scale-105 bg-white"
+                    : "border-gray-200 hover:border-emerald-300 bg-white"
                 }`}
               >
                 {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-rose-500 hover:bg-rose-600 text-white px-4 py-1">
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-1">
                     Popular 🔥
                   </Badge>
                 )}
@@ -98,12 +98,12 @@ export default function PricingSection() {
                 <CardHeader className="text-center pb-4">
                   <div
                     className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${
-                      plan.popular ? "bg-rose-500" : "bg-rose-100"
+                      plan.popular ? "bg-emerald-500" : "bg-emerald-100"
                     }`}
                   >
                     <Icon
                       className={`w-8 h-8 ${
-                        plan.popular ? "text-white" : "text-rose-500"
+                        plan.popular ? "text-white" : "text-emerald-500"
                       }`}
                     />
                   </div>
@@ -132,7 +132,7 @@ export default function PricingSection() {
                   <ul className="space-y-3 mb-8">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start">
-                        <Check className="w-5 h-5 text-rose-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <Check className="w-5 h-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700 text-sm leading-relaxed">
                           {feature}
                         </span>
@@ -152,8 +152,8 @@ export default function PricingSection() {
                     <Button
                       className={`w-full py-3 text-base font-semibold transition-all duration-200 cursor-pointer ${
                         plan.buttonVariant === "default"
-                          ? "bg-rose-500 hover:bg-rose-600 text-white shadow-lg hover:shadow-xl"
-                          : "border-2 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white"
+                          ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-xl"
+                          : "border-2 border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white"
                       }`}
                       variant={plan.buttonVariant}
                     >
@@ -170,7 +170,7 @@ export default function PricingSection() {
           <p className="text-gray-600 mb-4">Have questions? Contact us</p>
           <Button
             variant="outline"
-            className="border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white bg-transparent"
+            className="border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white bg-transparent"
           >
             Talk to Support Team
           </Button>

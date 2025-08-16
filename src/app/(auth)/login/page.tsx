@@ -136,10 +136,10 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center px-4">
       {/* Background elements remain unchanged */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl"></div>
       </div>
 
@@ -149,14 +149,14 @@ export default function LoginPage() {
           {/* Logo */}
           <Link href={"/"}>
             <div className="flex items-center justify-center lg:justify-start space-x-3">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
                 <Heart className="h-6 w-6 text-white fill-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                   Nikah
                 </span>
-                <span className="text-sm text-rose-500/70 font-medium -mt-1">
+                <span className="text-sm text-emerald-500/70 font-medium -mt-1">
                   Find Your Perfect Match
                 </span>
               </div>
@@ -167,7 +167,7 @@ export default function LoginPage() {
           <div className="space-y-6">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
               Welcome Back to
-              <span className="block bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                 Your Love Journey
               </span>
             </h1>
@@ -180,25 +180,25 @@ export default function LoginPage() {
           {/* Success Stats */}
           <div className="grid grid-cols-3 gap-6 pt-8">
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-600">0</div>
+              <div className="text-2xl font-bold text-emerald-600">0</div>
               <div className="text-sm text-gray-600">Happy Couples</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-600">0</div>
+              <div className="text-2xl font-bold text-emerald-600">0</div>
               <div className="text-sm text-gray-600">Active Members</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-600">0</div>
+              <div className="text-2xl font-bold text-emerald-600">0</div>
               <div className="text-sm text-gray-600">Success Rate</div>
             </div>
           </div>
 
           {/* Testimonial */}
-          <Card className="bg-white/80 backdrop-blur-sm border-rose-100 shadow-xl">
+          <Card className="bg-white/80 backdrop-blur-sm border-emerald-100 shadow-xl">
             <CardContent className="p-6">
               <div className="flex items-start space-x-4">
-                <div className="h-12 w-12 bg-gradient-to-br from-rose-100 to-rose-200 rounded-full flex items-center justify-center">
-                  <span className="text-rose-600 font-semibold">S</span>
+                <div className="h-12 w-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center">
+                  <span className="text-emerald-600 font-semibold">S</span>
                 </div>
                 <div>
                   <p className="text-gray-700 italic mb-2">
@@ -223,10 +223,10 @@ export default function LoginPage() {
             <CardHeader className="space-y-4 pb-8">
               {/* Mobile Logo */}
               <div className="flex lg:hidden items-center justify-center space-x-3 mb-4">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
                   <Heart className="h-5 w-5 text-white fill-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-rose-500 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                   Nikah
                 </span>
               </div>
@@ -272,7 +272,7 @@ export default function LoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
-                      className="pl-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                      className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                       required
                       autoComplete="email"
                     />
@@ -295,7 +295,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
-                      className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-rose-400 focus:ring-rose-400 rounded-xl transition-all duration-300"
+                      className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
                       required
                       autoComplete="current-password"
                       minLength={8}
@@ -313,7 +313,7 @@ export default function LoginPage() {
                       onCheckedChange={(checked) =>
                         setRememberMe(checked === true)
                       }
-                      className="border-2 border-gray-300 data-[state=checked]:bg-rose-600 data-[state=checked]:border-rose-600"
+                      className="border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                     />
                     <Label
                       htmlFor="remember"
@@ -324,7 +324,7 @@ export default function LoginPage() {
                   </div>
                   <Link
                     href="/forgot-password"
-                    className="text-sm text-rose-600 hover:text-rose-700 font-medium"
+                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
                   >
                     Forgot password?
                   </Link>
@@ -333,7 +333,7 @@ export default function LoginPage() {
                 {/* Login Button */}
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-xl hover:shadow-rose-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -353,7 +353,7 @@ export default function LoginPage() {
                   Don&apos;t have an account?{" "}
                   <Link
                     href="/registration"
-                    className="text-rose-600 hover:text-rose-700 font-semibold"
+                    className="text-emerald-600 hover:text-emerald-700 font-semibold"
                   >
                     Create Account
                   </Link>

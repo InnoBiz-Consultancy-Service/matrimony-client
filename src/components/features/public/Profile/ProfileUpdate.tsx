@@ -283,7 +283,7 @@ export default function ProfileUpdate() {
   const progressPercentage = (currentStep / 7) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -321,7 +321,7 @@ export default function ProfileUpdate() {
                   onClick={() => goToStep(step.id)}
                   className={`w-12 h-12 cursor-pointer rounded-full flex items-center justify-center mb-2 transition-all ${
                     currentStep === step.id
-                      ? "bg-rose-600 text-white shadow-lg"
+                      ? "bg-emerald-600 text-white shadow-lg"
                       : currentStep > step.id
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-500"
@@ -337,7 +337,7 @@ export default function ProfileUpdate() {
                   <p
                     className={`text-sm font-medium ${
                       currentStep === step.id
-                        ? "text-rose-600"
+                        ? "text-emerald-600"
                         : "text-gray-500"
                     }`}
                   >
@@ -368,7 +368,7 @@ export default function ProfileUpdate() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${"bg-rose-600 text-white"}`}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center ${"bg-emerald-600 text-white"}`}
                   >
                     {/* <steps[currentStep - 1].icon className="h-5 w-5" /> */}
                   </div>
@@ -393,7 +393,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-rose-600" />
+                    <User className="h-5 w-5 text-emerald-600" />
                     Basic Information
                   </CardTitle>
                   <CardDescription>
@@ -499,7 +499,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-rose-600" />
+                    <MapPin className="h-5 w-5 text-emerald-600" />
                     Address Information
                   </CardTitle>
                   <CardDescription>
@@ -702,7 +702,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-rose-600" />
+                    <GraduationCap className="h-5 w-5 text-emerald-600" />
                     Educational Background
                   </CardTitle>
                   <CardDescription>
@@ -865,7 +865,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-rose-600" />
+                    <Users className="h-5 w-5 text-emerald-600" />
                     Family Information
                   </CardTitle>
                   <CardDescription>
@@ -1035,7 +1035,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Heart className="h-5 w-5 text-rose-600" />
+                    <Heart className="h-5 w-5 text-emerald-600" />
                     Personal & Religious Information
                   </CardTitle>
                   <CardDescription>
@@ -1374,7 +1374,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Phone className="h-5 w-5 text-rose-600" />
+                    <Phone className="h-5 w-5 text-emerald-600" />
                     Contact Information
                   </CardTitle>
                   <CardDescription>How others can reach you</CardDescription>
@@ -1445,7 +1445,7 @@ export default function ProfileUpdate() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Search className="h-5 w-5 text-rose-600" />
+                    <Search className="h-5 w-5 text-emerald-600" />
                     Partner Preferences
                   </CardTitle>
                   <CardDescription>
@@ -1628,7 +1628,7 @@ export default function ProfileUpdate() {
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 flex-1 sm:flex-none"
+                    className="bg-gradient-to-r from-emerald-500 to-pink-600 hover:from-emerald-600 hover:to-pink-700 flex-1 sm:flex-none"
                   >
                     Next
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -1640,7 +1640,7 @@ export default function ProfileUpdate() {
                     </Button>
                     <Button
                       type="submit"
-                      className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700"
+                      className="bg-gradient-to-r from-emerald-500 to-pink-600 hover:from-emerald-600 hover:to-pink-700"
                     >
                       <Save className="h-4 w-4 mr-2" />
                       Save Changes
