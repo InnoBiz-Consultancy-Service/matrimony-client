@@ -223,3 +223,12 @@
     @apply bg-background text-foreground;
   }
 }
+/* Light mode defaults */
+body {
+  @apply bg-white text-black;
+}
+
+/* Dark mode (applies site-wide when html has class="dark") */
+.dark body {
+  @apply bg-black text-white;
+}

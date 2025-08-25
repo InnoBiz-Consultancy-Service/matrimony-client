@@ -167,10 +167,11 @@ export default function ProfessionalBiodatasPage() {
         );
       } else {
         setError(
-          (axiosError.response?.data && typeof axiosError.response.data === "object" && "message" in axiosError.response.data
+          (axiosError.response?.data &&
+          typeof axiosError.response.data === "object" &&
+          "message" in axiosError.response.data
             ? (axiosError.response.data as { message?: string }).message
-            : undefined) ||
-            "Failed to fetch profiles. Please try again later."
+            : undefined) || "Failed to fetch profiles. Please try again later."
         );
       }
 
@@ -183,7 +184,7 @@ export default function ProfessionalBiodatasPage() {
 
   React.useEffect(() => {
     getAllBioData();
-  }, [searchParams]); 
+  }, [searchParams]);
 
   const handleRetry = () => {
     setError("");
@@ -191,9 +192,9 @@ export default function ProfessionalBiodatasPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10">
       {/* Header */}
-      <div className="bg-white border-b border-emerald-100">
+      <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10">
         <div className="container mx-auto px-4 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -297,7 +298,7 @@ export default function ProfessionalBiodatasPage() {
               {filteredProfiles.map((profile) => (
                 <Card
                   key={profile._id}
-                  className="group hover:shadow-2xl transition-all duration-300 border-0 bg-white shadow-lg overflow-hidden relative"
+                  className="group hover:shadow-2xl dark:hover:shadow-emerald-500/10 transition-all duration-300 border-0 dark:border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg dark:shadow-emerald-500/5 overflow-hidden relative flex flex-col h-full"
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
@@ -311,11 +312,11 @@ export default function ProfessionalBiodatasPage() {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="text-xl font-bold text-gray-800">
+                            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
                               {profile.name || "Name not provided"}
                             </h3>
                           </div>
-                          <p className="text-gray-600 font-medium">
+                          <p className="text-gray-600 dark:text-gray-300 font-medium">
                             {profile.age
                               ? `${profile.age} years`
                               : "Age not specified"}{" "}
@@ -328,15 +329,15 @@ export default function ProfessionalBiodatasPage() {
                     </div>
                   </CardHeader>
 
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 flex-grow">
                     {/* Professional Details */}
                     <div className="grid grid-cols-1 gap-4">
                       <div className="space-y-3">
                         {profile.familyInfo?.fatherOccupation && (
-                          <div className="flex items-center text-gray-600">
-                            <Briefcase className="h-4 w-4 mr-2 text-emerald-500 flex-shrink-0" />
+                          <div className="flex items-center text-gray-600 dark:text-gray-300">
+                            <Briefcase className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
                             <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-800 truncate">
+                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                                 Father: {profile.familyInfo.fatherOccupation}
                               </p>
                             </div>
@@ -344,20 +345,20 @@ export default function ProfessionalBiodatasPage() {
                         )}
 
                         {profile.education?.honours && (
-                          <div className="flex items-center text-gray-600">
-                            <GraduationCap className="h-4 w-4 mr-2 text-emerald-500 flex-shrink-0" />
+                          <div className="flex items-center text-gray-600 dark:text-gray-300">
+                            <GraduationCap className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
                             <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-800 truncate">
+                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                                 {profile.education.honours}
                               </p>
                             </div>
                           </div>
                         )}
 
-                        <div className="flex items-center text-gray-600">
-                          <MapPin className="h-4 w-4 mr-2 text-emerald-500 flex-shrink-0" />
+                        <div className="flex items-center text-gray-600 dark:text-gray-300">
+                          <MapPin className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-800 truncate">
+                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                               {profile.address?.present ||
                                 "Location not specified"}
                               ,{" "}
@@ -370,25 +371,25 @@ export default function ProfessionalBiodatasPage() {
                     </div>
 
                     {/* Physical Info */}
-                    <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         {profile.physicalInfo?.weight && (
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-300">
                             Weight: {profile.physicalInfo.weight}
                           </p>
                         )}
                         {profile.physicalInfo?.bloodGroup && (
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-300">
                             Blood: {profile.physicalInfo.bloodGroup}
                           </p>
                         )}
                         {profile.physicalInfo?.bodyColor && (
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-300">
                             Complexion: {profile.physicalInfo.bodyColor}
                           </p>
                         )}
                         {profile.maritalInfo?.maritalStatus && (
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-300">
                             Status: {profile.maritalInfo.maritalStatus}
                           </p>
                         )}
@@ -397,20 +398,22 @@ export default function ProfessionalBiodatasPage() {
 
                     {/* Bio */}
                     {profile.description && (
-                      <div className="bg-gray-50 rounded-lg p-3">
-                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">
+                      <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
                           {profile.description}
                         </p>
                       </div>
                     )}
+                  </CardContent>
 
-                    {/* Action Buttons */}
-                    <div className="flex space-x-2 pt-4 border-t border-gray-100">
+                  {/* Action Buttons - Always at bottom */}
+                  <div className="p-6 pt-0 mt-auto">
+                    <div className="flex space-x-2 pt-4 border-t border-gray-100 dark:border-gray-600">
                       <Link
                         href={`/biodatas/${profile._id}`}
                         className="flex-1"
                       >
-                        <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white">
+                        <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-500 dark:hover:to-emerald-600 text-white dark:text-gray-900 transition-all duration-200">
                           <Eye className="h-4 w-4 mr-2" />
                           View Profile
                         </Button>
@@ -419,10 +422,10 @@ export default function ProfessionalBiodatasPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => toggleSaveProfile(profile._id)}
-                        className={`border-emerald-200 hover:bg-emerald-50 ${
+                        className={`border-emerald-200 dark:border-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors duration-200 ${
                           savedProfiles.includes(profile._id)
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "text-emerald-700"
+                            ? "bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
+                            : "text-emerald-700 dark:text-emerald-400 bg-transparent dark:bg-transparent"
                         }`}
                       >
                         <Bookmark
@@ -436,12 +439,12 @@ export default function ProfessionalBiodatasPage() {
                       <Button
                         variant="outline"
                         size="icon"
-                        className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
+                        className="border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 bg-transparent dark:bg-transparent transition-colors duration-200"
                       >
                         <Heart className="h-4 w-4" />
                       </Button>
                     </div>
-                  </CardContent>
+                  </div>
                 </Card>
               ))}
             </div>

@@ -522,10 +522,10 @@ export default function PaymentPage() {
   const Icon = selectedPlan.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-700 dark:text-gray-300 leading-relaxed mb-2">
             Complete Your Payment
           </h1>
           <p className="text-muted-foreground">
@@ -533,9 +533,9 @@ export default function PaymentPage() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8 ">
           {/* Left Side - Plan Details */}
-          <Card className="h-fit">
+          <Card className="h-fit border-gray-200 dark:border-gray-600 dark:hover:border-emerald-500 bg-white dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-emerald-500/10 transition">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div
@@ -562,8 +562,8 @@ export default function PaymentPage() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-center p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
-                <div className="text-4xl font-bold text-gray-900 mb-1">
+              <div className="text-center p-6 bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 rounded-lg">
+                <div className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-1">
                   ৳{selectedPlan.price}
                 </div>
                 <div className="text-muted-foreground">
@@ -586,9 +586,11 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium text-blue-900 mb-2">Need Help?</h4>
-                <div className="space-y-1 text-sm text-blue-800">
+              <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg">
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 leading-relaxed mb-2">
+                  Need Help?
+                </h4>
+                <div className="space-y-1 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4" />
                     <span>+880 1712-345678</span>
@@ -603,7 +605,7 @@ export default function PaymentPage() {
           </Card>
 
           {/* Right Side - Form */}
-          <Card>
+          <Card className="border-gray-200 dark:border-gray-600 dark:hover:border-emerald-500 bg-white dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-emerald-500/10">
             <form onSubmit={handleSubmit}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -619,7 +621,7 @@ export default function PaymentPage() {
                 <div className="space-y-4">
                   <h3 className="font-medium">Personal Information</h3>
                   <div className="grid gap-4">
-                    <div>
+                    <div className="space-y-3">
                       <Label htmlFor="name">Full Name *</Label>
                       <Input
                         id="name"
@@ -630,7 +632,7 @@ export default function PaymentPage() {
                         required
                       />
                     </div>
-                    <div>
+                    <div className="space-y-3">
                       <Label htmlFor="email">Email Address *</Label>
                       <Input
                         id="email"
@@ -642,7 +644,7 @@ export default function PaymentPage() {
                         required
                       />
                     </div>
-                    <div>
+                    <div className="space-y-3">
                       <Label htmlFor="phone">Phone Number *</Label>
                       <Input
                         id="phone"
@@ -658,9 +660,9 @@ export default function PaymentPage() {
 
                 <Separator />
 
-                <div className="space-y-4">
+                <div className="space-y-4 ">
                   <h3 className="font-medium">Payment Method</h3>
-                  <div className="border rounded-lg p-4 bg-gradient-to-r from-pink-50 to-red-50">
+                  <div className="border rounded-lg p-4 bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-8 bg-gradient-to-r from-pink-600 to-red-600 rounded flex items-center justify-center">
                         <span className="text-white font-bold text-sm">
@@ -685,7 +687,7 @@ export default function PaymentPage() {
 
                 <div className="space-y-3">
                   <h3 className="font-medium">Payment Summary</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                  <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg space-y-2">
                     <div className="flex justify-between">
                       <span>{selectedPlan.name} Plan</span>
                       <span>৳{selectedPlan.price}</span>

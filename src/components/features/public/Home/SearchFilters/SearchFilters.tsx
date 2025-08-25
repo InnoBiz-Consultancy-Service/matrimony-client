@@ -198,23 +198,23 @@ export default function SearchFilters() {
   };
 
   return (
-    <section className="bg-gradient-to-r from-white to-emerald-50/30 py-12">
+    <section className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 py-12 transition-colors duration-300">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Heart className="h-6 w-6 text-emerald-500 fill-current" />
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+            <Heart className="h-6 w-6 text-emerald-500 dark:text-emerald-400 fill-current" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
               Find Your Perfect Match
             </h2>
           </div>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
             Use our advanced filters to discover compatible profiles that match
             your preferences and values
           </p>
         </div>
 
-        <Card className="shadow-lg">
+        <Card className="shadow-lg dark:shadow-emerald-500/10 bg-white dark:bg-gray-800 border-0 dark:border dark:border-gray-700">
           <CardContent className="p-8 md:p-12">
             <Form {...form}>
               <form
@@ -229,8 +229,8 @@ export default function SearchFilters() {
                     name="lookingFor"
                     render={({ field }) => (
                       <FormItem className="space-y-4">
-                        <FormLabel className="text-sm font-semibold text-gray-700 flex items-center">
-                          <Users className="h-4 w-4 mr-2 text-emerald-500" />
+                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
+                          <Users className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400" />
                           Looking For
                         </FormLabel>
                         <FormControl>
@@ -243,11 +243,11 @@ export default function SearchFilters() {
                               <RadioGroupItem
                                 value="male"
                                 id="male"
-                                className="border-2 border-gray-300 text-emerald-600"
+                                className="border-2 border-gray-300 dark:border-gray-600 text-emerald-600 dark:text-emerald-400"
                               />
                               <Label
                                 htmlFor="male"
-                                className="cursor-pointer font-medium"
+                                className="cursor-pointer font-medium text-gray-700 dark:text-gray-300"
                               >
                                 Male
                               </Label>
@@ -256,11 +256,11 @@ export default function SearchFilters() {
                               <RadioGroupItem
                                 value="female"
                                 id="female"
-                                className="border-2 border-gray-300 text-emerald-600"
+                                className="border-2 border-gray-300 dark:border-gray-600 text-emerald-600 dark:text-emerald-400"
                               />
                               <Label
                                 htmlFor="female"
-                                className="cursor-pointer font-medium"
+                                className="cursor-pointer font-medium text-gray-700 dark:text-gray-300"
                               >
                                 Female
                               </Label>
@@ -278,8 +278,8 @@ export default function SearchFilters() {
                     name="division"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-semibold text-gray-700 flex items-center">
-                          <MapPin className="h-4 w-4 mr-2 text-emerald-500" />
+                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
+                          <MapPin className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400" />
                           Division
                         </FormLabel>
                         <Select
@@ -287,15 +287,16 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                               <SelectValue placeholder="Select Division" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                             {divisions.map((div) => (
                               <SelectItem
                                 key={div.division_id}
                                 value={div.division_id}
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
                                 {div.divisionName}
                               </SelectItem>
@@ -313,7 +314,7 @@ export default function SearchFilters() {
                     name="district"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-semibold text-gray-700">
+                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                           District
                         </FormLabel>
                         <Select
@@ -322,15 +323,16 @@ export default function SearchFilters() {
                           disabled={!selectedDivision}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50">
                               <SelectValue placeholder="Select District" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                             {filteredDistricts.map((dis) => (
                               <SelectItem
                                 key={dis.districtsName}
                                 value={dis.districtsName}
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
                                 {dis.districtsName}
                               </SelectItem>
@@ -348,7 +350,7 @@ export default function SearchFilters() {
                     name="upazila"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-semibold text-gray-700">
+                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                           Upazila
                         </FormLabel>
                         <Select
@@ -357,15 +359,16 @@ export default function SearchFilters() {
                           disabled={!selectedDistrict}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50">
                               <SelectValue placeholder="Select Upazila" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                             {filteredUpazilas.map((upa) => (
                               <SelectItem
                                 key={upa.subDistrictsName}
                                 value={upa.subDistrictsName}
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
                                 {upa.subDistrictsName}
                               </SelectItem>
@@ -385,7 +388,7 @@ export default function SearchFilters() {
                     name="profession"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-semibold text-gray-700">
+                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                           Profession
                         </FormLabel>
                         <Select
@@ -393,17 +396,18 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                               <SelectValue placeholder="Select profession" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                             {professions.map((profession) => (
                               <SelectItem
                                 key={profession}
                                 value={profession
                                   .toLowerCase()
                                   .replace(/\s+/g, "-")}
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
                                 {profession}
                               </SelectItem>
@@ -420,7 +424,7 @@ export default function SearchFilters() {
                     name="maritalStatus"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-semibold text-gray-700">
+                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                           Marital Status
                         </FormLabel>
                         <Select
@@ -428,17 +432,18 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                             {maritalStatuses.map((status) => (
                               <SelectItem
                                 key={status}
                                 value={status
                                   .toLowerCase()
                                   .replace(/\s+/g, "-")}
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
                                 {status}
                               </SelectItem>
@@ -457,7 +462,7 @@ export default function SearchFilters() {
                   name="ageRange"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="text-sm font-semibold text-gray-700">
+                      <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                         Age Range: {field.value[0]} - {field.value[1]} years
                       </FormLabel>
                       <FormControl>
@@ -468,9 +473,9 @@ export default function SearchFilters() {
                             max={70}
                             min={18}
                             step={1}
-                            className="w-full"
+                            className="w-full [&_[role=slider]]:bg-emerald-500 dark:[&_[role=slider]]:bg-emerald-400 [&_[role=slider]]:border-emerald-500 dark:[&_[role=slider]]:border-emerald-400"
                           />
-                          <div className="flex justify-between text-sm text-gray-500 mt-2">
+                          <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mt-2">
                             <span>18</span>
                             <span>70</span>
                           </div>
@@ -487,7 +492,7 @@ export default function SearchFilters() {
                     type="button"
                     variant="ghost"
                     onClick={() => setShowAdvanced(!showAdvanced)}
-                    className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-medium text-base px-6 py-3"
+                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 font-medium text-base px-6 py-3"
                   >
                     <Filter className="h-5 w-5 mr-2" />
                     {showAdvanced ? "Hide" : "Show"} Advanced Filters
@@ -496,7 +501,7 @@ export default function SearchFilters() {
 
                 {/* Advanced Filters */}
                 {showAdvanced && (
-                  <div className="border-t border-emerald-100 pt-8">
+                  <div className="border-t border-emerald-100 dark:border-emerald-800 pt-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       {/* Education */}
                       <FormField
@@ -504,7 +509,7 @@ export default function SearchFilters() {
                         name="education"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-sm font-semibold text-gray-700">
+                            <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                               Education
                             </FormLabel>
                             <Select
@@ -512,17 +517,18 @@ export default function SearchFilters() {
                               value={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                                <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                                   <SelectValue placeholder="Select education" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
+                              <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                                 {educationLevels.map((education) => (
                                   <SelectItem
                                     key={education}
                                     value={education
                                       .toLowerCase()
                                       .replace(/\s+/g, "-")}
+                                    className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                                   >
                                     {education}
                                   </SelectItem>
@@ -540,7 +546,7 @@ export default function SearchFilters() {
                         name="incomeRange"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-sm font-semibold text-gray-700">
+                            <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                               Income Range
                             </FormLabel>
                             <Select
@@ -548,17 +554,18 @@ export default function SearchFilters() {
                               value={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="border-2 border-gray-200 focus:border-emerald-400 h-12 w-full">
+                                <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                                   <SelectValue placeholder="Select income" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
+                              <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                                 {incomeRanges.map((income) => (
                                   <SelectItem
                                     key={income}
                                     value={income
                                       .toLowerCase()
                                       .replace(/\s+/g, "-")}
+                                    className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                                   >
                                     {income}
                                   </SelectItem>
@@ -575,9 +582,9 @@ export default function SearchFilters() {
 
                 {/* Active Filters */}
                 {getActiveFiltersCount() > 0 && (
-                  <div className="bg-emerald-50/50 rounded-lg p-6">
+                  <div className="bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg p-6 border dark:border-emerald-800/30">
                     <div className="flex items-center justify-between mb-4">
-                      <Label className="text-base font-semibold text-gray-700">
+                      <Label className="text-base font-semibold text-gray-700 dark:text-gray-300">
                         Active Filters ({getActiveFiltersCount()})
                       </Label>
                       <Button
@@ -585,7 +592,7 @@ export default function SearchFilters() {
                         variant="ghost"
                         size="sm"
                         onClick={clearFilters}
-                        className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-100 font-medium"
+                        className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 font-medium"
                       >
                         Clear All
                       </Button>
@@ -594,11 +601,11 @@ export default function SearchFilters() {
                       {watchedValues.lookingFor && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           Looking for: {watchedValues.lookingFor}
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => form.setValue("lookingFor", "")}
                           />
                         </Badge>
@@ -606,7 +613,7 @@ export default function SearchFilters() {
                       {watchedValues.division && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           Division:{" "}
                           {
@@ -615,7 +622,7 @@ export default function SearchFilters() {
                             )?.divisionName
                           }
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => {
                               form.setValue("division", "");
                               setSelectedDivision("");
@@ -626,11 +633,11 @@ export default function SearchFilters() {
                       {watchedValues.district && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           District: {watchedValues.district}
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => {
                               form.setValue("district", "");
                               setSelectedDistrict("");
@@ -641,11 +648,11 @@ export default function SearchFilters() {
                       {watchedValues.upazila && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           Upazila: {watchedValues.upazila}
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => form.setValue("upazila", "")}
                           />
                         </Badge>
@@ -653,7 +660,7 @@ export default function SearchFilters() {
                       {watchedValues.profession && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           Profession:{" "}
                           {professions.find(
@@ -662,7 +669,7 @@ export default function SearchFilters() {
                               watchedValues.profession
                           )}
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => form.setValue("profession", "")}
                           />
                         </Badge>
@@ -670,7 +677,7 @@ export default function SearchFilters() {
                       {watchedValues.maritalStatus && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           Status:{" "}
                           {maritalStatuses.find(
@@ -679,7 +686,7 @@ export default function SearchFilters() {
                               watchedValues.maritalStatus
                           )}
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => form.setValue("maritalStatus", "")}
                           />
                         </Badge>
@@ -688,12 +695,12 @@ export default function SearchFilters() {
                         watchedValues.ageRange[1] !== 40) && (
                         <Badge
                           variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm py-1.5 px-3"
+                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
                         >
                           Age: {watchedValues.ageRange[0]}-
                           {watchedValues.ageRange[1]}
                           <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
+                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
                             onClick={() => form.setValue("ageRange", [18, 40])}
                           />
                         </Badge>
@@ -702,14 +709,14 @@ export default function SearchFilters() {
                   </div>
                 )}
 
-                <Separator className="my-8" />
+                <Separator className="my-8 bg-gray-200 dark:bg-gray-700" />
 
                 {/* Search Button */}
                 <div className="flex justify-center">
                   <Button
                     type="submit"
                     disabled={isSearching}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-12 py-4 rounded-lg font-semibold transition-all duration-200 text-lg shadow-lg hover:shadow-xl"
+                    className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-12 py-4 rounded-lg font-semibold transition-all duration-200 text-lg shadow-lg hover:shadow-xl dark:shadow-emerald-500/20"
                   >
                     {isSearching ? (
                       <div className="flex items-center space-x-3">

@@ -2,6 +2,7 @@ import { Toaster } from "sonner";
 import { AuthProvider } from "./(auth)/context/auth-context";
 import "./globals.css";
 import CheckProfileProgress from "@/components/features/public/Home/check-profile-progress/CheckProfileProgress";
+import { ThemeProvider } from "next-themes";
 export const metadata = {
   title: "Nikah",
   description:
@@ -21,8 +22,10 @@ export default function RootLayout({
       <body>
         <main>
           <AuthProvider>
-            <CheckProfileProgress />
-            {children}
+            {/* <CheckProfileProgress /> */}
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+            </ThemeProvider>
             <Toaster />
           </AuthProvider>
         </main>
