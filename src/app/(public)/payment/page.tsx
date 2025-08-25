@@ -1,6 +1,6 @@
-import { DotsLoader } from "@/components/common/Loader"
-import PaymentPage from "@/components/features/public/Payment/PaymentPage"
-import { Suspense } from "react"
+import { DotsLoader } from "@/components/common/Loader";
+import PaymentPage from "@/components/features/public/Payment/PaymentPage";
+import { Suspense } from "react";
 
 function PaymentPageWrapper() {
   return (
@@ -13,7 +13,7 @@ function PaymentPageWrapper() {
     >
       <PaymentPage />
     </Suspense>
-  )
+  );
 }
 
-export default PaymentPageWrapper
+export default PaymentPageWrapper;

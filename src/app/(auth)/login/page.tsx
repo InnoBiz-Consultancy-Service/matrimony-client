@@ -11,7 +11,78 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 // Auth service abstraction
+// const authService = {
+//   login: async (credentials: {
+//     email: string;
+//     password: string;
+//     rememberMe: boolean;
+//   }) => {
+//     const response = await axios.post(`/api/auth/login`, credentials, {
+//       headers: { "Content-Type": "application/json" },
+//       withCredentials: true,
+//     });
+
+//     if (!response.data?.token) {
+//       throw new Error("Authentication failed: No token received");
+//     }
+
+//     return response.data;
+//   },
+
+//   storeAuthData: (token: string) => {
+//     try {
+//       const decoded = jwtDecode<{ id: string; email: string; exp: number }>(
+//         token
+//       );
+
+//       // Store only necessary non-sensitive data
+//       localStorage.setItem("token", token);
+//       localStorage.setItem(
+//         "user",
+//         JSON.stringify({
+//           id: decoded.id,
+//           email: decoded.email,
+//         })
+//       );
+
+//       return decoded;
+//     } catch {
+//       throw new Error("Invalid token format");
+//     }
+//   },
+
+//   clearAuthData: () => {
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user");
+//   },
+// };
+
+// Cookie utility functions
+const setCookie = (name: string, value: string, days: number = 7) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict;Secure=${
+    window.location.protocol === "https:"
+  }`;
+};
+
+const getCookie = (name: string): string | null => {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === " ") c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+};
+
+const deleteCookie = (name: string) => {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Strict`;
+};
+
 const authService = {
   login: async (credentials: {
     email: string;
@@ -30,31 +101,152 @@ const authService = {
     return response.data;
   },
 
-  storeAuthData: (token: string) => {
+  storeAuthData: (token: string, rememberMe: boolean = false) => {
     try {
       const decoded = jwtDecode<{ id: string; email: string; exp: number }>(
         token
       );
 
-      // Store only necessary non-sensitive data
+      // User data object
+      const userData = {
+        id: decoded.id,
+        email: decoded.email,
+      };
+
+      // Store in localStorage
       localStorage.setItem("token", token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          id: decoded.id,
-          email: decoded.email,
-        })
-      );
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      // Store in cookies
+      // Token cookie - expires based on remember me option
+      const tokenExpiryDays = rememberMe ? 30 : 7; // 30 days if remember me, otherwise 7 days
+      setCookie("token", token, tokenExpiryDays);
+
+      // User data cookie
+      setCookie("user", JSON.stringify(userData), tokenExpiryDays);
+
+      // Profile status cookie (default false for new login)
+      setCookie("profileStatus", "false", tokenExpiryDays);
+
+      console.log("✅ Auth data stored in localStorage and cookies");
+      console.log("Token expires in:", tokenExpiryDays, "days");
 
       return decoded;
-    } catch {
+    } catch (error) {
+      console.error("❌ Error storing auth data:", error);
       throw new Error("Invalid token format");
     }
   },
 
+  updateProfileStatus: (status: boolean) => {
+    try {
+      // Update in cookie
+      setCookie("profileStatus", status.toString(), 30);
+
+      // Update in localStorage if needed
+      const user = localStorage.getItem("user");
+      if (user) {
+        const userData = JSON.parse(user);
+        userData.profileComplete = status;
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+
+      console.log("✅ Profile status updated:", status);
+    } catch (error) {
+      console.error("❌ Error updating profile status:", error);
+    }
+  },
+
   clearAuthData: () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    try {
+      // Clear localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      // Clear cookies
+      deleteCookie("token");
+      deleteCookie("user");
+      deleteCookie("profileStatus");
+
+      console.log("✅ Auth data cleared from localStorage and cookies");
+    } catch (error) {
+      console.error("❌ Error clearing auth data:", error);
+    }
+  },
+
+  getToken: (): string | null => {
+    // First try localStorage, then cookies
+    return localStorage.getItem("token") || getCookie("token");
+  },
+
+  getUser: () => {
+    try {
+      // First try localStorage, then cookies
+      const userStr = localStorage.getItem("user") || getCookie("user");
+      return userStr ? JSON.parse(userStr) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  getProfileStatus: (): boolean => {
+    // Check cookie first, then localStorage
+    const cookieStatus = getCookie("profileStatus");
+    const user = authService.getUser();
+
+    if (cookieStatus) {
+      return cookieStatus === "true";
+    }
+
+    return user?.profileComplete || false;
+  },
+
+  isAuthenticated: (): boolean => {
+    const token = authService.getToken();
+    if (!token) return false;
+
+    try {
+      const decoded = jwtDecode<{ exp: number }>(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decoded.exp < currentTime) {
+        console.log("⚠️ Token expired, clearing auth data");
+        authService.clearAuthData();
+        return false;
+      }
+
+      return true;
+    } catch {
+      console.log("⚠️ Invalid token, clearing auth data");
+      authService.clearAuthData();
+      return false;
+    }
+  },
+
+  // Login with cookie support
+  loginWithCookies: async (credentials: {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+  }) => {
+    try {
+      const response = await authService.login(credentials);
+
+      if (response.token) {
+        // Store auth data in both localStorage and cookies
+        authService.storeAuthData(response.token, credentials.rememberMe);
+
+        // If user data includes profile status, update it
+        if (response.user?.profileComplete !== undefined) {
+          authService.updateProfileStatus(response.user.profileComplete);
+        }
+      }
+
+      return response;
+    } catch (error) {
+      console.error("❌ Login failed:", error);
+      throw error;
+    }
   },
 };
 
@@ -64,6 +256,8 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [rememberMe, setRememberMe] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +280,8 @@ export default function LoginPage() {
         rememberMe,
       });
       authService.storeAuthData(token);
-      window.location.href = "/";
+      // window.location.href = "/";
+      router.push("/");
       toast.success("Login success", {
         position: "top-center",
         className: "bg-red-600 text-white font-semibold shadow-lg",

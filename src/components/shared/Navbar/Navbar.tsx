@@ -1,3 +1,399 @@
+// "use client";
+
+// import * as React from "react";
+// import Link from "next/link";
+// import { usePathname } from "next/navigation";
+// import { Menu, Heart, X, User, LogOut, ChevronDown } from "lucide-react";
+// import { cn } from "@/lib/utils";
+// import { Button } from "@/components/ui/button";
+// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+// import { useAuth } from "@/app/(auth)/context/auth-context";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "@/components/ui/popover";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Separator } from "@/components/ui/separator";
+// import femaleAvatar from "../../../../public/female_avatar.jpg";
+// import maleAvatar from "../../../../public/men_avatar.webp";
+// import type { User as UserType } from "@/types/user";
+// import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle";
+
+// const navigationItems = [
+//   { title: "Home", href: "/" },
+//   { title: "Find Match", href: "/biodatas" },
+//   { title: "Success Stories", href: "/success-stories" },
+//   { title: "About Us", href: "/about" },
+//   { title: "Contact", href: "/contact" },
+// ];
+
+// export default function Navbar() {
+//   const pathname = usePathname();
+//   const [isScrolled, setIsScrolled] = React.useState(false);
+//   const [isOpen, setIsOpen] = React.useState(false);
+//   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+//   const {
+//     user,
+//     isAuthenticated,
+//     logout,
+//   }: { user: UserType | null; isAuthenticated: boolean; logout: () => void } =
+//     useAuth();
+
+//   // Handle scroll effect
+//   React.useEffect(() => {
+//     const handleScroll = () => {
+//       setIsScrolled(window.scrollY > 10);
+//     };
+//     window.addEventListener("scroll", handleScroll);
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, []);
+
+//   const handleLogout = () => {
+//     logout();
+//     setIsProfileOpen(false);
+//   };
+
+//   const getInitials = (name: string) => {
+//     return (
+//       name
+//         ?.split(" ")
+//         .map((n) => n[0])
+//         .join("")
+//         .toUpperCase() || "U"
+//     );
+//   };
+
+//   return (
+//     <header
+//       className={cn(
+//         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
+//         isScrolled
+//           ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-emerald-100 dark:border-emerald-800"
+//           : "bg-white dark:bg-gray-900 border-emerald-50 dark:border-emerald-800"
+//       )}
+//     >
+//       <div className="container mx-auto px-4 lg:px-8">
+//         <div className="flex h-20 items-center justify-between">
+//           {/* Logo */}
+//           <Link href="/" className="flex items-center space-x-3 group">
+//             <div className="relative">
+//               <div className="h-10 w-10 rounded-full bg-[#50C878] flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 transition-all duration-300 group-hover:scale-105">
+//                 <Heart className="h-5 w-5 text-white fill-white" />
+//               </div>
+//               <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 opacity-80 animate-pulse"></div>
+//             </div>
+//             <div className="flex flex-col">
+//               <span className="text-2xl font-bold bg-emerald-600 bg-clip-text text-transparent">
+//                 Nikah
+//               </span>
+//               <span className="text-xs text-[#50C878] font-medium -mt-1">
+//                 Find Your Perfect Match
+//               </span>
+//             </div>
+//           </Link>
+
+//           {/* Desktop Navigation */}
+//           <nav className="hidden lg:flex items-center space-x-1">
+//             {navigationItems.map((item) => (
+//               <Link
+//                 key={item.title}
+//                 href={item.href}
+//                 className={cn(
+//                   "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-emerald-50 group",
+//                   pathname === item.href
+//                     ? "text-[#50C878] bg-emerald-50"
+//                     : "text-gray-700 hover:text-emerald-400"
+//                 )}
+//               >
+//                 {item.title}
+//                 {pathname === item.href && (
+//                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-600 rounded-full"></div>
+//                 )}
+//                 <div className="absolute inset-0 rounded-lg bg-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10"></div>
+//               </Link>
+//             ))}
+//           </nav>
+
+//           {/* Desktop CTA Buttons */}
+//           <div className="hidden lg:flex items-center space-x-3">
+//             <ThemeToggle />
+//             {isAuthenticated ? (
+//               <div className="flex items-center space-x-3">
+//                 {/* User Profile Dropdown */}
+//                 <Popover open={isProfileOpen} onOpenChange={setIsProfileOpen}>
+//                   <PopoverTrigger asChild>
+//                     <Button
+//                       variant="ghost"
+//                       className="flex items-center space-x-2 hover:bg-emerald-50 transition-all duration-200 p-2 rounded-lg cursor-pointer"
+//                     >
+//                       <Avatar className="h-8 w-8 rounded-lg ring-2 ring-emerald-100 hover:ring-emerald-200 transition-all duration-200">
+//                         <AvatarImage
+//                           src={
+//                             user?.gender === "male"
+//                               ? maleAvatar.src
+//                               : femaleAvatar.src
+//                           }
+//                           alt={user?.name}
+//                         />
+//                         <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold text-sm">
+//                           {getInitials(user?.name || "")}
+//                         </AvatarFallback>
+//                       </Avatar>
+//                       <ChevronDown className="h-4 w-4 text-gray-500 transition-transform duration-200" />
+//                     </Button>
+//                   </PopoverTrigger>
+//                   <PopoverContent
+//                     className="w-80 p-0 shadow-xl border-0 bg-white/95 backdrop-blur-sm"
+//                     align="end"
+//                   >
+//                     {/* User Info Header */}
+//                     <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 border-b border-emerald-100">
+//                       <div className="flex items-center space-x-3">
+//                         <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white shadow-md">
+//                           <AvatarImage
+//                             src={
+//                               user?.gender === "male"
+//                                 ? maleAvatar.src
+//                                 : femaleAvatar.src
+//                             }
+//                             alt={user?.name}
+//                           />
+//                           <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold text-lg">
+//                             {getInitials(user?.name || "")}
+//                           </AvatarFallback>
+//                         </Avatar>
+//                         <div className="flex-1 min-w-0">
+//                           <p className="text-sm text-gray-600 truncate">
+//                             {user?.userEmail || "user@example.com"}
+//                           </p>
+//                           <div className="flex items-center space-x-2 mt-1">
+//                             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+//                             <span className="text-xs text-green-600 font-medium">
+//                               Online
+//                             </span>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     </div>
+
+//                     {/* Menu Items */}
+//                     <div className="py-2">
+//                       <button
+//                         onClick={() => setIsProfileOpen(false)}
+//                         className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
+//                       >
+//                         <div className="h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+//                           <User className="h-4 w-4 text-emerald-600" />
+//                         </div>
+//                         {user?.role === "admin" ? (
+//                           <Link href={"/dashboard"}>
+//                             <div className="flex-1">
+//                               <p className="font-medium text-gray-800">
+//                                 Admin Dashboard
+//                               </p>
+//                               <p className="text-xs text-gray-500">
+//                                 Manage users and content
+//                               </p>
+//                             </div>
+//                           </Link>
+//                         ) : (
+//                           <Link href={"/profile"}>
+//                             <div>
+//                               <p className="font-medium text-gray-800">
+//                                 My Profile
+//                               </p>
+//                               <p className="text-xs text-gray-500">
+//                                 View and edit your profile
+//                               </p>
+//                             </div>
+//                           </Link>
+//                         )}
+//                       </button>
+//                       <Separator className="my-2 bg-emerald-100" />
+
+//                       <button
+//                         onClick={handleLogout}
+//                         className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
+//                       >
+//                         <div className="h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+//                           <LogOut className="h-4 w-4 text-emerald-600" />
+//                         </div>
+//                         <div>
+//                           <p className="font-medium text-gray-800">Sign Out</p>
+//                           <p className="text-xs text-gray-500">
+//                             Logout from your account
+//                           </p>
+//                         </div>
+//                       </button>
+//                     </div>
+//                   </PopoverContent>
+//                 </Popover>
+//               </div>
+//             ) : (
+//               <>
+//                 <Link href="/login">
+//                   <Button
+//                     variant="ghost"
+//                     className="text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50 font-medium transition-all duration-200"
+//                   >
+//                     Sign In
+//                   </Button>
+//                 </Link>
+//                 <Link href="/registration">
+//                   <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-emerald-200 transition-all duration-300 font-medium px-6">
+//                     Join Free
+//                   </Button>
+//                 </Link>
+//               </>
+//             )}
+//           </div>
+
+//           {/* Mobile Menu */}
+//           <Sheet open={isOpen} onOpenChange={setIsOpen}>
+//             <SheetTrigger asChild className="lg:hidden">
+//               <Button
+//                 variant="ghost"
+//                 size="icon"
+//                 aria-label="Menu"
+//                 className="text-emerald-700 hover:bg-emerald-50 transition-all duration-200"
+//               >
+//                 <Menu className="h-6 w-6" />
+//               </Button>
+//             </SheetTrigger>
+//             <SheetContent
+//               side="right"
+//               className="w-[320px] sm:w-[350px] bg-white/95 backdrop-blur-sm px-0"
+//             >
+//               <div className="flex flex-col h-full">
+//                 {/* Mobile Header */}
+//                 <div className="flex items-center justify-between p-4 border-b border-emerald-100">
+//                   <div className="flex items-center space-x-3">
+//                     <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md">
+//                       <Heart className="h-4 w-4 text-white fill-white" />
+//                     </div>
+//                     <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
+//                       Nikah
+//                     </span>
+//                   </div>
+//                   <Button
+//                     variant="ghost"
+//                     size="icon"
+//                     onClick={() => setIsOpen(false)}
+//                     className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
+//                   >
+//                     <X className="h-5 w-5" />
+//                   </Button>
+//                 </div>
+
+//                 {/* User Info in Mobile */}
+//                 {isAuthenticated && (
+//                   <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 border-b border-emerald-100">
+//                     <div className="flex items-center space-x-3">
+//                       <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white shadow-md">
+//                         <AvatarImage
+//                           src={
+//                             user?.gender === "male"
+//                               ? maleAvatar.src
+//                               : femaleAvatar.src
+//                           }
+//                           alt={user?.name}
+//                         />
+//                         <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold">
+//                           {getInitials(user?.name || "")}
+//                         </AvatarFallback>
+//                       </Avatar>
+//                       <div className="flex-1 min-w-0">
+//                         <div className="flex items-center space-x-2">
+//                           <p className="font-semibold text-gray-800 truncate">
+//                             {user?.name || "User"}
+//                           </p>
+//                           {/* {user?.isPremium && <Crown className="h-4 w-4 text-amber-500" />} */}
+//                         </div>
+//                         <p className="text-sm text-gray-600 truncate">
+//                           {user?.userEmail || "user@example.com"}
+//                         </p>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 )}
+
+//                 {/* Mobile Navigation */}
+//                 <nav className="flex flex-col space-y-1 py-4 flex-1 px-2">
+//                   {navigationItems.map((item) => (
+//                     <Link
+//                       key={item.title}
+//                       href={item.href}
+//                       onClick={() => setIsOpen(false)}
+//                       className={cn(
+//                         "flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 mx-2",
+//                         pathname === item.href
+//                           ? "text-emerald-700 bg-emerald-50 border-l-4 border-emerald-600 shadow-sm"
+//                           : "text-gray-700 hover:text-emerald-700 hover:bg-emerald-50"
+//                       )}
+//                     >
+//                       {item.title}
+//                     </Link>
+//                   ))}
+
+//                   {/* Mobile User Menu Items */}
+//                   {isAuthenticated && (
+//                     <>
+//                       <Separator className="my-4 bg-emerald-100" />
+
+//                       <Link
+//                         href="/profile"
+//                         onClick={() => setIsOpen(false)}
+//                         className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
+//                       >
+//                         <User className="h-5 w-5" />
+//                         <span className="font-medium">My Profile</span>
+//                       </Link>
+//                     </>
+//                   )}
+//                 </nav>
+
+//                 {/* Mobile CTA Buttons */}
+//                 <div className="border-t border-emerald-100 p-4 space-y-3">
+//                   {isAuthenticated ? (
+//                     <Button
+//                       onClick={handleLogout}
+//                       className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg transition-all duration-300"
+//                     >
+//                       <LogOut className="mr-2 h-4 w-4" />
+//                       Sign Out
+//                     </Button>
+//                   ) : (
+//                     <>
+//                       <Link href="/login" className="block">
+//                         <Button
+//                           variant="outline"
+//                           className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent transition-all duration-200"
+//                           onClick={() => setIsOpen(false)}
+//                         >
+//                           Sign In
+//                         </Button>
+//                       </Link>
+//                       <Link href="/registration" className="block">
+//                         <Button
+//                           className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg transition-all duration-300"
+//                           onClick={() => setIsOpen(false)}
+//                         >
+//                           Join Free
+//                         </Button>
+//                       </Link>
+//                     </>
+//                   )}
+//                 </div>
+//               </div>
+//             </SheetContent>
+//           </Sheet>
+//         </div>
+//       </div>
+//     </header>
+//   );
+// }
+
 "use client";
 
 import * as React from "react";
@@ -14,11 +410,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import femaleAvatar from "../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../public/men_avatar.webp";
 import type { User as UserType } from "@/types/user";
+import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle";
 
 const navigationItems = [
   { title: "Home", href: "/" },
@@ -69,8 +465,8 @@ export default function Navbar() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-lg border-emerald-100"
-          : "bg-white border-emerald-50"
+          ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-lg border-emerald-100 dark:border-gray-800"
+          : "bg-white dark:bg-gray-950 border-emerald-50 dark:border-gray-800"
       )}
     >
       <div className="container mx-auto px-4 lg:px-8">
@@ -78,16 +474,16 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="h-10 w-10 rounded-full bg-[#50C878] flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 transition-all duration-300 group-hover:scale-105">
+              <div className="h-10 w-10 rounded-full bg-[#50C878] dark:bg-emerald-600 flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 dark:group-hover:shadow-emerald-800/30 transition-all duration-300 group-hover:scale-105">
                 <Heart className="h-5 w-5 text-white fill-white" />
               </div>
               <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 opacity-80 animate-pulse"></div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold bg-emerald-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-emerald-600 dark:bg-emerald-500 bg-clip-text text-transparent">
                 Nikah
               </span>
-              <span className="text-xs text-[#50C878] font-medium -mt-1">
+              <span className="text-xs text-[#50C878] dark:text-emerald-400 font-medium -mt-1">
                 Find Your Perfect Match
               </span>
             </div>
@@ -100,23 +496,24 @@ export default function Navbar() {
                 key={item.title}
                 href={item.href}
                 className={cn(
-                  "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-emerald-50 group",
+                  "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 group",
                   pathname === item.href
-                    ? "text-[#50C878] bg-emerald-50"
-                    : "text-gray-700 hover:text-emerald-400"
+                    ? "text-[#50C878] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70"
+                    : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400"
                 )}
               >
                 {item.title}
                 {pathname === item.href && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-600 rounded-full"></div>
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-600 dark:bg-emerald-400 rounded-full"></div>
                 )}
-                <div className="absolute inset-0 rounded-lg bg-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10"></div>
+                <div className="absolute inset-0 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10"></div>
               </Link>
             ))}
           </nav>
 
           {/* Desktop CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
+            <ThemeToggle />
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 {/* User Profile Dropdown */}
@@ -124,9 +521,9 @@ export default function Navbar() {
                   <PopoverTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="flex items-center space-x-2 hover:bg-emerald-50 transition-all duration-200 p-2 rounded-lg cursor-pointer"
+                      className="flex items-center space-x-2 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-all duration-200 p-2 rounded-lg cursor-pointer"
                     >
-                      <Avatar className="h-8 w-8 rounded-lg ring-2 ring-emerald-100 hover:ring-emerald-200 transition-all duration-200">
+                      <Avatar className="h-8 w-8 rounded-lg ring-2 ring-emerald-100 dark:ring-emerald-900 hover:ring-emerald-200 dark:hover:ring-emerald-700 transition-all duration-200">
                         <AvatarImage
                           src={
                             user?.gender === "male"
@@ -135,21 +532,21 @@ export default function Navbar() {
                           }
                           alt={user?.name}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold text-sm">
+                        <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold text-sm">
                           {getInitials(user?.name || "")}
                         </AvatarFallback>
                       </Avatar>
-                      <ChevronDown className="h-4 w-4 text-gray-500 transition-transform duration-200" />
+                      <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-80 p-0 shadow-xl border-0 bg-white/95 backdrop-blur-sm"
+                    className="w-80 p-0 shadow-xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-gray-200 dark:border-gray-800"
                     align="end"
                   >
                     {/* User Info Header */}
-                    <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 border-b border-emerald-100">
+                    <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 dark:from-emerald-950/50 dark:to-pink-950/50 border-b border-emerald-100 dark:border-emerald-900">
                       <div className="flex items-center space-x-3">
-                        <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white shadow-md">
+                        <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white dark:ring-gray-800 shadow-md">
                           <AvatarImage
                             src={
                               user?.gender === "male"
@@ -158,22 +555,17 @@ export default function Navbar() {
                             }
                             alt={user?.name}
                           />
-                          <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold text-lg">
+                          <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold text-lg">
                             {getInitials(user?.name || "")}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          {/* <div className="flex items-center space-x-2">
-                            <p className="font-semibold text-gray-800 truncate">{user?.name || "User"}</p>
-                            {user?.isPremium && <Crown className="h-4 w-4 text-amber-500" />}
-                            {user?.verified && <Shield className="h-4 w-4 text-blue-500" />}
-                          </div> */}
-                          <p className="text-sm text-gray-600 truncate">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                             {user?.userEmail || "user@example.com"}
                           </p>
                           <div className="flex items-center space-x-2 mt-1">
                             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-xs text-green-600 font-medium">
+                            <span className="text-xs text-green-600 dark:text-green-400 font-medium">
                               Online
                             </span>
                           </div>
@@ -185,18 +577,18 @@ export default function Navbar() {
                     <div className="py-2">
                       <button
                         onClick={() => setIsProfileOpen(false)}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
                       >
-                        <div className="h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                          <User className="h-4 w-4 text-emerald-600" />
+                        <div className="h-9 w-9 rounded-lg bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800 transition-colors">
+                          <User className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         {user?.role === "admin" ? (
                           <Link href={"/dashboard"}>
                             <div className="flex-1">
-                              <p className="font-medium text-gray-800">
+                              <p className="font-medium text-gray-800 dark:text-gray-200">
                                 Admin Dashboard
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
                                 Manage users and content
                               </p>
                             </div>
@@ -204,91 +596,35 @@ export default function Navbar() {
                         ) : (
                           <Link href={"/profile"}>
                             <div>
-                              <p className="font-medium text-gray-800">
+                              <p className="font-medium text-gray-800 dark:text-gray-200">
                                 My Profile
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
                                 View and edit your profile
                               </p>
                             </div>
                           </Link>
                         )}
                       </button>
-
-                      {/* <Link href="/favorites">
-                        <button
-                          onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
-                        >
-                          <div className="h-9 w-9 rounded-lg bg-pink-100 flex items-center justify-center group-hover:bg-pink-200 transition-colors">
-                            <Bookmark className="h-4 w-4 text-pink-600" />
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-800">
-                              Favorites
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              Saved profiles
-                            </p>
-                          </div>
-                          <Badge
-                            variant="secondary"
-                            className="bg-pink-100 text-pink-700 text-xs"
-                          >
-                            12
-                          </Badge>
-                        </button>
-                      </Link>
-
-                      <Link href="/settings">
-                        <button
-                          onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
-                        >
-                          <div className="h-9 w-9 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                            <Settings className="h-4 w-4 text-blue-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">
-                              Settings
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              Account preferences
-                            </p>
-                          </div>
-                        </button>
-                      </Link> */}
-
-                      <Separator className="my-2 bg-emerald-100" />
+                      <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
 
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 transition-colors duration-200 group cursor-pointer"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
                       >
-                        <div className="h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                          <LogOut className="h-4 w-4 text-emerald-600" />
+                        <div className="h-9 w-9 rounded-lg bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800 transition-colors">
+                          <LogOut className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-800">Sign Out</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="font-medium text-gray-800 dark:text-gray-200">
+                            Sign Out
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Logout from your account
                           </p>
                         </div>
                       </button>
                     </div>
-
-                    {/* Premium Badge */}
-                    {/* {user?.isPremium && (
-                      <div className="p-3 bg-gradient-to-r from-amber-50 to-amber-100 border-t border-amber-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <Crown className="h-4 w-4 text-amber-600" />
-                            <span className="text-sm font-medium text-amber-800">Premium Member</span>
-                          </div>
-                          <Badge className="bg-amber-500 text-white text-xs">Active</Badge>
-                        </div>
-                      </div>
-                    )} */}
                   </PopoverContent>
                 </Popover>
               </div>
@@ -297,13 +633,13 @@ export default function Navbar() {
                 <Link href="/login">
                   <Button
                     variant="ghost"
-                    className="text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50 font-medium transition-all duration-200"
+                    className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 font-medium transition-all duration-200"
                   >
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/registration">
-                  <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-emerald-200 transition-all duration-300 font-medium px-6">
+                  <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white shadow-lg hover:shadow-emerald-200 dark:hover:shadow-emerald-800/30 transition-all duration-300 font-medium px-6">
                     Join Free
                   </Button>
                 </Link>
@@ -318,23 +654,23 @@ export default function Navbar() {
                 variant="ghost"
                 size="icon"
                 aria-label="Menu"
-                className="text-emerald-700 hover:bg-emerald-50 transition-all duration-200"
+                className="text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-all duration-200"
               >
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-[320px] sm:w-[350px] bg-white/95 backdrop-blur-sm px-0"
+              className="w-[320px] sm:w-[350px] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm px-0 border-l border-gray-200 dark:border-gray-800"
             >
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
-                <div className="flex items-center justify-between p-4 border-b border-emerald-100">
+                <div className="flex items-center justify-between p-4 border-b border-emerald-100 dark:border-emerald-900">
                   <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md">
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center shadow-md">
                       <Heart className="h-4 w-4 text-white fill-white" />
                     </div>
-                    <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
+                    <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 dark:from-emerald-500 dark:to-emerald-400 bg-clip-text text-transparent">
                       Nikah
                     </span>
                   </div>
@@ -342,7 +678,7 @@ export default function Navbar() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsOpen(false)}
-                    className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                   >
                     <X className="h-5 w-5" />
                   </Button>
@@ -350,9 +686,9 @@ export default function Navbar() {
 
                 {/* User Info in Mobile */}
                 {isAuthenticated && (
-                  <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 border-b border-emerald-100">
+                  <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 dark:from-emerald-950/50 dark:to-pink-950/50 border-b border-emerald-100 dark:border-emerald-900">
                     <div className="flex items-center space-x-3">
-                      <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white shadow-md">
+                      <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white dark:ring-gray-800 shadow-md">
                         <AvatarImage
                           src={
                             user?.gender === "male"
@@ -361,18 +697,17 @@ export default function Navbar() {
                           }
                           alt={user?.name}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-semibold">
+                        <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold">
                           {getInitials(user?.name || "")}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
-                          <p className="font-semibold text-gray-800 truncate">
+                          <p className="font-semibold text-gray-800 dark:text-gray-200 truncate">
                             {user?.name || "User"}
                           </p>
-                          {/* {user?.isPremium && <Crown className="h-4 w-4 text-amber-500" />} */}
                         </div>
-                        <p className="text-sm text-gray-600 truncate">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                           {user?.userEmail || "user@example.com"}
                         </p>
                       </div>
@@ -390,8 +725,8 @@ export default function Navbar() {
                       className={cn(
                         "flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 mx-2",
                         pathname === item.href
-                          ? "text-emerald-700 bg-emerald-50 border-l-4 border-emerald-600 shadow-sm"
-                          : "text-gray-700 hover:text-emerald-700 hover:bg-emerald-50"
+                          ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70 border-l-4 border-emerald-600 dark:border-emerald-500 shadow-sm"
+                          : "text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
                       )}
                     >
                       {item.title}
@@ -401,50 +736,26 @@ export default function Navbar() {
                   {/* Mobile User Menu Items */}
                   {isAuthenticated && (
                     <>
-                      <Separator className="my-4 bg-emerald-100" />
+                      <Separator className="my-4 bg-emerald-100 dark:bg-emerald-900" />
 
                       <Link
                         href="/profile"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
+                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-all duration-200 mx-2 rounded-lg"
                       >
                         <User className="h-5 w-5" />
                         <span className="font-medium">My Profile</span>
                       </Link>
-
-                      {/* <Link
-                        href="/favorites"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
-                      >
-                        <Bookmark className="h-5 w-5" />
-                        <span className="font-medium">Favorites</span>
-                        <Badge
-                          variant="secondary"
-                          className="ml-auto bg-pink-100 text-pink-700 text-xs"
-                        >
-                          12
-                        </Badge>
-                      </Link>
-
-                      <Link
-                        href="/settings"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 mx-2 rounded-lg"
-                      >
-                        <Settings className="h-5 w-5" />
-                        <span className="font-medium">Settings</span>
-                      </Link> */}
                     </>
                   )}
                 </nav>
 
                 {/* Mobile CTA Buttons */}
-                <div className="border-t border-emerald-100 p-4 space-y-3">
+                <div className="border-t border-emerald-100 dark:border-emerald-900 p-4 space-y-3">
                   {isAuthenticated ? (
                     <Button
                       onClick={handleLogout}
-                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white shadow-lg transition-all duration-300"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
                       Sign Out
@@ -454,7 +765,7 @@ export default function Navbar() {
                       <Link href="/login" className="block">
                         <Button
                           variant="outline"
-                          className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent transition-all duration-200"
+                          className="w-full border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 bg-transparent transition-all duration-200"
                           onClick={() => setIsOpen(false)}
                         >
                           Sign In
@@ -462,7 +773,7 @@ export default function Navbar() {
                       </Link>
                       <Link href="/registration" className="block">
                         <Button
-                          className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg transition-all duration-300"
+                          className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white shadow-lg transition-all duration-300"
                           onClick={() => setIsOpen(false)}
                         >
                           Join Free

@@ -207,11 +207,11 @@ export default function BkashManualPayment() {
   const Icon = selectedPlan.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             bKash Manual Payment
           </h1>
           <p className="text-muted-foreground">
@@ -221,9 +221,9 @@ export default function BkashManualPayment() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Selected Plan Details */}
-          <Card className="h-fit">
+          <Card className="h-fit  dark:border-gray-600 dark:hover:border-emerald-500 bg-white dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-emerald-500/10 transition">
             <CardHeader>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 ">
                 <div
                   className={`p-3 rounded-full bg-gradient-to-r ${selectedPlan.color} text-white`}
                 >
@@ -249,8 +249,8 @@ export default function BkashManualPayment() {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Price */}
-              <div className="text-center p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
-                <div className="text-4xl font-bold text-gray-900 mb-1">
+              <div className="text-center p-6 bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 rounded-lg">
+                <div className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                   ৳{selectedPlan.price}
                 </div>
                 <div className="text-muted-foreground">
@@ -277,7 +277,7 @@ export default function BkashManualPayment() {
           </Card>
 
           {/* Payment Instructions */}
-          <Card className="h-fit">
+          <Card className="h-fit  dark:border-gray-600 dark:hover:border-emerald-500 bg-white dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-emerald-500/10 transition">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <div className="w-8 h-6 bg-gradient-to-r from-pink-600 to-red-600 rounded flex items-center justify-center">
@@ -287,53 +287,53 @@ export default function BkashManualPayment() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-pink-50 p-4 rounded-lg border border-pink-200">
-                <h4 className="font-semibold text-pink-900 mb-2">
+              <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-pink-200">
+                <h4 className="font-semibold text-gray-700 dark:text-gray-100 mb-2">
                   Step 1: Make Payment
                 </h4>
-                <p className="text-sm text-pink-800 mb-2">
+                <p className="text-sm text-gray-700 dark:text-gray-100 mb-2">
                   Send money to our bKash merchant account:
                 </p>
-                <div className="bg-white p-3 rounded border">
+                <div className="bg-white dark:bg-gray-900 p-3 rounded border">
                   <div className="text-center">
-                    <div className="text-lg font-bold text-pink-600">
+                    <div className="text-lg font-bold text-pink-700">
                       01712-345678
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-700 dark:text-gray-300">
                       Merchant Account
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h4 className="font-semibold text-blue-900 mb-2">
+              <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-blue-200">
+                <h4 className="font-semibold text-blue-900 dark:text-gray-100 mb-2">
                   Step 2: Note Transaction Details
                 </h4>
-                <ul className="text-sm text-blue-800 space-y-1">
+                <ul className="text-sm text-blue-800 dark:text-gray-300 space-y-1">
                   <li>• Transaction ID</li>
                   <li>• Your bKash number</li>
                   <li>• Payment date</li>
                 </ul>
               </div>
 
-              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-900 mb-2">
+              <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-green-200">
+                <h4 className="font-semibold text-green-900 dark:text-green-600 mb-2">
                   Step 3: Submit Form
                 </h4>
-                <p className="text-sm text-green-800">
+                <p className="text-sm text-green-800 dark:text-green-700">
                   Fill out the form with your payment details for verification.
                 </p>
               </div>
 
-              <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+              <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-amber-200">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="h-4 w-4 text-amber-600" />
-                  <h4 className="font-semibold text-amber-900">
+                  <h4 className="font-semibold text-amber-900 dark:text-amber-600">
                     Verification Time
                   </h4>
                 </div>
-                <p className="text-sm text-amber-800">
+                <p className="text-sm text-amber-800 dark:text-amber-700">
                   Your payment will be verified within 24 hours and your
                   subscription will be activated.
                 </p>
@@ -342,7 +342,7 @@ export default function BkashManualPayment() {
           </Card>
 
           {/* Payment Form */}
-          <Card className="lg:col-span-1">
+          <Card className="lg:col-span-1  dark:border-gray-600 dark:hover:border-emerald-500 bg-white dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-emerald-500/10 transition">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5" />
@@ -360,7 +360,7 @@ export default function BkashManualPayment() {
                 >
                   {/* bKash Payment Information */}
                   <div className="space-y-4">
-                    <h3 className="font-medium text-gray-900">
+                    <h3 className="font-medium text-gray-900 dark:text-gray-300">
                       bKash Payment Information
                     </h3>
 
