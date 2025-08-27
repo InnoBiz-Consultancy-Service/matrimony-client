@@ -3,8 +3,13 @@ import { Heart, Users, Shield, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useLanguage } from "@/hooks/use-language";
+import { translations } from "@/dictionary/translation";
 
 export default function Banner() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden transition-colors duration-300">
       {/* Background Decorative Elements */}
@@ -21,29 +26,29 @@ export default function Banner() {
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-4 py-2 rounded-full text-sm font-medium border dark:border-emerald-700/30">
               <Heart className="h-4 w-4 fill-current" />
-              <span>Trusted by Happy Couples</span>
+              <span>{t.banner?.tagLine}</span>
             </div>
 
             {/* Main Heading */}
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                <span className="text-gray-900 dark:text-white">Find Your</span>
-                <span className="block text-emerald-600 dark:text-emerald-400">
+                <span className="text-gray-900 dark:text-white">
+                  {t.banner?.title}
+                </span>
+                {/* <span className="block text-emerald-600 dark:text-emerald-400">
                   Perfect Match
                 </span>
                 <span className="block text-gray-800 dark:text-gray-200">
                   Today
-                </span>
+                </span> */}
               </h1>
               <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed">
-                Join thousands of successful couples who found their soulmate
-                through our trusted matrimony platform. Your journey to happily
-                ever after starts here.
+                {t.banner?.description}
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            {/* <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-semibold px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group">
                 Start Free Today
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -55,7 +60,7 @@ export default function Banner() {
                 <Play className="mr-2 h-5 w-5" />
                 Watch Success Stories
               </Button>
-            </div>
+            </div> */}
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8">
@@ -64,7 +69,7 @@ export default function Banner() {
                   0
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Happy Couples
+                  {t.banner?.happyCouples}
                 </div>
               </div>
               <div className="text-center">
@@ -72,7 +77,7 @@ export default function Banner() {
                   0
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Active Members
+                  {t.banner?.activeMember}
                 </div>
               </div>
               <div className="text-center">
@@ -80,7 +85,7 @@ export default function Banner() {
                   0
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Success Rate
+                  {t.banner?.successRate}
                 </div>
               </div>
             </div>
@@ -106,17 +111,17 @@ export default function Banner() {
                     <div className="flex items-center space-x-2">
                       <Shield className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                       <span className="font-semibold text-gray-800 dark:text-gray-200">
-                        100% Verified
+                        {t.banner?.badgeVerify}
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Users className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                       <span className="font-semibold text-gray-800 dark:text-gray-200">
-                        Privacy Protected
+                        {t.banner?.privacy}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      All profiles are manually verified for your safety
+                      {t.banner?.privacyDesc}
                     </div>
                   </div>
                 </CardContent>

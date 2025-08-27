@@ -57,7 +57,6 @@ function getUserRole(payload: JWTPayload): string | null {
   return null;
 }
 
-
 //  * Check if a path should be excluded from middleware processing
 
 function isExcludedPath(pathname: string): boolean {
@@ -76,8 +75,7 @@ function isExcludedPath(pathname: string): boolean {
   return excludedPaths.some((path) => pathname.startsWith(path));
 }
 
-
-  // Check if a path is an authentication-related page
+// Check if a path is an authentication-related page
 
 function isAuthPage(pathname: string): boolean {
   const authPaths = [
@@ -90,8 +88,7 @@ function isAuthPage(pathname: string): boolean {
   return authPaths.includes(pathname);
 }
 
-
-  // Check if a path is a public page that doesn't require authentication
+// Check if a path is a public page that doesn't require authentication
 
 function isPublicPage(pathname: string): boolean {
   const publicPaths = [
@@ -104,8 +101,7 @@ function isPublicPage(pathname: string): boolean {
   return publicPaths.includes(pathname);
 }
 
-
-  // Check if a path is the profile creation page
+// Check if a path is the profile creation page
 
 function isProfileCreationPage(pathname: string): boolean {
   return pathname === "/profile/create-biodata";
