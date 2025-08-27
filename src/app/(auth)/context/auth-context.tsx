@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const initializeAuth = () => {
-    const token = getCookie('accessToken') || localStorage.getItem('token');
+    const token = getCookie('token') || localStorage.getItem('token');
     
     if (token) {
       try {
