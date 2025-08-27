@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Filter, X, Heart, Users, MapPin } from "lucide-react";
+import { Search, Heart, Users, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,9 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -35,60 +32,20 @@ import { FilterParams } from "@/types/filters";
 import { generateSearchParams } from "@/utils/searchParams";
 import { useRouter } from "next/navigation";
 
-const professions = [
-  "Doctor",
-  "Engineer",
-  "Teacher",
-  "Business Owner",
-  "Software Developer",
-  "Lawyer",
-  "Accountant",
-  "Nurse",
-  "Architect",
-  "Designer",
-  "Marketing Professional",
-  "Sales Professional",
-  "Government Employee",
-  "Student",
-  "Other",
-  "Any Profession",
-];
-
-const educationLevels = [
-  "High School",
-  "Bachelor's Degree",
-  "Master's Degree",
-  "PhD",
-  "Other",
-];
-
 const maritalStatuses = ["Never Married", "Divorced", "Widowed"];
-
-const incomeRanges = [
-  "Below $25,000",
-  "$25,000 - $50,000",
-  "$50,000 - $75,000",
-  "$75,000 - $100,000",
-  "Above $100,000",
-];
 
 // Zod schema for form validation
 const filterSchema = z.object({
   lookingFor: z.enum(["male", "female", ""]).optional(),
-  ageRange: z.tuple([z.number(), z.number()]),
   division: z.string().optional(),
   district: z.string().optional(),
   upazila: z.string().optional(),
-  profession: z.string().optional(),
-  education: z.string().optional(),
   maritalStatus: z.string().optional(),
-  incomeRange: z.string().optional(),
 });
 
 type FilterFormData = z.infer<typeof filterSchema>;
 
 export default function SearchFilters() {
-  const [showAdvanced, setShowAdvanced] = React.useState(false);
   const [isSearching, setIsSearching] = React.useState(false);
   const [selectedDivision, setSelectedDivision] = React.useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = React.useState<string>("");
@@ -99,14 +56,10 @@ export default function SearchFilters() {
     resolver: zodResolver(filterSchema),
     defaultValues: {
       lookingFor: "",
-      ageRange: [18, 40],
       division: "",
       district: "",
       upazila: "",
-      profession: "",
-      education: "",
       maritalStatus: "",
-      incomeRange: "",
     },
   });
 
@@ -150,37 +103,6 @@ export default function SearchFilters() {
     } finally {
       setIsSearching(false);
     }
-  };
-
-  const clearFilters = () => {
-    form.reset({
-      lookingFor: "",
-      ageRange: [18, 40],
-      division: "",
-      district: "",
-      upazila: "",
-      profession: "",
-      education: "",
-      maritalStatus: "",
-      incomeRange: "",
-    });
-    setSelectedDivision("");
-    setSelectedDistrict("");
-  };
-
-  const getActiveFiltersCount = () => {
-    let count = 0;
-    if (watchedValues.lookingFor) count++;
-    if (watchedValues.division) count++;
-    if (watchedValues.district) count++;
-    if (watchedValues.upazila) count++;
-    if (watchedValues.profession) count++;
-    if (watchedValues.education) count++;
-    if (watchedValues.maritalStatus) count++;
-    if (watchedValues.incomeRange) count++;
-    if (watchedValues.ageRange[0] !== 18 || watchedValues.ageRange[1] !== 40)
-      count++;
-    return count;
   };
 
   const handleDivisionChange = (value: string) => {
@@ -385,42 +307,6 @@ export default function SearchFilters() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <FormField
                     control={form.control}
-                    name="profession"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                          Profession
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                              <SelectValue placeholder="Select profession" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                            {professions.map((profession) => (
-                              <SelectItem
-                                key={profession}
-                                value={profession
-                                  .toLowerCase()
-                                  .replace(/\s+/g, "-")}
-                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                              >
-                                {profession}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="maritalStatus"
                     render={({ field }) => (
                       <FormItem>
@@ -455,262 +341,6 @@ export default function SearchFilters() {
                     )}
                   />
                 </div>
-
-                {/* Age Range */}
-                <FormField
-                  control={form.control}
-                  name="ageRange"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Age Range: {field.value[0]} - {field.value[1]} years
-                      </FormLabel>
-                      <FormControl>
-                        <div className="px-6">
-                          <Slider
-                            value={field.value}
-                            onValueChange={field.onChange}
-                            max={70}
-                            min={18}
-                            step={1}
-                            className="w-full [&_[role=slider]]:bg-emerald-500 dark:[&_[role=slider]]:bg-emerald-400 [&_[role=slider]]:border-emerald-500 dark:[&_[role=slider]]:border-emerald-400"
-                          />
-                          <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mt-2">
-                            <span>18</span>
-                            <span>70</span>
-                          </div>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Advanced Filters Toggle */}
-                <div className="flex justify-center">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setShowAdvanced(!showAdvanced)}
-                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 font-medium text-base px-6 py-3"
-                  >
-                    <Filter className="h-5 w-5 mr-2" />
-                    {showAdvanced ? "Hide" : "Show"} Advanced Filters
-                  </Button>
-                </div>
-
-                {/* Advanced Filters */}
-                {showAdvanced && (
-                  <div className="border-t border-emerald-100 dark:border-emerald-800 pt-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      {/* Education */}
-                      <FormField
-                        control={form.control}
-                        name="education"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                              Education
-                            </FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                                  <SelectValue placeholder="Select education" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                                {educationLevels.map((education) => (
-                                  <SelectItem
-                                    key={education}
-                                    value={education
-                                      .toLowerCase()
-                                      .replace(/\s+/g, "-")}
-                                    className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                  >
-                                    {education}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* Income Range */}
-                      <FormField
-                        control={form.control}
-                        name="incomeRange"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                              Income Range
-                            </FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                                  <SelectValue placeholder="Select income" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                                {incomeRanges.map((income) => (
-                                  <SelectItem
-                                    key={income}
-                                    value={income
-                                      .toLowerCase()
-                                      .replace(/\s+/g, "-")}
-                                    className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                  >
-                                    {income}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Active Filters */}
-                {getActiveFiltersCount() > 0 && (
-                  <div className="bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg p-6 border dark:border-emerald-800/30">
-                    <div className="flex items-center justify-between mb-4">
-                      <Label className="text-base font-semibold text-gray-700 dark:text-gray-300">
-                        Active Filters ({getActiveFiltersCount()})
-                      </Label>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearFilters}
-                        className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 font-medium"
-                      >
-                        Clear All
-                      </Button>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {watchedValues.lookingFor && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          Looking for: {watchedValues.lookingFor}
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => form.setValue("lookingFor", "")}
-                          />
-                        </Badge>
-                      )}
-                      {watchedValues.division && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          Division:{" "}
-                          {
-                            divisions.find(
-                              (d) => d.division_id === watchedValues.division
-                            )?.divisionName
-                          }
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => {
-                              form.setValue("division", "");
-                              setSelectedDivision("");
-                            }}
-                          />
-                        </Badge>
-                      )}
-                      {watchedValues.district && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          District: {watchedValues.district}
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => {
-                              form.setValue("district", "");
-                              setSelectedDistrict("");
-                            }}
-                          />
-                        </Badge>
-                      )}
-                      {watchedValues.upazila && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          Upazila: {watchedValues.upazila}
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => form.setValue("upazila", "")}
-                          />
-                        </Badge>
-                      )}
-                      {watchedValues.profession && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          Profession:{" "}
-                          {professions.find(
-                            (p) =>
-                              p.toLowerCase().replace(/\s+/g, "-") ===
-                              watchedValues.profession
-                          )}
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => form.setValue("profession", "")}
-                          />
-                        </Badge>
-                      )}
-                      {watchedValues.maritalStatus && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          Status:{" "}
-                          {maritalStatuses.find(
-                            (m) =>
-                              m.toLowerCase().replace(/\s+/g, "-") ===
-                              watchedValues.maritalStatus
-                          )}
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => form.setValue("maritalStatus", "")}
-                          />
-                        </Badge>
-                      )}
-                      {(watchedValues.ageRange[0] !== 18 ||
-                        watchedValues.ageRange[1] !== 40) && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-700/50 text-sm py-1.5 px-3 border-0"
-                        >
-                          Age: {watchedValues.ageRange[0]}-
-                          {watchedValues.ageRange[1]}
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-100"
-                            onClick={() => form.setValue("ageRange", [18, 40])}
-                          />
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                <Separator className="my-8 bg-gray-200 dark:bg-gray-700" />
-
                 {/* Search Button */}
                 <div className="flex justify-center">
                   <Button
@@ -726,8 +356,7 @@ export default function SearchFilters() {
                     ) : (
                       <>
                         <Search className="mr-3 h-5 w-5" />
-                        Search Matches (
-                        {getActiveFiltersCount() > 0 ? "Filtered" : "All"})
+                        Search Matches ({0 ? "Filtered" : "All"})
                       </>
                     )}
                   </Button>
