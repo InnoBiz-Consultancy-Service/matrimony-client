@@ -60,7 +60,7 @@ import { useRouter } from "next/navigation";
 // };
 
 // Cookie utility functions
-const setCookie = (name: string, value: string, days: number = 7) => {
+export const setCookie = (name: string, value: string, days: number = 7) => {
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
   document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict;Secure=${
@@ -119,7 +119,7 @@ const authService = {
 
       // Store in cookies
       // Token cookie - expires based on remember me option
-      const tokenExpiryDays = rememberMe ? 30 : 7; // 30 days if remember me, otherwise 7 days
+      const tokenExpiryDays = rememberMe ? 30 : 7;
       setCookie("token", token, tokenExpiryDays);
 
       // User data cookie
@@ -280,8 +280,8 @@ export default function LoginPage() {
         rememberMe,
       });
       authService.storeAuthData(token);
-      // window.location.href = "/";
-      router.push("/");
+      window.location.href = "/";
+      // router.push("/");
       toast.success("Login success", {
         position: "top-center",
         className: "bg-red-600 text-white font-semibold shadow-lg",
