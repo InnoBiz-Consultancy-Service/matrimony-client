@@ -10,6 +10,7 @@ import {
 import { useLanguage } from "@/hooks/use-language";
 import { translations } from "@/dictionary/translation";
 import { useEffect, useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 export function LanguageSelector() {
   const { language, changeLanguage } = useLanguage();
@@ -35,10 +36,10 @@ export function LanguageSelector() {
         <Button
           variant="outline"
           size="sm"
-          className="rounded-md border-gray-300 text-sm font-medium hover:bg-pink-50 focus:ring-2 focus:ring-pink-400"
+          className="rounded-md border-gray-300 text-sm font-medium hover:bg-pink-50 focus:ring-2 focus:ring-pink-400 cus"
         >
           {translations[language].language}
-          {lang}
+          <ChevronDown /> {lang}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

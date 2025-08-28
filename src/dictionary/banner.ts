@@ -1,4 +1,4 @@
-export const translations = {
+export const bannerContent = {
   en: {
     banner: {
       tagLine: "Trusted by Happy Couples",
@@ -30,5 +30,5 @@ export const translations = {
   },
 };
 
-export type Language = keyof typeof translations;
-export type TranslationKey = keyof typeof translations.en;
+export type Language = keyof typeof bannerContent;
+export type TranslationKey = keyof typeof bannerContent.en;
