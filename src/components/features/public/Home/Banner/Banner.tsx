@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useLanguage } from "@/hooks/use-language";
-import { translations } from "@/dictionary/translation";
+import { bannerContent } from "@/dictionary/banner";
 
 export default function Banner() {
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = bannerContent[language];
 
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden transition-colors duration-300">

@@ -19,6 +19,7 @@ import femaleAvatar from "../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../public/men_avatar.webp";
 import type { User as UserType } from "@/types/user";
 import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle";
+import { LanguageSelector } from "../languageSelector/LanguageSelector";
 
 const navigationItems = [
   { title: "Home", href: "/" },
@@ -117,6 +118,7 @@ export default function Navbar() {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
+            <LanguageSelector />
             <ThemeToggle />
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
@@ -395,7 +397,6 @@ export default function Navbar() {
   );
 }
 
-
 // "use client";
 
 // import * as React from "react";
@@ -434,7 +435,7 @@ export default function Navbar() {
 //   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
 //   const [isLanguageOpen, setIsLanguageOpen] = React.useState(false);
 //   const languageDropdownRef = React.useRef(null);
-  
+
 //   const {
 //     user,
 //     isAuthenticated,
@@ -570,8 +571,8 @@ export default function Navbar() {
 //                       href={redirectedPathName(locale)}
 //                       className={cn(
 //                         "flex items-center space-x-3 px-4 py-2 text-sm hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors",
-//                         lang === locale 
-//                           ? 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400' 
+//                         lang === locale
+//                           ? 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400'
 //                           : 'text-gray-700 dark:text-gray-300'
 //                       )}
 //                       onClick={() => setIsLanguageOpen(false)}

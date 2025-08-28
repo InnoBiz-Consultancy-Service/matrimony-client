@@ -1,10 +1,10 @@
 "use client";
 
-import { Language } from "@/dictionary/translation";
+import { Language } from "@/dictionary/banner";
 import { useState, useEffect } from "react";
 
 export function useLanguage() {
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguage] = useState<Language>("bn");
 
   useEffect(() => {
     const saved = localStorage.getItem("language") as Language;
