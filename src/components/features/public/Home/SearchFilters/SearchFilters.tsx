@@ -31,8 +31,8 @@ import { District, Upazila } from "@/types/filterForm";
 import { FilterParams } from "@/types/filters";
 import { generateSearchParams } from "@/utils/searchParams";
 import { useRouter } from "next/navigation";
-
-const maritalStatuses = ["Never Married", "Divorced", "Widowed"];
+import { useLanguage } from "@/hooks/use-language";
+import { filterTranslation } from "@/dictionary/filter";
 
 // Zod schema for form validation
 const filterSchema = z.object({
@@ -52,6 +52,9 @@ export default function SearchFilters() {
 
   const router = useRouter();
 
+  const { language } = useLanguage();
+  const t = filterTranslation[language];
+
   const form = useForm<FilterFormData>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
@@ -62,8 +65,7 @@ export default function SearchFilters() {
       maritalStatus: "",
     },
   });
-
-  const watchedValues = form.watch();
+  const maritalStatuses = [t.naverMarried, t.divorced, t.married];
 
   // Get unique districts for the selected division
   const filteredDistricts = React.useMemo(() => {
@@ -127,12 +129,11 @@ export default function SearchFilters() {
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Heart className="h-6 w-6 text-emerald-500 dark:text-emerald-400 fill-current" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
-              Find Your Perfect Match
+              {t.title}
             </h2>
           </div>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
-            Use our advanced filters to discover compatible profiles that match
-            your preferences and values
+            {t.description}
           </p>
         </div>
 
@@ -153,7 +154,7 @@ export default function SearchFilters() {
                       <FormItem className="space-y-4">
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
                           <Users className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400" />
-                          Looking For
+                          {t.lookingFor}
                         </FormLabel>
                         <FormControl>
                           <RadioGroup
@@ -171,7 +172,7 @@ export default function SearchFilters() {
                                 htmlFor="male"
                                 className="cursor-pointer font-medium text-gray-700 dark:text-gray-300"
                               >
-                                Male
+                                {t.male}
                               </Label>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -184,7 +185,7 @@ export default function SearchFilters() {
                                 htmlFor="female"
                                 className="cursor-pointer font-medium text-gray-700 dark:text-gray-300"
                               >
-                                Female
+                                {t.female}
                               </Label>
                             </div>
                           </RadioGroup>
@@ -202,7 +203,7 @@ export default function SearchFilters() {
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
                           <MapPin className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400" />
-                          Division
+                          {t.division}
                         </FormLabel>
                         <Select
                           onValueChange={handleDivisionChange}
@@ -210,7 +211,7 @@ export default function SearchFilters() {
                         >
                           <FormControl>
                             <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                              <SelectValue placeholder="Select Division" />
+                              <SelectValue placeholder={t.selectDivision} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
@@ -220,7 +221,7 @@ export default function SearchFilters() {
                                 value={div.division_id}
                                 className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
-                                {div.divisionName}
+                                {div.bnDivisionName}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -237,7 +238,7 @@ export default function SearchFilters() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                          District
+                          {t.district}
                         </FormLabel>
                         <Select
                           onValueChange={handleDistrictChange}
@@ -246,7 +247,7 @@ export default function SearchFilters() {
                         >
                           <FormControl>
                             <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50">
-                              <SelectValue placeholder="Select District" />
+                              <SelectValue placeholder={t.selectDistrict} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
@@ -256,7 +257,7 @@ export default function SearchFilters() {
                                 value={dis.districtsName}
                                 className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
-                                {dis.districtsName}
+                                {dis.bnDistrictsName}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -273,7 +274,7 @@ export default function SearchFilters() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                          Upazila
+                          {t.upazila}
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
@@ -282,7 +283,7 @@ export default function SearchFilters() {
                         >
                           <FormControl>
                             <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50">
-                              <SelectValue placeholder="Select Upazila" />
+                              <SelectValue placeholder={t.selectUpazila} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
@@ -292,7 +293,7 @@ export default function SearchFilters() {
                                 value={upa.subDistrictsName}
                                 className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                               >
-                                {upa.subDistrictsName}
+                                {upa.bnSubDistrictsName}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -311,7 +312,7 @@ export default function SearchFilters() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                          Marital Status
+                          {t.maritalStatus}
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
@@ -319,7 +320,9 @@ export default function SearchFilters() {
                         >
                           <FormControl>
                             <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                              <SelectValue placeholder="Select status" />
+                              <SelectValue
+                                placeholder={t.selectMaritalStatus}
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
@@ -351,12 +354,12 @@ export default function SearchFilters() {
                     {isSearching ? (
                       <div className="flex items-center space-x-3">
                         <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
-                        <span>Searching...</span>
+                        <span>{t.searching}...</span>
                       </div>
                     ) : (
                       <>
                         <Search className="mr-3 h-5 w-5" />
-                        Search Matches ({0 ? "Filtered" : "All"})
+                        {t.search}
                       </>
                     )}
                   </Button>
