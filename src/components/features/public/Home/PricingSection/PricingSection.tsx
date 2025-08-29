@@ -9,57 +9,59 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { useLanguage } from "@/hooks/use-language";
+import { pricingTranslation } from "@/dictionary/pricing";
 
 export default function PricingSection() {
+  const { language } = useLanguage();
+  const t = pricingTranslation[language];
+
   const plans = [
     {
-      name: "Free",
-      price: "0",
-      currency: "BDT",
-      period: "Forever",
-      description: "Perfect to get started",
+      name: t.free,
+      price: t.freePrice,
+      period: t.freeDuration,
+      description: t.freeDesc,
       icon: Heart,
       features: [
-        "Profile Creating",
-        "Profile Viewing",
-        "Profile Shortlist",
-        "Profile Ignore List",
+        t.freeFeatures?.create,
+        t.freeFeatures?.ignore,
+        t.freeFeatures?.shortlist,
+        t.freeFeatures?.view,
       ],
-      buttonText: "Get Started",
+      buttonText: t.freeBtn,
       popular: false,
       buttonVariant: "outline" as const,
     },
     {
-      name: "Premium",
-      price: "1,500",
-      currency: "BDT",
-      period: "3 months",
-      description: "Most popular plan",
+      name: t.premium,
+      price: t.premiumPrice,
+      period: t.premiumDuration,
+      description: t.premiumDesc,
       icon: Star,
       features: [
-        "All Free features",
-        "Profile Featuring",
-        "Profile viewing with contact details (100 profiles)",
-        "Unlimited interest sending",
+        t.premiumFeatures?.freeFeatures,
+        t.premiumFeatures?.featuring,
+        t.premiumFeatures?.contactView,
+        t.premiumFeatures?.interest,
       ],
-      buttonText: "Get Premium",
+      buttonText: t.premiumBtn,
       popular: true,
       buttonVariant: "default" as const,
     },
     {
-      name: "VIP",
-      price: "5,000",
-      currency: "BDT",
-      period: "1 year",
-      description: "Get maximum benefits",
+      name: t.vip,
+      price: t.vipPrice,
+      period: t.vipDuration,
+      description: t.vipDesc,
       icon: Crown,
       features: [
-        "All Premium features",
-        "1 year duration",
-        "Unlimited profile access",
-        "Priority customer support",
+        t.vipFeatures?.premiumFeatures,
+        t.vipFeatures?.unlimited,
+        t.vipFeatures?.support,
+        t.vipFeatures?.duration,
       ],
-      buttonText: "Become VIP",
+      buttonText: t.vipBtn,
       popular: false,
       buttonVariant: "outline" as const,
     },
@@ -70,10 +72,10 @@ export default function PricingSection() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Our Pricing Plans
+            {t.title}
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Choose the right plan to find your life partner
+            {t.subtitle}
           </p>
         </div>
 
@@ -124,9 +126,6 @@ export default function PricingSection() {
                       <span className="text-4xl font-bold text-gray-900 dark:text-white">
                         {plan.price}
                       </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 ml-1">
-                        {plan.currency}
-                      </span>
                     </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                       {plan.period}
@@ -173,14 +172,12 @@ export default function PricingSection() {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
-            Have questions? Contact us
-          </p>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{t.contact}</p>
           <Button
             variant="outline"
             className="border-emerald-500 dark:border-emerald-400 text-emerald-500 dark:text-emerald-400 hover:bg-emerald-500 dark:hover:bg-emerald-400 hover:text-white dark:hover:text-gray-900 bg-transparent dark:bg-transparent transition-all duration-200"
           >
-            Talk to Support Team
+            {t.supportBtn}
           </Button>
         </div>
       </div>
