@@ -232,3 +232,10 @@ body {
 .dark body {
   @apply bg-black text-white;
 }
+/* :lang(bn) {
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+:lang(en) {
+  font-family: 'Inter', sans-serif;
+} */
