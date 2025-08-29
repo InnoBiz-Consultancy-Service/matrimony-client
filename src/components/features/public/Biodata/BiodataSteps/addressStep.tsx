@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddressInfo, LocationData, StepProps } from "@/types/biodataForm";
+import { useLanguage } from "@/hooks/use-language";
+import { biodataTranslation } from "@/dictionary/biodata";
 
 export default function AddressStep({ data, updateData }: StepProps) {
   const [address, setAddress] = useState<AddressInfo>({
@@ -35,6 +37,9 @@ export default function AddressStep({ data, updateData }: StepProps) {
   const [upazilas, setUpazilas] = useState<LocationData[]>([]);
   const [presentDistricts, setPresentDistricts] = useState<LocationData[]>([]);
   const [presentUpazilas, setPresentUpazilas] = useState<LocationData[]>([]);
+
+  const { language } = useLanguage();
+  const t = biodataTranslation[language];
 
   // Load location data
   useEffect(() => {
@@ -150,11 +155,11 @@ export default function AddressStep({ data, updateData }: StepProps) {
       {/* Permanent Address */}
       <div>
         <h3 className="text-lg font-semibold text-emerald-800 dark:text-emerald-200 mb-4">
-          Permanent Address
+          {t.address?.permanentAddress}
         </h3>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="permanent-address">Address *</Label>
+          <div className="space-y-3">
+            <Label htmlFor="permanent-address">{t.address?.address} *</Label>
             <Input
               id="permanent-address"
               value={address.permanent.address}
@@ -164,20 +169,22 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   permanent: { ...prev.permanent, address: e.target.value },
                 }))
               }
-              placeholder="Enter your permanent address"
+              placeholder={t.address?.addressPlaceHolder}
               className="border-emerald-200 dark:border-emerald-700"
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="permanent-division">Division *</Label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div className="space-y-3">
+              <Label htmlFor="permanent-division">
+                {t.address?.division} *
+              </Label>
               <Select
                 value={address.permanent.division}
                 onValueChange={handlePermanentDivisionChange}
               >
-                <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-                  <SelectValue placeholder="Select division" />
+                <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                  <SelectValue placeholder={t.address?.division} />
                 </SelectTrigger>
                 <SelectContent>
                   {divisions.map((division: any) => (
@@ -192,15 +199,17 @@ export default function AddressStep({ data, updateData }: StepProps) {
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="permanent-district">District *</Label>
+            <div className="space-y-3">
+              <Label htmlFor="permanent-district">
+                {t.address?.district} *
+              </Label>
               <Select
                 value={address.permanent.district}
                 onValueChange={handlePermanentDistrictChange}
                 disabled={!address.permanent.division}
               >
-                <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-                  <SelectValue placeholder="Select district" />
+                <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                  <SelectValue placeholder={t.address?.district} />
                 </SelectTrigger>
                 <SelectContent>
                   {districts.map((district: any, index) => (
@@ -212,8 +221,8 @@ export default function AddressStep({ data, updateData }: StepProps) {
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="permanent-upazila">Upazila *</Label>
+            <div className="space-y-3">
+              <Label htmlFor="permanent-upazila">{t.address?.upazila} *</Label>
               <Select
                 value={address.permanent.upazila}
                 onValueChange={(value) =>
@@ -224,8 +233,8 @@ export default function AddressStep({ data, updateData }: StepProps) {
                 }
                 disabled={!address.permanent.district}
               >
-                <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-                  <SelectValue placeholder="Select upazila" />
+                <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                  <SelectValue placeholder={t.address?.upazila} />
                 </SelectTrigger>
                 <SelectContent>
                   {upazilas.map((upazila: any, index) => (
@@ -243,11 +252,11 @@ export default function AddressStep({ data, updateData }: StepProps) {
       {/* Present Address */}
       <div>
         <h3 className="text-lg font-semibold text-emerald-800 dark:text-emerald-200 mb-4">
-          Present Address
+          {t.address?.presentAddress}
         </h3>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="present-address">Address *</Label>
+          <div className="space-y-3">
+            <Label htmlFor="present-address">{t.address?.address} *</Label>
             <Input
               id="present-address"
               value={address.present.address}
@@ -257,20 +266,20 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   present: { ...prev.present, address: e.target.value },
                 }))
               }
-              placeholder="Enter your present address"
+              placeholder={t.address?.addressPlaceHolder}
               className="border-emerald-200 dark:border-emerald-700"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="present-division">Division *</Label>
+            <div className="space-y-3">
+              <Label htmlFor="present-division">{t.address?.division} *</Label>
               <Select
                 value={address.present.division}
                 onValueChange={handlePresentDivisionChange}
               >
-                <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-                  <SelectValue placeholder="Select division" />
+                <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                  <SelectValue placeholder={t.address?.division} />
                 </SelectTrigger>
                 <SelectContent>
                   {divisions.map((division: any) => (
@@ -285,15 +294,15 @@ export default function AddressStep({ data, updateData }: StepProps) {
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="present-district">District *</Label>
+            <div className="space-y-3">
+              <Label htmlFor="present-district">{t.address?.district} *</Label>
               <Select
                 value={address.present.district}
                 onValueChange={handlePresentDistrictChange}
                 disabled={!address.present.division}
               >
-                <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-                  <SelectValue placeholder="Select district" />
+                <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                  <SelectValue placeholder={t.address?.district} />
                 </SelectTrigger>
                 <SelectContent>
                   {presentDistricts.map((district: any, index) => (
@@ -305,8 +314,8 @@ export default function AddressStep({ data, updateData }: StepProps) {
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="present-upazila">Upazila *</Label>
+            <div className="space-y-3">
+              <Label htmlFor="present-upazila">{t.address?.upazila} *</Label>
               <Select
                 value={address.present.upazila}
                 onValueChange={(value) =>
@@ -317,8 +326,8 @@ export default function AddressStep({ data, updateData }: StepProps) {
                 }
                 disabled={!address.present.district}
               >
-                <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-                  <SelectValue placeholder="Select upazila" />
+                <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                  <SelectValue placeholder={t.address?.upazila} />
                 </SelectTrigger>
                 <SelectContent>
                   {presentUpazilas.map((upazila: any, index) => (
@@ -334,15 +343,15 @@ export default function AddressStep({ data, updateData }: StepProps) {
       </div>
 
       {/* Grew Up At */}
-      <div>
-        <Label htmlFor="grewUpAt">Grew Up At</Label>
+      <div className="space-y-3">
+        <Label htmlFor="grewUpAt">{t.address?.whereDidYouGrow}</Label>
         <Input
           id="grewUpAt"
           value={address.grewUpAt}
           onChange={(e) =>
             setAddress((prev) => ({ ...prev, grewUpAt: e.target.value }))
           }
-          placeholder="e.g., Father's home, Mother's home, etc."
+          placeholder={t.address?.whereDidYouGrowPlaceholder}
           className="border-emerald-200 dark:border-emerald-700"
         />
       </div>

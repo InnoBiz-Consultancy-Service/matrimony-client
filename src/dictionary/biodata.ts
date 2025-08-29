@@ -4,6 +4,12 @@ export const biodataTranslation = {
       permanentAddress: "Permanent Address",
       presentAddress: "Present Address",
       whereDidYouGrow: "Where did you grow up",
+      division: "Division",
+      district: "District",
+      upazila: "Upazila",
+      address: "Address",
+      addressPlaceHolder: "Village, post office",
+      whereDidYouGrowPlaceholder: 'e.g. Fathers home, Mothers home, etc.' 
     },
     educationalQualification: {
       educationMethod: "Your education method",
@@ -85,6 +91,12 @@ export const biodataTranslation = {
       permanentAddress: "স্থায়ী ঠিকানা",
       presentAddress: "বর্তমান ঠিকানা",
       whereDidYouGrow: "আপনি কোথায় বড় হয়েছেন",
+      division: "বিভাগ",
+      district: "জেলা",
+      upazila: "উপজেলা",
+      address: "ঠিকানা",
+      addressPlaceHolder: "ইউনিয়ন, গ্রাম",
+      whereDidYouGrowPlaceholder: 'যেমন, বাবার বাড়ি, মায়ের বাড়ি ইত্যাদি।' 
     },
     educationalQualification: {
       educationMethod: "আপনার পড়াশোনার মাধ্যম",
