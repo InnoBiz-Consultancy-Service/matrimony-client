@@ -1,7 +1,50 @@
+// import { Toaster } from "sonner";
+// import { AuthProvider } from "./(auth)/context/auth-context";
+// import "./globals.css";
+// import { Noto_Serif_Bengali } from "next/font/google";
+// import { ThemeProvider } from "next-themes";
+// export const metadata = {
+//   title: "Nikah",
+//   description:
+//     "Nikah is a platform that connects individuals seeking marriage, providing a space for them to find potential partners and build meaningful relationships.",
+//   icons: {
+//     icon: "https://i.ibb.co/BHMGGW7z/ontonim.png",
+//   },
+// };
+
+// const notoBengali = Noto_Serif_Bengali({
+//   subsets: ["bengali"],
+//   weight: ["400", "500", "700"],
+// });
+
+// export default function RootLayout({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   return (
+//     <html >
+//       <body className={notoBengali.className}>
+//         <main>
+//           <AuthProvider>
+//             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+//               {children}
+//             </ThemeProvider>
+//             <Toaster />
+//           </AuthProvider>
+//         </main>
+//       </body>
+//     </html>
+//   );
+// }
+
+
 import { Toaster } from "sonner";
 import { AuthProvider } from "./(auth)/context/auth-context";
 import "./globals.css";
+import { Noto_Serif_Bengali } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+
 export const metadata = {
   title: "Nikah",
   description:
@@ -11,14 +54,19 @@ export const metadata = {
   },
 };
 
+const notoBengali = Noto_Serif_Bengali({
+  subsets: ["bengali"],
+  weight: ["400", "500", "700"],
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>
+    <html lang="bn">
+      <body className={notoBengali.className}>
         <main>
           <AuthProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
