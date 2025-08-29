@@ -136,6 +136,7 @@ export default function ProfessionalBiodatasPage() {
           : [];
         setProfiles(profilesData);
         setFilteredProfiles(profilesData);
+        setShowFilters(false)
 
         if (profilesData.length === 0) {
           setError("No profiles found matching your criteria.");
