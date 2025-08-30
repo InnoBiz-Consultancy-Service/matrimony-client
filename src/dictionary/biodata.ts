@@ -89,8 +89,15 @@ export const biodataTranslation = {
 
     OccupationalInformation: {
       occupation: "Occupation",
+      occupationPlaceholder: "e.g., Student, Engineer, Teacher, etc.",
       profession: "Description Of profession",
+      professionPlaceHolder: "Describe your current job or occupation",
       income: "Monthly Income",
+      incomeInfo: "Income Information",
+      currency: "Currency",
+      note: "Note",
+      noteDetails:
+        "Please provide accurate information about your occupation and income. This information will be used for matching purposes and should reflect your current situation.",
     },
     marriageRelatedInformation: {
       guardiansAgree: "Do your guardians agree to your marriage?",
@@ -204,8 +211,15 @@ export const biodataTranslation = {
 
     OccupationalInformation: {
       occupation: "পেশা",
+      occupationPlaceholder: "যেমন, ছাত্র, প্রকৌশলী, শিক্ষক, ইত্যাদি।",
       profession: "পেশার বিবরণ",
+      professionPlaceHolder: "আপনার বর্তমান চাকরি বা পেশা বর্ণনা করুন",
       income: "মাসিক আয়",
+      incomeInfo: "আয়ের তথ্য",
+      currency: "মুদ্রা",
+      note: "বিঃ দ্রঃ",
+      noteDetails:
+        "আপনার পেশা এবং আয় সম্পর্কে সঠিক তথ্য প্রদান করুন। এই তথ্য মিলের উদ্দেশ্যে ব্যবহার করা হবে এবং আপনার বর্তমান পরিস্থিতি প্রতিফলিত করা উচিত।",
     },
     marriageRelatedInformation: {
       guardiansAgree: "আপনার অভিভাবকরা কি বিয়েতে রাজি?",
