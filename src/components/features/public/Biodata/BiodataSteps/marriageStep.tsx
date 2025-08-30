@@ -1,10 +1,18 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { MarriageInfo, StepProps } from "@/types/biodataForm"
+import { useState, useEffect } from "react";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { MarriageInfo, StepProps } from "@/types/biodataForm";
+import { useLanguage } from "@/hooks/use-language";
+import { biodataTranslation } from "@/dictionary/biodata";
 
 export default function MarriageStep({ data, updateData }: StepProps) {
   const [marriage, setMarriage] = useState<MarriageInfo>({
@@ -13,16 +21,17 @@ export default function MarriageStep({ data, updateData }: StepProps) {
     reason: "",
     jobStatus: "",
     ...data.marriage,
-  })
+  });
 
   useEffect(() => {
-    updateData({ marriage })
-  }, [marriage, updateData])
+    updateData({ marriage });
+  }, [marriage, updateData]);
 
   const handleChange = (field: keyof MarriageInfo, value: string | boolean) => {
-    setMarriage((prev) => ({ ...prev, [field]: value }))
-  }
-
+    setMarriage((prev) => ({ ...prev, [field]: value }));
+  };
+  const { language } = useLanguage();
+  const t = biodataTranslation[language];
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-2">
@@ -31,68 +40,106 @@ export default function MarriageStep({ data, updateData }: StepProps) {
           checked={marriage.guardiansAgree}
           onCheckedChange={(checked) => handleChange("guardiansAgree", checked)}
         />
-        <Label htmlFor="guardiansAgree">Do your guardians agree to your marriage decision?</Label>
+        <Label htmlFor="guardiansAgree">
+          {t.marriageRelatedInformation?.guardiansAgree}
+        </Label>
       </div>
 
-      <div>
-        <Label htmlFor="studyContinue">Will you continue your studies after marriage?</Label>
+      <div className="space-y-3">
+        <Label htmlFor="studyContinue">
+          {t.marriageRelatedInformation?.studyContinue}
+        </Label>
         <Select
           value={marriage.studyContinue || "not_decided"}
-          onValueChange={(value) => handleChange("studyContinue", value === "" ? "not_decided" : value)}
+          onValueChange={(value) =>
+            handleChange("studyContinue", value === "" ? "not_decided" : value)
+          }
         >
           <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
             <SelectValue placeholder="Select an option" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="true">Yes</SelectItem>
-            <SelectItem value="false">No</SelectItem>
-            <SelectItem value="not_decided">Not decided yet</SelectItem>
+            <SelectItem value="true">
+              {t.marriageRelatedInformation?.yes}
+            </SelectItem>
+            <SelectItem value="false">
+              {t.marriageRelatedInformation?.no}
+            </SelectItem>
+            <SelectItem value="not_decided">
+              {t.marriageRelatedInformation?.notDecide}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div>
-        <Label htmlFor="reason">Reason for Marriage *</Label>
-        <Select value={marriage.reason} onValueChange={(value) => handleChange("reason", value)}>
+      <div className="space-y-3">
+        <Label htmlFor="reason">{t.marriageRelatedInformation?.reason} *</Label>
+        <Select
+          value={marriage.reason}
+          onValueChange={(value) => handleChange("reason", value)}
+        >
           <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
             <SelectValue placeholder="Select reason" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="personal">Personal choice</SelectItem>
-            <SelectItem value="family">Family decision</SelectItem>
-            <SelectItem value="religious">Religious obligation</SelectItem>
-            <SelectItem value="social">Social pressure</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
+            <SelectItem value="personal">
+              {t.marriageRelatedInformation?.personal}
+            </SelectItem>
+            <SelectItem value="family">
+              {t.marriageRelatedInformation?.family}
+            </SelectItem>
+            {/* <SelectItem value="religious">{t.marriageRelatedInformation?.}</SelectItem> */}
+            <SelectItem value="social">
+              {t.marriageRelatedInformation?.social}
+            </SelectItem>
+            <SelectItem value="other">
+              {t.marriageRelatedInformation?.other}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div>
-        <Label htmlFor="jobStatus">Job Status After Marriage</Label>
+      <div className="space-y-3">
+        <Label htmlFor="jobStatus">
+          {t.marriageRelatedInformation?.jobContinue}
+        </Label>
         <Select
           value={marriage.jobStatus || "not_decided"}
-          onValueChange={(value) => handleChange("jobStatus", value === "" ? "not_decided" : value)}
+          onValueChange={(value) =>
+            handleChange("jobStatus", value === "" ? "not_decided" : value)
+          }
         >
           <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
             <SelectValue placeholder="Select job status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="continue">Will continue current job</SelectItem>
-            <SelectItem value="change">Will change job</SelectItem>
-            <SelectItem value="quit">Will quit job</SelectItem>
-            <SelectItem value="start">Will start working</SelectItem>
-            <SelectItem value="not_decided">Not decided yet</SelectItem>
+            <SelectItem value="continue">
+              {t.marriageRelatedInformation?.continueJob}
+            </SelectItem>
+            <SelectItem value="change">
+              {t.marriageRelatedInformation?.changeJob}
+            </SelectItem>
+            <SelectItem value="quit">
+              {t.marriageRelatedInformation?.quitJob}
+            </SelectItem>
+            <SelectItem value="start">
+              {t.marriageRelatedInformation?.startJob}
+            </SelectItem>
+            <SelectItem value="not_decided">
+              {t.marriageRelatedInformation?.noDecideJob}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-        <h3 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">Important Note</h3>
+        <h3 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">
+          {t.marriageRelatedInformation?.importantNote}
+        </h3>
         <p className="text-sm text-yellow-700 dark:text-yellow-300">
-          Please discuss these matters with your family and potential spouse. Clear communication about expectations is
-          essential for a successful marriage.
+          {t.marriageRelatedInformation?.noteDescription}
         </p>
       </div>
     </div>
-  )
+  );
 }

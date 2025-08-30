@@ -101,6 +101,24 @@ export const biodataTranslation = {
     },
     marriageRelatedInformation: {
       guardiansAgree: "Do your guardians agree to your marriage?",
+      studyContinue: "Will you continue your studies after marriage?",
+      yes: "Yes",
+      no: "No",
+      notDecide: "Not decided yet",
+      jobContinue: "Job Status After Marriage",
+      reason: "Reason for marriage",
+      personal: "Personal",
+      family: "Family",
+      social: "Social",
+      other: "Others",
+      continueJob: "Will continue job",
+      changeJob: "Will change job",
+      quitJob: "Will quit job",
+      startJob: "Will start new job",
+      noDecideJob: "Not decide yet",
+      importantNote: "Important Note",
+      noteDescription:
+        "Please discuss these matters with your family and potential spouse.Clear communication about expectations is essential for a successful marriage.",
     },
 
     expectedLifePartner: {
@@ -223,6 +241,24 @@ export const biodataTranslation = {
     },
     marriageRelatedInformation: {
       guardiansAgree: "আপনার অভিভাবকরা কি বিয়েতে রাজি?",
+      studyContinue: "বিয়ের পর কি আপনি পড়াশোনা চালিয়ে যাবেন?",
+      yes: "হ্যাঁ",
+      notDecide: "এখনই বলতে পারছি না",
+      no: "না",
+      jobContinue: "বিয়ের পর আপনি কি চাকরী করতে চান",
+      reason: "বিয়ের কারণ",
+      personal: "ব্যক্তিগত",
+      family: "পরিবার",
+      social: "সমাজ",
+      other: "অন্যান্য",
+      continueJob: "চাকরি চালিয়ে যাব।",
+      changeJob: "চাকরি পরিবর্তন করবে।",
+      quitJob: "চাকরি ছেড়ে দেবে।",
+      startJob: "নতুন কাজ শুরু করবে।",
+      noDecideJob: "এখনও সিদ্ধান্ত নেই।",
+      importantNote: "গুরুত্বপূর্ণ তথ্য",
+      noteDescription:
+        "আপনার পরিবার এবং সম্ভাব্য জীবনসঙ্গীর সাথে এই বিষয়গুলি নিয়ে আলোচনা করুন। একটি সফল বিবাহের জন্য প্রত্যাশা সম্পর্কে স্পষ্ট যোগাযোগ অপরিহার্য।",
     },
 
     expectedLifePartner: {
