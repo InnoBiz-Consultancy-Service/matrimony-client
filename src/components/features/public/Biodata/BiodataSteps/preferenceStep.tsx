@@ -13,6 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import { PreferenceInfo, StepProps } from "@/types/biodataForm";
+import { useLanguage } from "@/hooks/use-language";
+import { biodataTranslation } from "@/dictionary/biodata";
 
 export default function PreferenceStep({ data, updateData }: StepProps) {
   const [preference, setPreference] = useState<PreferenceInfo>({
@@ -56,12 +58,13 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
       qualities: prev.qualities.map((item, i) => (i === index ? value : item)),
     }));
   };
-
+  const { language } = useLanguage();
+  const t = biodataTranslation[language];
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="ageRange">Preferred Age Range</Label>
+        <div className="space-y-3">
+          <Label htmlFor="ageRange">{t.expectedLifePartner?.age}</Label>
           <Input
             id="ageRange"
             value={preference.ageRange}
@@ -71,28 +74,38 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
           />
         </div>
 
-        <div>
-          <Label htmlFor="complexion">Preferred Complexion</Label>
+        <div className="space-y-3">
+          <Label htmlFor="complexion">
+            {t.expectedLifePartner?.complexion}
+          </Label>
           <Select
             value={preference.complexion}
             onValueChange={(value) => handleChange("complexion", value)}
           >
-            <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-              <SelectValue placeholder="Select complexion" />
+            <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+              <SelectValue
+                placeholder={t.expectedLifePartner?.selectComplexion}
+              />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Fair">Fair</SelectItem>
-              <SelectItem value="Medium">Medium</SelectItem>
-              <SelectItem value="Dark">Dark</SelectItem>
-              <SelectItem value="Any">Any</SelectItem>
+              <SelectItem value="Fair">
+                {t.expectedLifePartner?.fair}
+              </SelectItem>
+              <SelectItem value="Medium">
+                {t.expectedLifePartner?.medium}
+              </SelectItem>
+              <SelectItem value="Dark">
+                {t.expectedLifePartner?.dark}
+              </SelectItem>
+              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="height">Preferred Height</Label>
+        <div className="space-y-3">
+          <Label htmlFor="height">{t.expectedLifePartner?.height}</Label>
           <Input
             id="height"
             value={preference.height}
@@ -102,90 +115,124 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
           />
         </div>
 
-        <div>
-          <Label htmlFor="education">Minimum Education</Label>
+        <div className="space-y-3">
+          <Label htmlFor="education">
+            {t.expectedLifePartner?.educationQualification}
+          </Label>
           <Select
             value={preference.education}
             onValueChange={(value) => handleChange("education", value)}
           >
-            <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-              <SelectValue placeholder="Select education" />
+            <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+              <SelectValue
+                placeholder={t.expectedLifePartner?.selectEducationPlaceHolder}
+              />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="SSC">SSC</SelectItem>
-              <SelectItem value="HSC">HSC</SelectItem>
-              <SelectItem value="Graduation">Graduation</SelectItem>
-              <SelectItem value="Masters">Masters</SelectItem>
-              <SelectItem value="PhD">PhD</SelectItem>
-              <SelectItem value="Any">Any</SelectItem>
+              <SelectItem value="SSC">
+                {t.educationalQualification?.ssc}
+              </SelectItem>
+              <SelectItem value="HSC">
+                {t.educationalQualification?.hsc}
+              </SelectItem>
+              <SelectItem value="Graduation">
+                {t.educationalQualification?.graduation}
+              </SelectItem>
+              <SelectItem value="Masters">
+                {t.educationalQualification?.masters}
+              </SelectItem>
+              <SelectItem value="PhD">
+                {t.educationalQualification?.phd}
+              </SelectItem>
+              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="location">Preferred Location</Label>
+        <div className="space-y-3">
+          <Label htmlFor="location">{t.expectedLifePartner?.district}</Label>
           <Input
             id="location"
             value={preference.location}
             onChange={(e) => handleChange("location", e.target.value)}
-            placeholder="e.g., Dhaka, Chittagong, Any"
+            placeholder={t.expectedLifePartner?.locationPlaceHolder}
             className="border-emerald-200 dark:border-emerald-700"
           />
         </div>
 
-        <div>
-          <Label htmlFor="maritalStatus">Marital Status</Label>
+        <div className="space-y-3">
+          <Label htmlFor="maritalStatus">
+            {t.expectedLifePartner?.maritalStatus}
+          </Label>
           <Select
             value={preference.maritalStatus}
             onValueChange={(value) => handleChange("maritalStatus", value)}
           >
-            <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-              <SelectValue placeholder="Select marital status" />
+            <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+              <SelectValue
+                placeholder={
+                  t.expectedLifePartner?.selectMaritalStatusPlaceHolder
+                }
+              />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Never married">Never married</SelectItem>
-              <SelectItem value="Divorced">Divorced</SelectItem>
-              <SelectItem value="Widowed">Widowed</SelectItem>
-              <SelectItem value="Any">Any</SelectItem>
+              <SelectItem value="Never married">
+                {t.expectedLifePartner?.neverMarried}
+              </SelectItem>
+              <SelectItem value="Divorced">
+                {t.expectedLifePartner?.divorced}
+              </SelectItem>
+              <SelectItem value="Widowed">
+                {t.expectedLifePartner?.widowed}
+              </SelectItem>
+              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="profession">Preferred Profession</Label>
+        <div className="space-y-3">
+          <Label htmlFor="profession">
+            {t.expectedLifePartner?.profession}
+          </Label>
           <Input
             id="profession"
             value={preference.profession}
             onChange={(e) => handleChange("profession", e.target.value)}
-            placeholder="e.g., Doctor, Engineer, Any"
+            placeholder={t.expectedLifePartner?.professionPlaceHolder}
             className="border-emerald-200 dark:border-emerald-700"
           />
         </div>
 
-        <div>
-          <Label htmlFor="financialCondition">Financial Condition</Label>
+        <div className="space-y-3">
+          <Label htmlFor="financialCondition">
+            {t.expectedLifePartner?.financialCondition}
+          </Label>
           <Select
             value={preference.financialCondition}
             onValueChange={(value) => handleChange("financialCondition", value)}
           >
-            <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
-              <SelectValue placeholder="Select financial condition" />
+            <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+              <SelectValue
+                placeholder={t.expectedLifePartner?.selectFinancialPlaceholder}
+              />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Poor">Poor</SelectItem>
+              <SelectItem value="Poor">{t.familyInformation?.poor}</SelectItem>
               <SelectItem value="Lower middle class">
-                Lower middle class
+                {t.familyInformation?.lower}
               </SelectItem>
-              <SelectItem value="Middle class">Middle class</SelectItem>
+              <SelectItem value="Middle class">
+                {t.familyInformation?.middle}
+              </SelectItem>
               <SelectItem value="Upper middle class">
-                Upper middle class
+                {t.familyInformation?.upper}
               </SelectItem>
-              <SelectItem value="Rich">Rich</SelectItem>
-              <SelectItem value="Any">Any</SelectItem>
+              <SelectItem value="Rich">{t.familyInformation?.rich}</SelectItem>
+              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -193,7 +240,7 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <Label>Desired Qualities</Label>
+          <Label>{t.expectedLifePartner?.qualities}</Label>
           <Button
             type="button"
             onClick={addQuality}
@@ -201,7 +248,7 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
             className="bg-emerald-600 hover:bg-emerald-700"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Quality
+            {t.expectedLifePartner?.addQualityBtn}
           </Button>
         </div>
         <div className="space-y-2">
@@ -210,7 +257,7 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
               <Input
                 value={quality}
                 onChange={(e) => updateQuality(index, e.target.value)}
-                placeholder="e.g., Good mindset, Religious, Kind"
+                placeholder={t.expectedLifePartner?.desiredQualityPlaceHolder}
                 className="border-emerald-200 dark:border-emerald-700"
               />
               <Button
@@ -228,12 +275,10 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
 
       <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
         <h3 className="font-medium text-emerald-800 dark:text-emerald-200 mb-2">
-          Preference Guidelines
+          {t.expectedLifePartner?.guideLine}
         </h3>
         <p className="text-sm text-emerald-700 dark:text-emerald-300">
-          Remember that preferences are guidelines, not strict requirements.
-          Focus on character and compatibility over superficial qualities for a
-          successful marriage.
+          {t.expectedLifePartner?.guideDescription}
         </p>
       </div>
     </div>
