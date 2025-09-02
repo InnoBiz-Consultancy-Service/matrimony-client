@@ -1,3 +1,4 @@
+
 "use client";
 
 import type React from "react";
@@ -39,6 +40,8 @@ import {
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "@/app/(auth)/context/auth-context";
+import { manualPaymentTranslation } from "@/dictionary/manualPayment";
+import { useLanguage } from "@/hooks/use-language";
 
 interface SubscriptionPlan {
   id: string;
@@ -51,83 +54,86 @@ interface SubscriptionPlan {
   popular?: boolean;
 }
 
-const subscriptionPlans: Record<string, SubscriptionPlan> = {
-  premium: {
-    id: "premium",
-    name: "premium",
-    price: 999,
-    duration: "1 Month",
-    features: [
-      "Unlimited Profile Views",
-      "Premium Support",
-      "Advanced Search Filters",
-      "Profile Highlight",
-      "Messaging Feature",
-    ],
-    icon: Crown,
-    color: "from-amber-500 to-orange-600",
-    popular: true,
-  },
-  vip: {
-    id: "vip",
-    name: "vip",
-    price: 1999,
-    duration: "3 Months",
-    features: [
-      "All Premium Features",
-      "Private Consultation",
-      "Matchmaking Service",
-      "Profile Verification",
-      "Priority Support",
-      "Custom Profile Design",
-    ],
-    icon: Star,
-    color: "from-purple-500 to-pink-600",
-  },
-};
-
-const formSchema = z.object({
-  // bKash Payment Information
-  transactionId: z
-    .string()
-    .min(10, {
-      message: "Transaction ID must be at least 10 characters.",
-    })
-    .regex(/^[A-Z0-9]+$/, {
-      message:
-        "Transaction ID should contain only uppercase letters and numbers.",
-    }),
-  senderNumber: z
-    .string()
-    .min(11, {
-      message: "Please enter a valid bKash number.",
-    })
-    .regex(/^01[3-9]\d{8}$/, {
-      message: "Please enter a valid Bangladeshi phone number.",
-    }),
-  paidAmount: z.string().refine(
-    (val) => {
-      const num = Number.parseFloat(val);
-      return !isNaN(num) && num > 0;
-    },
-    {
-      message: "Please enter a valid amount.",
-    }
-  ),
-  paymentDate: z.string().min(1, {
-    message: "Please select payment date.",
-  }),
-  additionalNotes: z.string().optional(),
-});
-
 export default function BkashManualPayment() {
   const searchParams = useSearchParams();
   const planId = searchParams.get("plan") || "premium";
-  const selectedPlan = subscriptionPlans[planId];
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { user } = useAuth();
   const router = useRouter();
+
+  const { language } = useLanguage();
+  const t = manualPaymentTranslation[language];
+
+  const subscriptionPlans: Record<string, SubscriptionPlan> = {
+    premium: {
+      id: "premium",
+      name: t.premium,
+      price: 999,
+      duration: t.oneMonth,
+      features: [
+        t.unlimitedProfileViews,
+        t.premiumSupport,
+        t.advancedSearchFilters,
+        t.profileHighlight,
+        t.messagingFeature,
+      ],
+      icon: Crown,
+      color: "from-amber-500 to-orange-600",
+      popular: true,
+    },
+    vip: {
+      id: "vip",
+      name: t.vip,
+      price: 1999,
+      duration: t.threeMonths,
+      features: [
+        t.allPremiumFeatures,
+        t.privateConsultation,
+        t.matchmakingService,
+        t.profileVerification,
+        t.prioritySupport,
+        t.customProfileDesign,
+      ],
+      icon: Star,
+      color: "from-purple-500 to-pink-600",
+    },
+  };
+
+  const selectedPlan = subscriptionPlans[planId];
+
+  // Dynamic form schema based on language
+  const formSchema = z.object({
+    transactionId: z
+      .string()
+      .min(10, {
+        message: t.transactionIdMinLength,
+      })
+      .regex(/^[A-Z0-9]+$/, {
+        message: t.transactionIdRegex,
+      }),
+    senderNumber: z
+      .string()
+      .min(11, {
+        message: t.validBkashNumber,
+      })
+      .regex(/^01[3-9]\d{8}$/, {
+        message: t.validBangladeshiPhone,
+      }),
+    paidAmount: z.string().refine(
+      (val) => {
+        const num = Number.parseFloat(val);
+        return !isNaN(num) && num > 0;
+      },
+      {
+        message: t.validAmount,
+      }
+    ),
+    paymentDate: z.string().min(1, {
+      message: t.selectPaymentDate,
+    }),
+    additionalNotes: z.string().optional(),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -149,7 +155,9 @@ export default function BkashManualPayment() {
       const paidAmount = Number.parseFloat(values.paidAmount);
       if (selectedPlan && paidAmount !== selectedPlan.price) {
         toast.error(
-          `Please pay exactly ৳${selectedPlan.price} for ${selectedPlan.name} plan`
+          t.payExactAmount
+            .replace("{amount}", selectedPlan.price.toString())
+            .replace("{plan}", selectedPlan.name)
         );
         setIsSubmitting(false);
         return;
@@ -166,7 +174,7 @@ export default function BkashManualPayment() {
           email: userInfo.email,
           phone: userInfo.phone,
           approvalStatus: "pending",
-          durationInMonths: selectedPlan?.duration === "3 Month" ? 3 : 1,
+          durationInMonths: selectedPlan?.duration === t.threeMonths ? 3 : 1,
           subscriptionType: selectedPlan?.name,
           userId: user?.userId,
         },
@@ -179,11 +187,11 @@ export default function BkashManualPayment() {
       );
       console.log("Payment submission response:", response.data);
       localStorage.removeItem("userInfo");
-      toast.success("Payment Submitted Successfully!");
+      toast.success(t.paymentSubmittedSuccess);
       router.push("/payment/success");
     } catch (error) {
       console.log(error);
-      toast.error("Submission Failed");
+      toast.error(t.submissionFailed);
     } finally {
       setIsSubmitting(false);
     }
@@ -194,10 +202,8 @@ export default function BkashManualPayment() {
       <div className="min-h-screen flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <h2 className="text-xl font-semibold mb-2">Plan Not Found</h2>
-            <p className="text-muted-foreground">
-              Please select a valid subscription plan
-            </p>
+            <h2 className="text-xl font-semibold mb-2">{t.planNotFound}</h2>
+            <p className="text-muted-foreground">{t.selectValidPlan}</p>
           </CardContent>
         </Card>
       </div>
@@ -212,11 +218,9 @@ export default function BkashManualPayment() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            bKash Manual Payment
+            {t.bkashManualPayment}
           </h1>
-          <p className="text-muted-foreground">
-            Submit your bKash payment details for verification
-          </p>
+          <p className="text-muted-foreground">{t.submitPaymentDetails}</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -231,18 +235,18 @@ export default function BkashManualPayment() {
                 </div>
                 <div>
                   <CardTitle className="flex items-center gap-2">
-                    {selectedPlan.name} Plan
+                    {selectedPlan.name} {t.planText}
                     {selectedPlan.popular && (
                       <Badge
                         variant="secondary"
                         className="bg-gradient-to-r from-amber-500 to-orange-600 text-white"
                       >
-                        Popular
+                        {t.popular}
                       </Badge>
                     )}
                   </CardTitle>
                   <CardDescription>
-                    {selectedPlan.duration} subscription
+                    {selectedPlan.duration} {t.subscription}
                   </CardDescription>
                 </div>
               </div>
@@ -254,7 +258,7 @@ export default function BkashManualPayment() {
                   ৳{selectedPlan.price}
                 </div>
                 <div className="text-muted-foreground">
-                  for {selectedPlan.duration}
+                  {t.forDuration} {selectedPlan.duration}
                 </div>
               </div>
 
@@ -262,7 +266,7 @@ export default function BkashManualPayment() {
               <div>
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
                   <Shield className="h-5 w-5 text-green-600" />
-                  What&apos;s included:
+                  {t.whatsIncluded}
                 </h3>
                 <div className="space-y-3">
                   {selectedPlan.features.map((feature, index) => (
@@ -283,16 +287,16 @@ export default function BkashManualPayment() {
                 <div className="w-8 h-6 bg-gradient-to-r from-pink-600 to-red-600 rounded flex items-center justify-center">
                   <span className="text-white font-bold text-xs">bKash</span>
                 </div>
-                Payment Instructions
+                {t.paymentInstructions}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-pink-200">
                 <h4 className="font-semibold text-gray-700 dark:text-gray-100 mb-2">
-                  Step 1: Make Payment
+                  {t.step1MakePayment}
                 </h4>
                 <p className="text-sm text-gray-700 dark:text-gray-100 mb-2">
-                  Send money to our bKash merchant account:
+                  {t.sendMoneyInstruction}
                 </p>
                 <div className="bg-white dark:bg-gray-900 p-3 rounded border">
                   <div className="text-center">
@@ -300,7 +304,7 @@ export default function BkashManualPayment() {
                       01712-345678
                     </div>
                     <div className="text-sm text-gray-700 dark:text-gray-300">
-                      Merchant Account
+                      {t.merchantAccount}
                     </div>
                   </div>
                 </div>
@@ -308,21 +312,21 @@ export default function BkashManualPayment() {
 
               <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-blue-200">
                 <h4 className="font-semibold text-blue-900 dark:text-gray-100 mb-2">
-                  Step 2: Note Transaction Details
+                  {t.step2NoteDetails}
                 </h4>
                 <ul className="text-sm text-blue-800 dark:text-gray-300 space-y-1">
-                  <li>• Transaction ID</li>
-                  <li>• Your bKash number</li>
-                  <li>• Payment date</li>
+                  <li>{t.transactionId}</li>
+                  <li>{t.yourBkashNumber}</li>
+                  <li>{t.paymentDate}</li>
                 </ul>
               </div>
 
               <div className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 p-4 rounded-lg border border-green-200">
                 <h4 className="font-semibold text-green-900 dark:text-green-600 mb-2">
-                  Step 3: Submit Form
+                  {t.step3SubmitForm}
                 </h4>
                 <p className="text-sm text-green-800 dark:text-green-700">
-                  Fill out the form with your payment details for verification.
+                  {t.fillFormInstruction}
                 </p>
               </div>
 
@@ -330,12 +334,11 @@ export default function BkashManualPayment() {
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="h-4 w-4 text-amber-600" />
                   <h4 className="font-semibold text-amber-900 dark:text-amber-600">
-                    Verification Time
+                    {t.verificationTime}
                   </h4>
                 </div>
                 <p className="text-sm text-amber-800 dark:text-amber-700">
-                  Your payment will be verified within 24 hours and your
-                  subscription will be activated.
+                  {t.verificationDescription}
                 </p>
               </div>
             </CardContent>
@@ -346,11 +349,9 @@ export default function BkashManualPayment() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5" />
-                Payment Details
+                {t.paymentDetails}
               </CardTitle>
-              <CardDescription>
-                Enter your bKash payment information
-              </CardDescription>
+              <CardDescription>{t.enterBkashInfo}</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -361,7 +362,7 @@ export default function BkashManualPayment() {
                   {/* bKash Payment Information */}
                   <div className="space-y-4">
                     <h3 className="font-medium text-gray-900 dark:text-gray-300">
-                      bKash Payment Information
+                      {t.bkashPaymentInfo}
                     </h3>
 
                     <FormField
@@ -369,12 +370,17 @@ export default function BkashManualPayment() {
                       name="transactionId"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Transaction ID *</FormLabel>
+                          <FormLabel>
+                            {t.transactionIdLabel} {t.required}
+                          </FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., 8A5B2C9D1E" {...field} />
+                            <Input
+                              placeholder={t.transactionIdPlaceholder}
+                              {...field}
+                            />
                           </FormControl>
                           <FormDescription>
-                            The transaction ID from your bKash payment receipt
+                            {t.transactionIdDescription}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -386,12 +392,17 @@ export default function BkashManualPayment() {
                       name="senderNumber"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Your bKash Number *</FormLabel>
+                          <FormLabel>
+                            {t.yourBkashNumberLabel} {t.required}
+                          </FormLabel>
                           <FormControl>
-                            <Input placeholder="01xxxxxxxxx" {...field} />
+                            <Input
+                              placeholder={t.bkashNumberPlaceholder}
+                              {...field}
+                            />
                           </FormControl>
                           <FormDescription>
-                            The bKash number you used to send money
+                            {t.bkashNumberDescription}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -404,9 +415,14 @@ export default function BkashManualPayment() {
                         name="paidAmount"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Amount Paid *</FormLabel>
+                            <FormLabel>
+                              {t.amountPaidLabel} {t.required}
+                            </FormLabel>
                             <FormControl>
-                              <Input placeholder="999" {...field} />
+                              <Input
+                                placeholder={t.amountPaidPlaceholder}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -418,7 +434,9 @@ export default function BkashManualPayment() {
                         name="paymentDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Payment Date *</FormLabel>
+                            <FormLabel>
+                              {t.paymentDateLabel} {t.required}
+                            </FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -433,10 +451,10 @@ export default function BkashManualPayment() {
                       name="additionalNotes"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Additional Notes (Optional)</FormLabel>
+                          <FormLabel>{t.additionalNotesLabel}</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Any additional information about your payment..."
+                              placeholder={t.additionalNotesPlaceholder}
                               className="resize-none"
                               rows={3}
                               {...field}
@@ -459,19 +477,12 @@ export default function BkashManualPayment() {
                     {isSubmitting ? (
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Submitting...
+                        {t.submitting}
                       </div>
                     ) : (
-                      "Submit Payment Details"
+                      t.submitPaymentDetailsBtn
                     )}
                   </Button>
-
-                  {/* Security Note */}
-                  <div className="text-center text-xs text-muted-foreground">
-                    <Shield className="h-4 w-4 inline mr-1" />
-                    Your information is secure and will be verified within 24
-                    hours
-                  </div>
                 </form>
               </Form>
             </CardContent>
