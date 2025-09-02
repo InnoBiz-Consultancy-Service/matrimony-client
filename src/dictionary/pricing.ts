@@ -26,6 +26,7 @@ export const pricingTranslation = {
       interest: "Unlimited interest sending",
     },
     premiumBtn: "Get Premium",
+    whatsIncluded: "What's Included",
 
     vip: "VIP",
     vipDesc: "Get maximum benefits",
@@ -59,7 +60,7 @@ export const pricingTranslation = {
     },
     freeBtn: "শুরু করুন",
 
-    premium: "প্রিমিয়াম",
+    premium: "Premium",
     premiumDesc: "সবচেয়ে জনপ্রিয় প্ল্যান",
     premiumPrice: "১,৫০০ টাকা",
     premiumDuration: "৩ মাস",
@@ -71,7 +72,7 @@ export const pricingTranslation = {
     },
     premiumBtn: "প্রিমিয়াম নিন",
 
-    vip: "ভিআইপি",
+    vip: "VIP",
     vipDesc: "সর্বোচ্চ সুবিধা পান",
     vipPrice: "৫,০০০ টাকা",
     vipDuration: "১ বছর",
