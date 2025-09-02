@@ -85,6 +85,12 @@ export const biodataTranslation = {
       male: "Male",
       female: "Female",
       quranReading: "Do you have reading quran.",
+      selectGender: "Select Gender",
+      selectFiqh: "Select Fiqh",
+      hanafi: "Hanafi",
+      shafi: "Shafi",
+      maliki: "Maliki",
+      hanbali: "Hanbali",
     },
 
     OccupationalInformation: {
@@ -264,6 +270,12 @@ export const biodataTranslation = {
       male: "পুরুষ",
       female: "মহিলা",
       quranReading: "আপনি কি কুরআন পরেন",
+      selectGender: "লিঙ্গ নির্বাচন করুন",
+      selectFiqh: "ফিকহ নির্বাচন করুন",
+      hanafi: "হানাফি",
+      shafi: "শাফি",
+      maliki: "মালিকি",
+      hanbali: "হাম্বলি",
     },
 
     OccupationalInformation: {

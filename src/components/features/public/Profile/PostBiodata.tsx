@@ -88,9 +88,9 @@ export default function BiodataForm() {
     console.log("=== BIODATA FORM DATA (AI FORMAT) ===");
     console.log(JSON.stringify(formData, null, 2));
     console.log("=== END BIODATA DATA ===");
-    setCookie("profileStatus", "true");
+    // setCookie("profileStatus", "true");
     alert("Form submitted! Check console for data.");
-    window.location.href = "/";
+    // window.location.href = "/";
   };
 
   const CurrentStepComponent = steps[currentStep - 1].component;

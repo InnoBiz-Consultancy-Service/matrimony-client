@@ -55,7 +55,7 @@ export default function MarriageStep({ data, updateData }: StepProps) {
             handleChange("studyContinue", value === "" ? "not_decided" : value)
           }
         >
-          <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
+          <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
             <SelectValue placeholder="Select an option" />
           </SelectTrigger>
           <SelectContent>
@@ -78,21 +78,21 @@ export default function MarriageStep({ data, updateData }: StepProps) {
           value={marriage.reason}
           onValueChange={(value) => handleChange("reason", value)}
         >
-          <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
+          <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
             <SelectValue placeholder="Select reason" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="personal">
+            <SelectItem value={t.marriageRelatedInformation?.personal}>
               {t.marriageRelatedInformation?.personal}
             </SelectItem>
-            <SelectItem value="family">
+            <SelectItem value={t.marriageRelatedInformation?.family}>
               {t.marriageRelatedInformation?.family}
             </SelectItem>
             {/* <SelectItem value="religious">{t.marriageRelatedInformation?.}</SelectItem> */}
-            <SelectItem value="social">
+            <SelectItem value={t.marriageRelatedInformation?.social}>
               {t.marriageRelatedInformation?.social}
             </SelectItem>
-            <SelectItem value="other">
+            <SelectItem value={t.marriageRelatedInformation?.other}>
               {t.marriageRelatedInformation?.other}
             </SelectItem>
           </SelectContent>
@@ -109,23 +109,23 @@ export default function MarriageStep({ data, updateData }: StepProps) {
             handleChange("jobStatus", value === "" ? "not_decided" : value)
           }
         >
-          <SelectTrigger className="border-emerald-200 dark:border-emerald-700">
+          <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
             <SelectValue placeholder="Select job status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="continue">
+            <SelectItem value={t.marriageRelatedInformation?.continueJob}>
               {t.marriageRelatedInformation?.continueJob}
             </SelectItem>
-            <SelectItem value="change">
+            <SelectItem value={t.marriageRelatedInformation?.changeJob}>
               {t.marriageRelatedInformation?.changeJob}
             </SelectItem>
-            <SelectItem value="quit">
+            <SelectItem value={t.marriageRelatedInformation?.quitJob}>
               {t.marriageRelatedInformation?.quitJob}
             </SelectItem>
-            <SelectItem value="start">
+            <SelectItem value={t.marriageRelatedInformation?.startJob}>
               {t.marriageRelatedInformation?.startJob}
             </SelectItem>
-            <SelectItem value="not_decided">
+            <SelectItem value={t.marriageRelatedInformation?.noDecideJob}>
               {t.marriageRelatedInformation?.noDecideJob}
             </SelectItem>
           </SelectContent>
