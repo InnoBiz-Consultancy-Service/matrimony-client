@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PledgeInfo, StepProps } from "@/types/biodataForm";
+import { useLanguage } from "@/hooks/use-language";
+import { biodataTranslation } from "@/dictionary/biodata";
 
 export default function PledgeStep({ data, updateData }: StepProps) {
   const [pledge, setPledge] = useState<PledgeInfo>({
@@ -21,16 +23,16 @@ export default function PledgeStep({ data, updateData }: StepProps) {
     setPledge((prev) => ({ ...prev, [field]: value }));
   };
 
+  const { language } = useLanguage();
+  const t = biodataTranslation[language];
+
   return (
     <div className="space-y-8">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-emerald-800 dark:text-emerald-200 mb-4">
-          Final Pledge
+          {t.pledge?.finalPledge}
         </h2>
-        <p className="text-muted-foreground">
-          Please read and confirm the following statements before submitting
-          your biodata.
-        </p>
+        <p className="text-muted-foreground">{t.pledge?.pledgeDescription}</p>
       </div>
 
       <div className="space-y-6">
@@ -48,11 +50,10 @@ export default function PledgeStep({ data, updateData }: StepProps) {
               htmlFor="parentsAware"
               className="text-base font-medium cursor-pointer"
             >
-              Parents/Guardians Awareness
+              {t.pledge?.parentsAware}
             </Label>
             <p className="text-sm text-muted-foreground mt-1">
-              I confirm that my parents/guardians are aware of my intention to
-              get married and I have their consent for this biodata submission.
+              {t.pledge?.confirmAwarness}
             </p>
           </div>
         </div>
@@ -71,12 +72,10 @@ export default function PledgeStep({ data, updateData }: StepProps) {
               htmlFor="informationAccurate"
               className="text-base font-medium cursor-pointer"
             >
-              Information Accuracy
+              {t.pledge?.nikahResponsibility}
             </Label>
             <p className="text-sm text-muted-foreground mt-1">
-              I declare that all the information provided in this biodata is
-              true and accurate to the best of my knowledge. I understand that
-              any false information may lead to rejection of my proposal.
+              {t.pledge?.confirmResponsibilities}
             </p>
           </div>
         </div>
@@ -95,12 +94,10 @@ export default function PledgeStep({ data, updateData }: StepProps) {
               htmlFor="nikahResponsibility"
               className="text-base font-medium cursor-pointer"
             >
-              Marriage Responsibility
+              {t.pledge?.confirmResponsibilities}
             </Label>
             <p className="text-sm text-muted-foreground mt-1">
-              I understand the responsibilities of marriage in Islam and am
-              committed to fulfilling my duties as a spouse according to Islamic
-              principles.
+              {t.pledge?.confirmResponsibilities}
             </p>
           </div>
         </div>
@@ -108,27 +105,19 @@ export default function PledgeStep({ data, updateData }: StepProps) {
 
       <div className="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg">
         <h3 className="font-medium text-yellow-800 dark:text-yellow-200 mb-3">
-          Important Reminders
+          {t.pledge?.importantRemainder}
         </h3>
         <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-2">
-          <li>
-            • Marriage is a sacred bond in Islam that requires commitment and
-            responsibility
-          </li>
-          <li>
-            • Always involve your parents/guardians in the marriage process
-          </li>
-          <li>• Be honest and transparent in all communications</li>
-          <li>• Pray Istikhara before making any final decisions</li>
-          <li>• Focus on character and deen over worldly matters</li>
+          <li>{t.pledge?.reminder1}</li>
+          <li>{t.pledge?.reminder2}</li>
+          <li>{t.pledge?.reminder3}</li>
+          <li>{t.pledge?.reminder4}</li>
+          <li>{t.pledge?.reminder5}</li>
         </ul>
       </div>
 
       <div className="text-center text-sm text-muted-foreground">
-        <p>
-          By checking all the boxes above and submitting this form, you agree to
-          our terms and conditions for biodata matching services.
-        </p>
+        <p>{t.pledge?.conclusion}</p>
       </div>
     </div>
   );
