@@ -158,6 +158,26 @@ export const biodataTranslation = {
         "By Allah, testify that the all information given is true",
       nikahResponsibility:
         "If you provide any false information, nikah.com will not take any responsibility for the conventional law and the hereafter. Do you agree?",
+      finalPledge: "Final Pledge",
+      pledgeDescription:
+        "Please read and confirm the following statements before submitting your biodata.",
+      confirmAwarness:
+        "I confirm that my parents/guardians are aware of my intention to get married and I have their consent for this biodata submission.",
+      confirmAccurate:
+        "I declare that all the information provided in this biodata is true and accurate to the best of my knowledge. I understand that any false information may lead to rejection of my proposal.",
+      confirmResponsibilities:
+        "I understand the responsibilities of marriage in Islam and am committed to fulfilling my duties as a spouse according to Islamic principles.",
+      marriageResponsiblity: "Marriage Responsibilities",
+      importantRemainder: "Important Reminders",
+      reminder1:
+        "• Marriage is a sacred bond in Islam that requires commitment and responsibility",
+      reminder2:
+        "• Always involve your parents/guardians in the marriage process",
+      reminder3: "• Be honest and transparent in all communications",
+      reminder4: "• Pray Istikhara before making any final decisions",
+      reminder5: "• Focus on character and deen over worldly matters",
+      conclusion:
+        " By checking all the boxes above and submitting this form, you agree to our terms and conditions for biodata matching services.",
     },
   },
 
@@ -317,6 +337,26 @@ export const biodataTranslation = {
       informationAccurate: "আল্লাহর নামে সাক্ষ্য দিন, আপনার দেওয়া সব তথ্য সত্য",
       nikahResponsibility:
         "আপনি যদি কোনো মিথ্যা তথ্য দেন, তবে nikah.com কোনো দায়ভার নেবে না—না দুনিয়াতে, না আখিরাতে। আপনি কি রাজি?",
+      finalPledge: "চূড়ান্ত অঙ্গীকার",
+      pledgeDescription:
+        "আপনার বায়োডাটা জমা দেওয়ার আগে অনুগ্রহ করে নিম্নলিখিত বিবৃতিগুলি পড়ুন এবং নিশ্চিত করুন।",
+      confirmAwarness:
+        "আমি নিশ্চিত করছি যে আমার বাবা-মা/অভিভাবকরা আমার বিয়ে করার ইচ্ছা সম্পর্কে অবগত এবং এই বায়োডাটা জমা দেওয়ার জন্য আমার তাদের সম্মতি রয়েছে।",
+      confirmAccurate:
+        "আমি ঘোষণা করছি যে এই বায়োডাটাতে প্রদত্ত সমস্ত তথ্য আমার জ্ঞানমতে সত্য এবং নির্ভুল। আমি বুঝতে পারছি যে যেকোনও মিথ্যা তথ্যের কারণে আমার প্রস্তাব প্রত্যাখ্যান হতে পারে।",
+      marriageResponsiblity: "বিবাহের দায়িত্ব",
+      confirmResponsibilities:
+        "আমি ইসলামে বিবাহের দায়িত্বগুলো বুঝি এবং ইসলামিক নীতিমালা অনুযায়ী স্বামী/স্ত্রী হিসেবে আমার দায়িত্ব পালনে প্রতিশ্রুতিবদ্ধ।",
+      importantRemainder: "গুরুত্বপূর্ণ অনুস্মারক",
+      reminder1:
+        "• ইসলামে বিবাহ একটি পবিত্র বন্ধন যার জন্য অঙ্গীকার এবং দায়িত্ব প্রয়োজন।",
+      reminder2:
+        "• বিবাহ প্রক্রিয়ায় সর্বদা আপনার বাবা-মা/অভিভাবকদের জড়িত করুন।",
+      reminder3: "• সকল যোগাযোগে সৎ এবং স্বচ্ছ থাকুন",
+      reminder4: "• চূড়ান্ত সিদ্ধান্ত নেওয়ার আগে ইস্তিখারার নামাজ পড়ুন",
+      reminder5: "• পার্থিব বিষয়ের চেয়ে চরিত্র ও দ্বীনের উপর মনোযোগ দিন",
+      conclusion:
+        "উপরের সমস্ত বাক্সে টিক চিহ্ন দিয়ে এবং এই ফর্মটি জমা দেওয়ার মাধ্যমে, আপনি বায়োডাটা ম্যাচিং পরিষেবার জন্য আমাদের শর্তাবলীতে সম্মত হচ্ছেন।",
     },
   },
 };
