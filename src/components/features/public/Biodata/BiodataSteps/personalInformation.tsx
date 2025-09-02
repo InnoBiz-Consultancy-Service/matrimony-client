@@ -64,7 +64,7 @@ export default function PersonalInfoStep({ data, updateData }: StepProps) {
             onValueChange={(value) => handleChange("gender", value)}
           >
             <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
-              <SelectValue placeholder="Select gender" />
+              <SelectValue placeholder={t.personalInformation?.selectGender} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Male">
@@ -111,13 +111,21 @@ export default function PersonalInfoStep({ data, updateData }: StepProps) {
           onValueChange={(value) => handleChange("fiqh", value)}
         >
           <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
-            <SelectValue placeholder="Select fiqh" />
+            <SelectValue placeholder={t.personalInformation?.selectFiqh} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Hanafi">Hanafi</SelectItem>
-            <SelectItem value="Shafi">Shafi</SelectItem>
-            <SelectItem value="Maliki">Maliki</SelectItem>
-            <SelectItem value="Hanbali">Hanbali</SelectItem>
+            <SelectItem value={t.personalInformation?.hanafi}>
+              {t.personalInformation?.hanafi}
+            </SelectItem>
+            <SelectItem value={t.personalInformation?.shafi}>
+              {t.personalInformation?.shafi}
+            </SelectItem>
+            <SelectItem value={t.personalInformation?.maliki}>
+              {t.personalInformation?.maliki}
+            </SelectItem>
+            <SelectItem value={t.personalInformation?.hanbali}>
+              {t.personalInformation?.hanbali}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

@@ -88,16 +88,18 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Fair">
+              <SelectItem value={t.expectedLifePartner?.fair}>
                 {t.expectedLifePartner?.fair}
               </SelectItem>
-              <SelectItem value="Medium">
+              <SelectItem value={t.expectedLifePartner?.medium}>
                 {t.expectedLifePartner?.medium}
               </SelectItem>
-              <SelectItem value="Dark">
+              <SelectItem value={t.expectedLifePartner?.dark}>
                 {t.expectedLifePartner?.dark}
               </SelectItem>
-              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
+              <SelectItem value={t.expectedLifePartner?.any}>
+                {t.expectedLifePartner?.any}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -178,16 +180,18 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Never married">
+              <SelectItem value={t.expectedLifePartner?.neverMarried}>
                 {t.expectedLifePartner?.neverMarried}
               </SelectItem>
-              <SelectItem value="Divorced">
+              <SelectItem value={t.expectedLifePartner?.divorced}>
                 {t.expectedLifePartner?.divorced}
               </SelectItem>
-              <SelectItem value="Widowed">
+              <SelectItem value={t.expectedLifePartner?.widowed}>
                 {t.expectedLifePartner?.widowed}
               </SelectItem>
-              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
+              <SelectItem value={t.expectedLifePartner?.any}>
+                {t.expectedLifePartner?.any}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -221,18 +225,24 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Poor">{t.familyInformation?.poor}</SelectItem>
-              <SelectItem value="Lower middle class">
+              <SelectItem value={t.familyInformation?.poor}>
+                {t.familyInformation?.poor}
+              </SelectItem>
+              <SelectItem value={t.familyInformation?.lower}>
                 {t.familyInformation?.lower}
               </SelectItem>
-              <SelectItem value="Middle class">
+              <SelectItem value={t.familyInformation?.middle}>
                 {t.familyInformation?.middle}
               </SelectItem>
-              <SelectItem value="Upper middle class">
+              <SelectItem value={t.familyInformation?.upper}>
                 {t.familyInformation?.upper}
               </SelectItem>
-              <SelectItem value="Rich">{t.familyInformation?.rich}</SelectItem>
-              <SelectItem value="Any">{t.expectedLifePartner?.any}</SelectItem>
+              <SelectItem value={t.familyInformation?.rich}>
+                {t.familyInformation?.rich}
+              </SelectItem>
+              <SelectItem value={t.expectedLifePartner?.any}>
+                {t.expectedLifePartner?.any}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
