@@ -65,7 +65,7 @@ export default function SearchFilters() {
       maritalStatus: "",
     },
   });
-  const maritalStatuses = [t.naverMarried, t.divorced, t.married];
+  // const maritalStatuses = [t.naverMarried, t.divorced, t.married];
 
   // Get unique districts for the selected division
   const filteredDistricts = React.useMemo(() => {
@@ -326,17 +326,24 @@ export default function SearchFilters() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                            {maritalStatuses.map((status) => (
-                              <SelectItem
-                                key={status}
-                                value={status
-                                  .toLowerCase()
-                                  .replace(/\s+/g, "-")}
-                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                              >
-                                {status}
-                              </SelectItem>
-                            ))}
+                            <SelectItem
+                              value={"Divorced".toLowerCase()}
+                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                            >
+                              {t.divorced}
+                            </SelectItem>
+                            <SelectItem
+                              value={"Naver Married".toLowerCase()}
+                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                            >
+                              {t.naverMarried}
+                            </SelectItem>
+                            <SelectItem
+                              value={"Married".toLowerCase()}
+                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                            >
+                              {t.married}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
