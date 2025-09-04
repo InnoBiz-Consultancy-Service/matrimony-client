@@ -20,6 +20,7 @@ export default function PersonalInfoStep({ data, updateData }: StepProps) {
     name: "",
     gender: "",
     dress: "",
+    age: "",
     prayerHabit: "",
     maintainMahram: "",
     quranReading: "",
@@ -104,30 +105,43 @@ export default function PersonalInfoStep({ data, updateData }: StepProps) {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label htmlFor="fiqh">{t.personalInformation?.fiqh}</Label>
-        <Select
-          value={personal.fiqh}
-          onValueChange={(value) => handleChange("fiqh", value)}
-        >
-          <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
-            <SelectValue placeholder={t.personalInformation?.selectFiqh} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={t.personalInformation?.hanafi}>
-              {t.personalInformation?.hanafi}
-            </SelectItem>
-            <SelectItem value={t.personalInformation?.shafi}>
-              {t.personalInformation?.shafi}
-            </SelectItem>
-            <SelectItem value={t.personalInformation?.maliki}>
-              {t.personalInformation?.maliki}
-            </SelectItem>
-            <SelectItem value={t.personalInformation?.hanbali}>
-              {t.personalInformation?.hanbali}
-            </SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-3">
+          <Label htmlFor="fiqh">{t.personalInformation?.fiqh}</Label>
+          <Select
+            value={personal.fiqh}
+            onValueChange={(value) => handleChange("fiqh", value)}
+          >
+            <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+              <SelectValue placeholder={t.personalInformation?.selectFiqh} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={t.personalInformation?.hanafi}>
+                {t.personalInformation?.hanafi}
+              </SelectItem>
+              <SelectItem value={t.personalInformation?.shafi}>
+                {t.personalInformation?.shafi}
+              </SelectItem>
+              <SelectItem value={t.personalInformation?.maliki}>
+                {t.personalInformation?.maliki}
+              </SelectItem>
+              <SelectItem value={t.personalInformation?.hanbali}>
+                {t.personalInformation?.hanbali}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-3">
+          <Label>বয়স *</Label>
+          <Input
+            id="age"
+            type="number"
+            value={personal.age}
+            onChange={(e) => handleChange("age", e.target.value)}
+            placeholder="e.g., 20"
+            className="border-emerald-200 dark:border-emerald-700"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

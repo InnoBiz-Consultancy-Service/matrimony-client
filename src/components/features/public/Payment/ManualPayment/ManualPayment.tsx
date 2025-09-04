@@ -1,4 +1,3 @@
-
 "use client";
 
 import type React from "react";
@@ -175,7 +174,7 @@ export default function BkashManualPayment() {
           phone: userInfo.phone,
           approvalStatus: "pending",
           durationInMonths: selectedPlan?.duration === t.threeMonths ? 3 : 1,
-          subscriptionType: selectedPlan?.name,
+          subscriptionType: selectedPlan?.id,
           userId: user?.userId,
         },
         {

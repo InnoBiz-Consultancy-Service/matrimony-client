@@ -1,6 +1,7 @@
 export interface PersonalInfo {
   name: string;
   gender: string;
+  age: string;
   dress: string;
   prayerHabit: string;
   maintainMahram: string;
@@ -119,4 +120,10 @@ export interface LocationData {
   lat: string;
   lon: string;
   url: string;
+}
+
+export interface DivisionProps {
+  division_id: string;
+  divisionName: string;
+  bnDivisionName: string;
 }

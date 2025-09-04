@@ -15,6 +15,9 @@ import MarriageStep from "../Biodata/BiodataSteps/marriageStep";
 import PreferenceStep from "../Biodata/BiodataSteps/preferenceStep";
 import PledgeStep from "../Biodata/BiodataSteps/pledgeStep";
 import { setCookie } from "@/app/(auth)/login/page";
+import { useAuth } from "@/app/(auth)/context/auth-context";
+import axios from "axios";
+import { toast } from "sonner";
 
 const STORAGE_KEY = "biodata-form-data";
 const STEP_KEY = "biodata-current-step";
@@ -35,6 +38,7 @@ export default function BiodataForm() {
   const [formData, setFormData] = useState<BiodataFormData>({});
   const [mounted, setMounted] = useState(false);
 
+  const { user } = useAuth();
   // Load data from localStorage on mount
   useEffect(() => {
     setMounted(true);
@@ -84,13 +88,51 @@ export default function BiodataForm() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log("=== BIODATA FORM DATA (AI FORMAT) ===");
-    console.log(JSON.stringify(formData, null, 2));
-    console.log("=== END BIODATA DATA ===");
-    // setCookie("profileStatus", "true");
-    alert("Form submitted! Check console for data.");
-    // window.location.href = "/";
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("No authentication token found");
+      }
+
+      // Add user information to payload
+      const payload = {
+        ...formData,
+        email: user?.userEmail,
+        name: user?.name,
+        userId: user?.userId,
+        age: formData?.personal?.age,
+        gender: user?.gender
+      };
+      console.log(payload)
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      console.log("Profile update successful:", response.data);
+      toast.success("Profile post successfully!");
+
+      return response.data;
+    } catch (error: unknown) {
+      console.error("Profile post failed:", error);
+
+      let errorMessage = "Failed to post profile. Please try again.";
+      if (error instanceof Error) {
+        errorMessage = error.message || errorMessage;
+      } else if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || errorMessage;
+      }
+
+      toast.error(errorMessage);
+      throw error;
+    }
   };
 
   const CurrentStepComponent = steps[currentStep - 1].component;
