@@ -10,9 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AddressInfo, LocationData, StepProps } from "@/types/biodataForm";
+import { AddressInfo, DivisionProps, StepProps } from "@/types/biodataForm";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
+
+import divisionsData from "../../../../../../public/division.json";
+import districtsData from "../../../../../../public/district.json";
+import upazilasData from "../../../../../../public/upzila.json";
 
 export default function AddressStep({ data, updateData }: StepProps) {
   const [address, setAddress] = useState<AddressInfo>({
@@ -32,42 +36,23 @@ export default function AddressStep({ data, updateData }: StepProps) {
     ...data.address,
   });
 
-  const [divisions, setDivisions] = useState<LocationData[]>([]);
-  const [districts, setDistricts] = useState<LocationData[]>([]);
-  const [upazilas, setUpazilas] = useState<LocationData[]>([]);
-  const [presentDistricts, setPresentDistricts] = useState<LocationData[]>([]);
-  const [presentUpazilas, setPresentUpazilas] = useState<LocationData[]>([]);
+  const [districts, setDistricts] = useState<any[]>([]);
+  const [upazilas, setUpazilas] = useState<any[]>([]);
+  const [presentDistricts, setPresentDistricts] = useState<any[]>([]);
+  const [presentUpazilas, setPresentUpazilas] = useState<any[]>([]);
 
   const { language } = useLanguage();
   const t = biodataTranslation[language];
 
-  // Load location data
-  useEffect(() => {
-    // Load divisions
-    fetch("../../../../../../public/division.json")
-      .then((res) => res.json())
-      .then((data) => setDivisions(data))
-      .catch(() => {
-        // // Fallback data
-        // setDivisions([
-        //   { division_id: "1", divisionName: "Chattagram", bnDivisionName: "চট্টগ্রাম" },
-        //   { division_id: "2", divisionName: "Rajshahi", bnDivisionName: "রাজশাহী" },
-        //   { division_id: "3", divisionName: "Khulna", bnDivisionName: "খুলনা" },
-        //   { division_id: "4", divisionName: "Barisal", bnDivisionName: "বরিশাল" },
-        //   { division_id: "5", divisionName: "Sylhet", bnDivisionName: "সিলেট" },
-        //   { division_id: "6", divisionName: "Dhaka", bnDivisionName: "ঢাকা" },
-        //   { division_id: "7", divisionName: "Rangpur", bnDivisionName: "রংপুর" },
-        //   { division_id: "8", divisionName: "Mymensingh", bnDivisionName: "ময়মনসিংহ" },
-        // ])
-        console.log("have some problems");
-      });
-  }, []);
-  console.log(divisions);
+  // ✅ Static data - no loading needed
+  const divisions = divisionsData as DivisionProps[];
 
+  // Update parent component when address changes
   useEffect(() => {
     updateData({ address });
   }, [address, updateData]);
 
+  // Load districts when permanent division changes
   const handlePermanentDivisionChange = (divisionName: string) => {
     setAddress((prev) => ({
       ...prev,
@@ -79,36 +64,37 @@ export default function AddressStep({ data, updateData }: StepProps) {
       },
     }));
 
-    // Load districts for this division
-    fetch("/districts.json")
-      .then((res) => res.json())
-      .then((data: LocationData[]) => {
-        const filteredDistricts = data.filter(
-          (d) => d.divisionName === divisionName
-        );
-        setDistricts(filteredDistricts);
-      })
-      .catch(() => setDistricts([]));
+    // Filter districts for this division
+    const filteredDistricts = districtsData.filter(
+      (d: any) => d.divisionName === divisionName
+    );
+
+    // Remove duplicates
+    const uniqueDistricts = filteredDistricts.filter(
+      (district: any, index: number, self: any[]) =>
+        index ===
+        self.findIndex((d) => d.districtsName === district.districtsName)
+    );
+
+    setDistricts(uniqueDistricts);
   };
 
+  // Load upazilas when permanent district changes
   const handlePermanentDistrictChange = (districtName: string) => {
     setAddress((prev) => ({
       ...prev,
       permanent: { ...prev.permanent, district: districtName, upazila: "" },
     }));
 
-    // Load upazilas for this district
-    fetch("/upazilas.json")
-      .then((res) => res.json())
-      .then((data: LocationData[]) => {
-        const filteredUpazilas = data.filter(
-          (u) => u.districtsName === districtName
-        );
-        setUpazilas(filteredUpazilas);
-      })
-      .catch(() => setUpazilas([]));
+    // Filter upazilas for this district
+    const filteredUpazilas = upazilasData.filter(
+      (u: any) => u.districtsName === districtName
+    );
+
+    setUpazilas(filteredUpazilas);
   };
 
+  // Load districts when present division changes
   const handlePresentDivisionChange = (divisionName: string) => {
     setAddress((prev) => ({
       ...prev,
@@ -120,34 +106,34 @@ export default function AddressStep({ data, updateData }: StepProps) {
       },
     }));
 
-    // Load districts for this division
-    fetch("/districts.json")
-      .then((res) => res.json())
-      .then((data: LocationData[]) => {
-        const filteredDistricts = data.filter(
-          (d) => d.divisionName === divisionName
-        );
-        setPresentDistricts(filteredDistricts);
-      })
-      .catch(() => setPresentDistricts([]));
+    // Filter districts for this division
+    const filteredDistricts = districtsData.filter(
+      (d: any) => d.divisionName === divisionName
+    );
+
+    // Remove duplicates
+    const uniqueDistricts = filteredDistricts.filter(
+      (district: any, index: number, self: any[]) =>
+        index ===
+        self.findIndex((d) => d.districtsName === district.districtsName)
+    );
+
+    setPresentDistricts(uniqueDistricts);
   };
 
+  // Load upazilas when present district changes
   const handlePresentDistrictChange = (districtName: string) => {
     setAddress((prev) => ({
       ...prev,
       present: { ...prev.present, district: districtName, upazila: "" },
     }));
 
-    // Load upazilas for this district
-    fetch("/upazilas.json")
-      .then((res) => res.json())
-      .then((data: LocationData[]) => {
-        const filteredUpazilas = data.filter(
-          (u) => u.districtsName === districtName
-        );
-        setPresentUpazilas(filteredUpazilas);
-      })
-      .catch(() => setPresentUpazilas([]));
+    // Filter upazilas for this district
+    const filteredUpazilas = upazilasData.filter(
+      (u: any) => u.districtsName === districtName
+    );
+
+    setPresentUpazilas(filteredUpazilas);
   };
 
   return (
