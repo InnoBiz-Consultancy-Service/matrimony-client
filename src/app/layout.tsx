@@ -38,7 +38,6 @@
 //   );
 // }
 
-
 import { Toaster } from "sonner";
 import { AuthProvider } from "./(auth)/context/auth-context";
 import "./globals.css";
@@ -72,7 +71,21 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
-            <Toaster />
+            <Toaster
+              position="top-right"
+              richColors
+              closeButton
+              toastOptions={{
+                style: {
+                  borderRadius: "12px",
+                  fontSize: "14px",
+                  padding: "12px 16px",
+                },
+                classNames: {
+                  toast: "shadow-lg", // সব টোস্টে shadow থাকবে
+                },
+              }}
+            />
           </AuthProvider>
         </main>
       </body>

@@ -4,17 +4,14 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import axios from "axios";
-import { Profile } from "@/types/bioData";
+import axios, { AxiosError } from "axios";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import femaleAvatar from "../../../../../../public/men_avatar.webp";
 import maleAvatar from "../../../../../../public/female_avatar.jpg";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
 import {
   Briefcase,
-  FileText,
   GraduationCap,
   Heart,
   MapPin,
@@ -24,6 +21,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BiodataType } from "@/types/publicBiodata";
+import { toast } from "sonner";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
@@ -68,8 +66,10 @@ export default function Biodata({ id }: { id: string }) {
         }
       );
       console.log("Interest sent successfully:", response.data);
-    } catch (error) {
-      console.error("Error sending interest:", error);
+      toast.success("Interest sent successfully");
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -119,9 +119,9 @@ export default function Biodata({ id }: { id: string }) {
                   <Avatar className="h-40 w-40 ring-4 ring-white dark:ring-gray-700 shadow-lg">
                     <AvatarImage
                       src={
-                        biodata?.gender === "male"
+                        biodata?.gender === "female"
                           ? maleAvatar.src
-                          : maleAvatar.src
+                          : femaleAvatar.src
                       }
                       alt={biodata?.name}
                     />
@@ -135,53 +135,54 @@ export default function Biodata({ id }: { id: string }) {
                   {biodata?.name}
                 </h2>
 
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
-                        {t.singleBiodata?.typesOfBiodata}
-                      </TableCell>
-                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
-                        <Badge
-                          variant="secondary"
-                          className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300"
-                        >
-                          {biodata?.gender === "male"
-                            ? t.singleBiodata?.maleBiodata
-                            : t.singleBiodata?.femaleBiodata}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
-                        {t.personalInformation?.age}
-                      </TableCell>
-                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
-                        {biodata?.age}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
-                        {t.expectedLifePartner?.complexion}
-                      </TableCell>
-                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.complexion}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
-                        {t.singleBiodata?.nationality}
-                      </TableCell>
-                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
-                        {biodata?.address?.country}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-3">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0">
+                      {t.singleBiodata?.typesOfBiodata}
+                    </div>
+                    <div className="flex-1 text-right text-gray-800 dark:text-gray-100">
+                      <Badge
+                        variant="secondary"
+                        className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 whitespace-nowrap"
+                      >
+                        {biodata?.gender === "male"
+                          ? t.singleBiodata?.maleBiodata
+                          : t.singleBiodata?.femaleBiodata}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-3">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0">
+                      {t.personalInformation?.age}
+                    </div>
+                    <div className="flex-1 text-right text-gray-800 dark:text-gray-100 break-words leading-relaxed">
+                      {biodata?.age}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-3">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0">
+                      {t.expectedLifePartner?.complexion}
+                    </div>
+                    <div className="flex-1 text-right text-gray-800 dark:text-gray-100 break-words leading-relaxed">
+                      {biodata?.preference?.complexion}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-3">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0">
+                      {t.singleBiodata?.nationality}
+                    </div>
+                    <div className="flex-1 text-right text-gray-800 dark:text-gray-100 break-words leading-relaxed">
+                      {biodata?.address?.country}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            <Button className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800">
+            <Button
+              onClick={handleSendInterest}
+              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800"
+            >
               <Heart className="w-4 h-4 mr-2" />
               {t.sendInterest}
             </Button>
@@ -198,42 +199,39 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.address?.permanentAddress}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.address?.permanent?.division},{" "}
-                        {biodata?.address?.permanent?.district},{" "}
-                        {biodata?.address?.permanent?.upazila},{" "}
-                        {t.address?.address}:{" "}
-                        {biodata?.address?.permanent?.address}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.address?.presentAddress}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.address?.present?.division},{" "}
-                        {biodata?.address?.present?.district},{" "}
-                        {biodata?.address?.present?.upazila},{" "}
-                        {t.address?.address}:{" "}
-                        {biodata?.address?.present?.address}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.address?.whereDidYouGrow}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.address?.grewUpAt}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.address?.permanentAddress}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.address?.permanent?.division},{" "}
+                      {biodata?.address?.permanent?.district},{" "}
+                      {biodata?.address?.permanent?.upazila},{" "}
+                      {t.address?.address}:{" "}
+                      {biodata?.address?.permanent?.address}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.address?.presentAddress}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.address?.present?.division},{" "}
+                      {biodata?.address?.present?.district},{" "}
+                      {biodata?.address?.present?.upazila}, {t.address?.address}
+                      : {biodata?.address?.present?.address}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.address?.whereDidYouGrow}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.address?.grewUpAt}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -246,44 +244,63 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.educationalQualification?.educationMethod}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.education?.method}
-                      </TableCell>
-                    </TableRow>
-                    {biodata?.education?.history.map((edu, idx) => (
-                      <TableRow
-                        key={idx}
-                        className="border-gray-200 dark:border-gray-700"
-                      >
-                        <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                          {edu.level === "SSC"
-                            ? t.educationalQualification?.sscDakhilEqulalent
-                            : edu.level === "HSC"
-                            ? t.educationalQualification?.hscAlimEquivalent
-                            : t.educationalQualification?.graduation}
-                          :
-                        </TableCell>
-                        <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                          {edu.group} ({edu.year})
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.educationalQualification?.othersEducation}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.education?.other.join(", ")}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.educationalQualification?.educationMethod}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.education?.method}
+                    </div>
+                  </div>
+                  {biodata?.education?.history.map((edu, idx) => (
+                    <div
+                      key={idx}
+                      className="flex border-b border-gray-200 dark:border-gray-700 py-4"
+                    >
+                      <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                        {edu.level === "SSC"
+                          ? t.educationalQualification?.sscDakhilEqulalent
+                          : edu.level === "HSC"
+                          ? t.educationalQualification?.hscAlimEquivalent
+                          : edu.level === "Graduation"
+                          ? t.educationalQualification?.graduation
+                          : edu.level === "Masters"
+                          ? t.educationalQualification?.masters
+                          : edu.level === "PhD"
+                          ? t.educationalQualification?.phd
+                          : "Prefer not say"}
+                        :
+                      </div>
+                      <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                        {edu.level === "SSC" || edu.level === "HSC" ? (
+                          <span>
+                            {edu.group} ({edu.year})
+                          </span>
+                        ) : edu.level === "Graduation" ||
+                          edu.level === "Masters" ||
+                          edu.level === "PhD" ? (
+                          <span className="flex flex-col">
+                            {edu.subject} ({edu.year})
+                            <small>({edu.institution})</small>
+                          </span>
+                        ) : (
+                          <span>
+                            {edu.level} ({edu.year})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.educationalQualification?.othersEducation}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.education?.other.join(", ")}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -296,75 +313,75 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.familyInformation?.fatherProfession}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.family?.fatherProfession}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.familyInformation?.fatherAlive}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        <Badge
-                          variant={
-                            biodata?.family?.fatherAlive
-                              ? "default"
-                              : "destructive"
-                          }
-                        >
-                          {biodata?.family?.fatherAlive ? "জীবিত" : "মৃত"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.familyInformation?.motherAlive}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        <Badge
-                          variant={
-                            biodata?.family.motherAlive
-                              ? "default"
-                              : "destructive"
-                          }
-                        >
-                          {biodata?.family?.motherAlive ? "জীবিত" : "মৃত"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.familyInformation?.brother}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.family?.brothers}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.familyInformation?.sister}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.family?.sisters} -{" "}
-                        {biodata?.family?.sistersInfo.join(", ")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.familyInformation?.familyStatus}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.family?.financialStatus}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.fatherProfession}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.fatherProfession}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.fatherAlive}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.family?.fatherAlive
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.family?.fatherAlive ? "জীবিত" : "মৃত"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.motherAlive}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.family.motherAlive
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.family?.motherAlive ? "জীবিত" : "মৃত"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.brother}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.brothers}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.sister}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.sisters} -{" "}
+                      {biodata?.family?.sistersInfo.join(", ")}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.familyStatus}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.financialStatus}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -377,35 +394,33 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.OccupationalInformation?.occupation}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.occupation?.current}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.OccupationalInformation?.profession}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.occupation?.description}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.OccupationalInformation?.income}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.occupation?.income.amount}{" "}
-                        {biodata?.occupation?.income.currency}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.OccupationalInformation?.occupation}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.occupation?.current}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.OccupationalInformation?.profession}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.occupation?.description}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.OccupationalInformation?.income}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.occupation?.income.amount}{" "}
+                      {biodata?.occupation?.income.currency}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -418,66 +433,64 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.dressUp}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.dress}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.pray5times}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.prayerHabit}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.quranReading}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.quranReading}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.favoriteBooks}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.favoriteBooks.join(", ")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.hobbies}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.hobbies.join(", ")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.specialSkills}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.specialSkills}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.personalInformation?.diseases}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.personal?.healthIssues}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.dressUp}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.dress}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.pray5times}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.prayerHabit}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.quranReading}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.quranReading}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.favoriteBooks}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.favoriteBooks.join(", ")}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.hobbies}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.hobbies.join(", ")}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.specialSkills}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.specialSkills}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.diseases}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.healthIssues}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -490,50 +503,49 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.marriageRelatedInformation?.guardiansAgree}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        <Badge
-                          variant={
-                            biodata?.marriage?.guardiansAgree
-                              ? "default"
-                              : "destructive"
-                          }
-                        >
-                          {biodata?.marriage?.guardiansAgree ? "আছে" : "নেই"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.marriageRelatedInformation?.jobContinue}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.marriage?.jobStatus}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.marriageRelatedInformation?.studyContinue}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.marriage?.studyContinue}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.marriageRelatedInformation?.reason}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.marriage?.reason}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.marriageRelatedInformation?.guardiansAgree}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.marriage?.guardiansAgree
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.marriage?.guardiansAgree ? "আছে" : "নেই"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.marriageRelatedInformation?.jobContinue}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.marriage?.jobStatus}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.marriageRelatedInformation?.studyContinue}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.marriage?.studyContinue}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.marriageRelatedInformation?.reason}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.marriage?.reason}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -546,106 +558,91 @@ export default function Biodata({ id }: { id: string }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.age}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.ageRange} বছর
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.height}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.height}"
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.educationQualification}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.education}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.maritalStatus}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.maritalStatus}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.financialCondition}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.financialCondition}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.profession}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.profession}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.district}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.location}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.expectedLifePartner?.qualities}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.preference?.qualities.join(", ")}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.age}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.ageRange} বছর
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.height}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.height}"
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.educationQualification}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.education}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.maritalStatus}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.maritalStatus}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.financialCondition}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.financialCondition}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.profession}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.profession}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.district}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.location}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.qualities}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.preference?.qualities.join(", ")}
+                    </div>
+                  </div>
+                </div>
 
-            {/* Contact Information Section */}
-            <Card className="border-gray-300 dark:border-gray-600">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
-                  <FileText className="w-6 h-6 mr-2 text-emerald-600" />
-                  {t.contactInfo?.contactInformation}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableBody>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.contactInfo?.email}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.userId?.email}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
-                        {t.contactInfo?.phone}:
-                      </TableCell>
-                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
-                        {biodata?.userId?.phone}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="space-y-1 mt-6">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.contactInfo?.email}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.userId?.email}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.contactInfo?.phone}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.userId?.phone}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

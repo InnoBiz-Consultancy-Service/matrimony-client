@@ -2,21 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Heart,
-  Users,
-  MapPin,
-  Eye,
-  Bookmark,
-  SlidersHorizontal,
-  Briefcase,
-  GraduationCap,
-} from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { ProfileSkeleton } from "@/components/common/Loader";
 import axios, { AxiosError } from "axios";
-import { Profile } from "@/types/bioData";
 import { useSearchParams, useRouter } from "next/navigation";
 import SearchFilters from "../Home/SearchFilters/SearchFilters";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -44,39 +34,8 @@ export default function ProfessionalBiodatasPage() {
   const [showFilters, setShowFilters] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [profiles, setProfiles] = React.useState<BiodataProps[]>([]);
-  const [filteredProfiles, setFilteredProfiles] = React.useState<Profile[]>([]);
-  const [savedProfiles, setSavedProfiles] = React.useState<string[]>([]);
   const [error, setError] = React.useState<string>("");
 
-  const toggleSaveProfile = (profileId: string) => {
-    setSavedProfiles((prev) =>
-      prev.includes(profileId)
-        ? prev.filter((id) => id !== profileId)
-        : [...prev, profileId]
-    );
-  };
-
-  const getInitials = (name: string) => {
-    if (!name) return "NA";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-  };
-
-  const getProfileColor = (name: string) => {
-    const colors = [
-      "from-emerald-400 to-emerald-600",
-      "from-blue-400 to-blue-600",
-      "from-green-400 to-green-600",
-      "from-purple-400 to-purple-600",
-      "from-amber-400 to-amber-600",
-      "from-teal-400 to-teal-600",
-    ];
-    const index = (name?.length || 0) % colors.length;
-    return colors[index];
-  };
   const divisionMap: Record<string, string> = {
     "1": "Chattagram",
     "2": "Rajshahi",
@@ -152,7 +111,6 @@ export default function ProfessionalBiodatasPage() {
           ? response.data.data
           : [];
         setProfiles(profilesData);
-        setFilteredProfiles(profilesData);
         setShowFilters(false);
 
         if (profilesData.length === 0) {
@@ -161,7 +119,6 @@ export default function ProfessionalBiodatasPage() {
       } else {
         setError("No profiles found or invalid response format.");
         setProfiles([]);
-        setFilteredProfiles([]);
       }
     } catch (error) {
       console.error("Error fetching biodata:", error);
@@ -194,7 +151,6 @@ export default function ProfessionalBiodatasPage() {
       }
 
       setProfiles([]);
-      setFilteredProfiles([]);
     } finally {
       setIsLoading(false);
     }
@@ -249,49 +205,60 @@ export default function ProfessionalBiodatasPage() {
         </>
       )}
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-4 gap-7">
-          {profiles.map((biodata) => {
-            return (
-              <Card className="flex items-start p-4 shadow-md rounded-xl">
-                {/* Left side */}
-                <div className="flex items-center gap-4">
-                  <Avatar className="w-16 h-16 border border-purple-500">
-                    <AvatarImage src="" alt="profile" />
-                    <AvatarFallback>👤</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h2 className="text-lg font-semibold text-purple-700">
-                      {biodata?.name}
-                    </h2>
-                    <p className="text-sm text-gray-700">
-                      {t.personalInformation?.age} - {biodata?.age}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      {t.expectedLifePartner?.height} -{" "}
-                      {biodata?.preference?.height}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      {t.OccupationalInformation?.occupation} -{" "}
-                      {biodata?.occupation?.current}
-                    </p>
+        {isLoading && <ProfileSkeleton />}
+        {profiles.length > 0 ? (
+          <div className="grid grid-cols-4 gap-7 mt-4">
+            {profiles.map((biodata) => {
+              return (
+                <Card className="flex items-start p-4 shadow-md dark:shadow-gray-800 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+                  {/* Left side */}
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-16 h-16 border border-emerald-500 dark:border-emerald-400">
+                      <AvatarImage src="" alt="profile" />
+                      <AvatarFallback className="bg-yellow-100 dark:bg-yellow-100 text-gray-600 dark:text-gray-200">
+                        👤
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h2 className="text-lg font-semibold text-black dark:text-gray-300">
+                        {biodata?.name}
+                      </h2>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        {t.personalInformation?.age} - {biodata?.age}
+                      </p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        {t.expectedLifePartner?.height} -{" "}
+                        {biodata?.preference?.height}
+                      </p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        {t.OccupationalInformation?.occupation} -{" "}
+                        {biodata?.occupation?.current}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Right side */}
-                <div className="flex items-center gap-2">
-                  <Link href={`/biodatas/${biodata.userId?._id}`}>
-                    <Button
-                      variant="outline"
-                      className="rounded-full text-pink-600 border-pink-500 hover:bg-pink-50"
-                    >
-                      {t.biodataBtn} →
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                  {/* Right side */}
+                  <div className="flex items-center gap-2">
+                    <Link href={`/biodatas/${biodata.userId?._id}`}>
+                      <Button
+                        variant="outline"
+                        className="rounded-full text-emerald-600 dark:text-emerald-400 border-yellow-500 dark:border-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/20 bg-white dark:bg-gray-800 transition-colors duration-200 cursor-pointer"
+                      >
+                        {t.biodataBtn} →
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              No data found
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
