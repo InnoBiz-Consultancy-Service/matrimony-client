@@ -116,7 +116,7 @@ export default function BiodataForm() {
         }
       );
 
-      console.log("Profile update successful:", response.data);
+      // console.log("Profile update successful:", response.data);
       toast.success("Profile post successfully!");
 
       return response.data;

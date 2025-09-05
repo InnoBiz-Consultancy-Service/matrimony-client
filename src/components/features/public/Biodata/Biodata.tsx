@@ -19,6 +19,20 @@ import axios, { AxiosError } from "axios";
 import { Profile } from "@/types/bioData";
 import { useSearchParams, useRouter } from "next/navigation";
 import SearchFilters from "../Home/SearchFilters/SearchFilters";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useLanguage } from "@/hooks/use-language";
+import { biodataTranslation } from "@/dictionary/biodata";
+
+interface BiodataProps {
+  preference: {
+    height: string;
+  };
+  occupation: {
+    current: string;
+  };
+  age: number;
+  name: string;
+}
 
 export default function ProfessionalBiodatasPage() {
   const router = useRouter();
@@ -26,7 +40,7 @@ export default function ProfessionalBiodatasPage() {
 
   const [showFilters, setShowFilters] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [profiles, setProfiles] = React.useState<Profile[]>([]);
+  const [profiles, setProfiles] = React.useState<BiodataProps[]>([]);
   const [filteredProfiles, setFilteredProfiles] = React.useState<Profile[]>([]);
   const [savedProfiles, setSavedProfiles] = React.useState<string[]>([]);
   const [error, setError] = React.useState<string>("");
@@ -136,7 +150,7 @@ export default function ProfessionalBiodatasPage() {
           : [];
         setProfiles(profilesData);
         setFilteredProfiles(profilesData);
-        setShowFilters(false)
+        setShowFilters(false);
 
         if (profilesData.length === 0) {
           setError("No profiles found matching your criteria.");
@@ -191,7 +205,10 @@ export default function ProfessionalBiodatasPage() {
     setError("");
     getAllBioData();
   };
+  console.log(profiles);
 
+  const { language } = useLanguage();
+  const t = biodataTranslation[language];
   return (
     <div className="min-h-screen bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10">
       {/* Header */}
@@ -228,241 +245,50 @@ export default function ProfessionalBiodatasPage() {
           <SearchFilters />
         </>
       )}
-
-      {/* Results */}
-      <div className="container mx-auto px-4 lg:px-8 py-8">
-        {/* Error Display */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6 flex items-center justify-between">
-            <span>{error}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setError("")}
-              className="text-red-700 hover:text-red-800"
-            >
-              ✕
-            </Button>
-          </div>
-        )}
-
-        {isLoading ? (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-            {[...Array(8)].map((_, i) => (
-              <ProfileSkeleton key={i} />
-            ))}
-          </div>
-        ) : filteredProfiles.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="h-24 w-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Users className="h-12 w-12 text-emerald-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              {error ? "Unable to Load Profiles" : "No Profiles Found"}
-            </h3>
-            <p className="text-gray-600 mb-6">
-              {error
-                ? "Please check your connection and try again."
-                : "Try adjusting your search filters or check back later."}
-            </p>
-            <div className="space-x-4">
-              {error && (
-                <Button
-                  onClick={handleRetry}
-                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
-                >
-                  Try Again
-                </Button>
-              )}
-              <Link href="/login">
-                <Button
-                  variant="outline"
-                  className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                >
-                  Login
-                </Button>
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <>
-            {/* Results Header */}
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-gray-600">
-                Showing {filteredProfiles.length} of {profiles.length}{" "}
-                {filteredProfiles.length === 1 ? "profile" : "profiles"}
-              </p>
-            </div>
-
-            {/* Professional Profiles Grid */}
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {filteredProfiles.map((profile) => (
-                <Card
-                  key={profile._id}
-                  className="group hover:shadow-2xl dark:hover:shadow-emerald-500/10 transition-all duration-300 border-0 dark:border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg dark:shadow-emerald-500/5 overflow-hidden relative flex flex-col h-full"
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className={`h-16 w-16 rounded-full bg-gradient-to-br ${getProfileColor(
-                            profile.name || ""
-                          )} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
-                        >
-                          {getInitials(profile.name || "")}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-                              {profile.name || "Name not provided"}
-                            </h3>
-                          </div>
-                          <p className="text-gray-600 dark:text-gray-300 font-medium">
-                            {profile.age
-                              ? `${profile.age} years`
-                              : "Age not specified"}{" "}
-                            •{" "}
-                            {profile.physicalInfo?.height ||
-                              "Height not specified"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4 flex-grow">
-                    {/* Professional Details */}
-                    <div className="grid grid-cols-1 gap-4">
-                      <div className="space-y-3">
-                        {profile.familyInfo?.fatherOccupation && (
-                          <div className="flex items-center text-gray-600 dark:text-gray-300">
-                            <Briefcase className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                                Father: {profile.familyInfo.fatherOccupation}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-
-                        {profile.education?.honours && (
-                          <div className="flex items-center text-gray-600 dark:text-gray-300">
-                            <GraduationCap className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                                {profile.education.honours}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="flex items-center text-gray-600 dark:text-gray-300">
-                          <MapPin className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
-                          <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                              {profile.address?.present ||
-                                "Location not specified"}
-                              ,{" "}
-                              {profile.address?.country ||
-                                "Country not specified"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Physical Info */}
-                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        {profile.physicalInfo?.weight && (
-                          <p className="text-gray-600 dark:text-gray-300">
-                            Weight: {profile.physicalInfo.weight}
-                          </p>
-                        )}
-                        {profile.physicalInfo?.bloodGroup && (
-                          <p className="text-gray-600 dark:text-gray-300">
-                            Blood: {profile.physicalInfo.bloodGroup}
-                          </p>
-                        )}
-                        {profile.physicalInfo?.bodyColor && (
-                          <p className="text-gray-600 dark:text-gray-300">
-                            Complexion: {profile.physicalInfo.bodyColor}
-                          </p>
-                        )}
-                        {profile.maritalInfo?.maritalStatus && (
-                          <p className="text-gray-600 dark:text-gray-300">
-                            Status: {profile.maritalInfo.maritalStatus}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Bio */}
-                    {profile.description && (
-                      <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
-                          {profile.description}
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-
-                  {/* Action Buttons - Always at bottom */}
-                  <div className="p-6 pt-0 mt-auto">
-                    <div className="flex space-x-2 pt-4 border-t border-gray-100 dark:border-gray-600">
-                      <Link
-                        href={`/biodatas/${profile._id}`}
-                        className="flex-1"
-                      >
-                        <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-500 dark:hover:to-emerald-600 text-white dark:text-gray-900 transition-all duration-200">
-                          <Eye className="h-4 w-4 mr-2" />
-                          View Profile
-                        </Button>
-                      </Link>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => toggleSaveProfile(profile._id)}
-                        className={`border-emerald-200 dark:border-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors duration-200 ${
-                          savedProfiles.includes(profile._id)
-                            ? "bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
-                            : "text-emerald-700 dark:text-emerald-400 bg-transparent dark:bg-transparent"
-                        }`}
-                      >
-                        <Bookmark
-                          className={`h-4 w-4 ${
-                            savedProfiles.includes(profile._id)
-                              ? "fill-current"
-                              : ""
-                          }`}
-                        />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 bg-transparent dark:bg-transparent transition-colors duration-200"
-                      >
-                        <Heart className="h-4 w-4" />
-                      </Button>
-                    </div>
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-4 gap-7">
+          {profiles.map((biodata) => {
+            return (
+              <Card className="flex items-start p-4 shadow-md rounded-xl">
+                {/* Left side */}
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-16 h-16 border border-purple-500">
+                    <AvatarImage src="" alt="profile" />
+                    <AvatarFallback>👤</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h2 className="text-lg font-semibold text-purple-700">
+                      {biodata?.name}
+                    </h2>
+                    <p className="text-sm text-gray-700">
+                      {t.personalInformation?.age} - {biodata?.age}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      {t.expectedLifePartner?.height} -{" "}
+                      {biodata?.preference?.height}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      {t.OccupationalInformation?.occupation} -{" "}
+                      {biodata?.occupation?.current}
+                    </p>
                   </div>
-                </Card>
-              ))}
-            </div>
+                </div>
 
-            {/* Load More */}
-            <div className="text-center mt-12">
-              <Button
-                variant="outline"
-                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 px-8 py-3 bg-transparent"
-                onClick={handleRetry}
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : "Refresh Profiles"}
-              </Button>
-            </div>
-          </>
-        )}
+                {/* Right side */}
+                <div className="flex items-center gap-2">
+                  <Link href={`/biodatas/${biodata.userId?._id}`}>
+                    <Button
+                      variant="outline"
+                      className="rounded-full text-pink-600 border-pink-500 hover:bg-pink-50"
+                    >
+                      {t.biodataBtn} →
+                    </Button>
+                  </Link>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
