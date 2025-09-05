@@ -143,7 +143,7 @@ export default function Biodata({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 ">
-      <div className="flex container mx-auto px-4">
+      <div className="flex container mx-auto px-4 gap-6">
         <div className="w-[30%]">
           <div className="border bg-yellow-500/10 p-6 my-4">
             <div className="flex justify-center items-center">
@@ -213,7 +213,45 @@ export default function Biodata({ id }: { id: string }) {
             <Button className="w-full">Send Interest</Button>
           </div>
         </div>
-        <div className="w-[70%]">right side</div>
+        <div className="w-[70%] mt-8">
+          <div className="border border-gray-300 rounded-lg">
+            <h3 className="text-center text-2xl my-6">{t.address?.address}</h3>
+            <Table>
+              <TableBody>
+                <TableRow className="w-full">
+                  <TableCell className="w-1/2 border-r">
+                    {t.address?.permanentAddress}:
+                  </TableCell>
+                  <TableCell className="w-1/2">
+                    {biodata?.address?.permanent?.division},{" "}
+                    {biodata?.address?.permanent?.district},{" "}
+                    {biodata?.address?.permanent?.upazila}, {t.address?.address}
+                    : {biodata?.address?.permanent?.address}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="w-full">
+                  <TableCell className="w-1/2 border-r">
+                    {t.address?.presentAddress}:
+                  </TableCell>
+                  <TableCell className="w-1/2">
+                    {biodata?.address?.present?.division},{" "}
+                    {biodata?.address?.present?.district},{" "}
+                    {biodata?.address?.present?.upazila}, {t.address?.address}:{" "}
+                    {biodata?.address?.present?.address}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="w-full">
+                  <TableCell className="w-1/2 border-r">
+                    {t.address?.whereDidYouGrow}:
+                  </TableCell>
+                  <TableCell className="w-1/2">
+                    {biodata?.address?.grewUpAt}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       </div>
     </div>
   );
