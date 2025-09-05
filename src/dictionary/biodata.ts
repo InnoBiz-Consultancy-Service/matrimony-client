@@ -187,6 +187,15 @@ export const biodataTranslation = {
         " By checking all the boxes above and submitting this form, you agree to our terms and conditions for biodata matching services.",
     },
     biodataBtn: "Biodata",
+    singleBiodata: {
+      nationality: "Nationality",
+      bangladeshi: "Bangladeshi",
+      complexion: "Complexion",
+      age: "Age",
+      typesOfBiodata: "Types of biodata",
+      maleBiodata: "Male Biodata",
+      femaleBiodata: "Female Biodata",
+    },
   },
 
   bn: {
@@ -374,6 +383,15 @@ export const biodataTranslation = {
         "উপরের সমস্ত বাক্সে টিক চিহ্ন দিয়ে এবং এই ফর্মটি জমা দেওয়ার মাধ্যমে, আপনি বায়োডাটা ম্যাচিং পরিষেবার জন্য আমাদের শর্তাবলীতে সম্মত হচ্ছেন।",
     },
     biodataBtn: "বায়োডাটা",
+    singleBiodata: {
+      nationality: "জাতীয়তা",
+      bangladeshi: "বাংলাদেশী",
+      complexion: "গাত্রবর্ণ",
+      age: "বয়স",
+      typesOfBiodata: "বায়োডাটার ধরণ",
+      maleBiodata: "পাত্রের বায়োডাটা",
+      femaleBiodata: "পাত্রীর বায়োডাটা",
+    },
   },
 };
 
