@@ -1,28 +1,9 @@
 "use client";
 
 import * as React from "react";
-import {
-  User,
-  MapPin,
-  Phone,
-  Mail,
-  Facebook,
-  GraduationCap,
-  Users,
-  Heart,
-  Shield,
-  Camera,
-  Star,
-  Crown,
-  Activity,
-  BookOpen,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { Profile } from "@/types/bioData";
 import { useAuth } from "@/app/(auth)/context/auth-context";
@@ -31,11 +12,21 @@ import maleAvatar from "../../../../../../public/female_avatar.jpg";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
+import {
+  Briefcase,
+  FileText,
+  GraduationCap,
+  Heart,
+  MapPin,
+  Target,
+  User,
+  Users,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { BiodataType } from "@/types/publicBiodata";
 
 export default function Biodata({ id }: { id: string }) {
-  const [activeTab, setActiveTab] = React.useState("overview");
-  const [biodata, setBiodata] = React.useState<Profile | undefined>();
-
+  const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
@@ -61,7 +52,6 @@ export default function Biodata({ id }: { id: string }) {
     };
     getbiodata();
   }, [id]);
-  // console.log(biodata?.userId?._id)
   const handleSendInterest = async () => {
     try {
       const response = await axios.post(
@@ -82,8 +72,6 @@ export default function Biodata({ id }: { id: string }) {
       console.error("Error sending interest:", error);
     }
   };
-  const biodataViews = 1247;
-  const interests = 45;
 
   const getInitials = (name: string) => {
     return name
@@ -117,139 +105,549 @@ export default function Biodata({ id }: { id: string }) {
     </Card>
   );
 
-  const InfoRow = ({
-    label,
-    value,
-    icon: Icon,
-  }: {
-    label: string;
-    value: string | undefined;
-    icon?: React.ElementType;
-  }) => (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100 last:border-b-0 space-y-1 sm:space-y-0">
-      <div className="flex items-center space-x-2">
-        {Icon && <Icon className="h-4 w-4 text-gray-500" />}
-        <span className="text-gray-600 font-medium text-sm sm:text-base">
-          {label}:
-        </span>
-      </div>
-      <span className="text-gray-800 font-semibold text-sm sm:text-base break-words">
-        {value || "Not specified"}
-      </span>
-    </div>
-  );
-
   console.log(biodata);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 ">
-      <div className="flex container mx-auto px-4 gap-6">
-        <div className="w-[30%]">
-          <div className="border bg-yellow-500/10 p-6 my-4">
-            <div className="flex justify-center items-center">
-              <Avatar className="h-40 w-40 rounded-full ring-white dark:ring-gray-800 shadow-md mt-12">
-                <AvatarImage
-                  src={
-                    biodata?.gender === "male"
-                      ? maleAvatar.src
-                      : femaleAvatar.src
-                  }
-                  alt={biodata?.name}
-                />
-                <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold">
-                  {getInitials(user?.name || "")}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold text-center">
-                {biodata?.name}
-              </h2>
-            </div>
-            <div>
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="text-left">
-                      {t.singleBiodata?.typesOfBiodata}:
-                    </TableCell>
-                    {biodata?.gender === "male" ? (
-                      <TableCell className="text-right">
-                        {t.singleBiodata?.maleBiodata}
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 p-4">
+      <div className="container mx-auto max-w-7xl">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left Side - Profile Summary */}
+          <div className="lg:w-1/3">
+            <Card className="bg-yellow-500/10 dark:bg-yellow-500/5 border-yellow-200 dark:border-yellow-800">
+              <CardContent className="p-6">
+                <div className="flex justify-center mb-6">
+                  <Avatar className="h-40 w-40 ring-4 ring-white dark:ring-gray-700 shadow-lg">
+                    <AvatarImage
+                      src={
+                        biodata?.gender === "male"
+                          ? maleAvatar.src
+                          : maleAvatar.src
+                      }
+                      alt={biodata?.name}
+                    />
+                    <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white text-2xl font-bold">
+                      {getInitials("asda")}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+
+                <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
+                  {biodata?.name}
+                </h2>
+
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
+                        {t.singleBiodata?.typesOfBiodata}
                       </TableCell>
-                    ) : (
-                      <TableCell className="text-right">
-                        {t.singleBiodata?.femaleBiodata}
+                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
+                        <Badge
+                          variant="secondary"
+                          className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300"
+                        >
+                          {biodata?.gender === "male"
+                            ? t.singleBiodata?.maleBiodata
+                            : t.singleBiodata?.femaleBiodata}
+                        </Badge>
                       </TableCell>
-                    )}
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="text-left">
-                      {t.singleBiodata?.age}:
-                    </TableCell>
-                    <TableCell className="text-right">{biodata?.age}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="text-left">
-                      {t.singleBiodata?.complexion}:
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {biodata?.preference?.complexion}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="text-left">
-                      {t.singleBiodata?.nationality}:
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {t.singleBiodata?.bangladeshi}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
+                        {t.personalInformation?.age}
+                      </TableCell>
+                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
+                        {biodata?.age}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
+                        {t.expectedLifePartner?.complexion}
+                      </TableCell>
+                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.complexion}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="font-medium text-gray-600 dark:text-gray-300">
+                        {t.singleBiodata?.nationality}
+                      </TableCell>
+                      <TableCell className="text-right text-gray-800 dark:text-gray-100">
+                        {biodata?.address?.country}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            <Button className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800">
+              <Heart className="w-4 h-4 mr-2" />
+              {t.sendInterest}
+            </Button>
           </div>
-          <div className="w-full">
-            <Button className="w-full">Send Interest</Button>
-          </div>
-        </div>
-        <div className="w-[70%] mt-8">
-          <div className="border border-gray-300 rounded-lg">
-            <h3 className="text-center text-2xl my-6">{t.address?.address}</h3>
-            <Table>
-              <TableBody>
-                <TableRow className="w-full">
-                  <TableCell className="w-1/2 border-r">
-                    {t.address?.permanentAddress}:
-                  </TableCell>
-                  <TableCell className="w-1/2">
-                    {biodata?.address?.permanent?.division},{" "}
-                    {biodata?.address?.permanent?.district},{" "}
-                    {biodata?.address?.permanent?.upazila}, {t.address?.address}
-                    : {biodata?.address?.permanent?.address}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="w-full">
-                  <TableCell className="w-1/2 border-r">
-                    {t.address?.presentAddress}:
-                  </TableCell>
-                  <TableCell className="w-1/2">
-                    {biodata?.address?.present?.division},{" "}
-                    {biodata?.address?.present?.district},{" "}
-                    {biodata?.address?.present?.upazila}, {t.address?.address}:{" "}
-                    {biodata?.address?.present?.address}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="w-full">
-                  <TableCell className="w-1/2 border-r">
-                    {t.address?.whereDidYouGrow}:
-                  </TableCell>
-                  <TableCell className="w-1/2">
-                    {biodata?.address?.grewUpAt}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+
+          {/* Right Side - Detailed Information */}
+          <div className="lg:w-2/3 space-y-6">
+            {/* Address Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <MapPin className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.address?.address}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.address?.permanentAddress}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.address?.permanent?.division},{" "}
+                        {biodata?.address?.permanent?.district},{" "}
+                        {biodata?.address?.permanent?.upazila},{" "}
+                        {t.address?.address}:{" "}
+                        {biodata?.address?.permanent?.address}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.address?.presentAddress}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.address?.present?.division},{" "}
+                        {biodata?.address?.present?.district},{" "}
+                        {biodata?.address?.present?.upazila},{" "}
+                        {t.address?.address}:{" "}
+                        {biodata?.address?.present?.address}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.address?.whereDidYouGrow}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.address?.grewUpAt}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Education Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <GraduationCap className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.educationalQualification?.educationalQualification}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.educationalQualification?.educationMethod}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.education?.method}
+                      </TableCell>
+                    </TableRow>
+                    {biodata?.education?.history.map((edu, idx) => (
+                      <TableRow
+                        key={idx}
+                        className="border-gray-200 dark:border-gray-700"
+                      >
+                        <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                          {edu.level === "SSC"
+                            ? t.educationalQualification?.sscDakhilEqulalent
+                            : edu.level === "HSC"
+                            ? t.educationalQualification?.hscAlimEquivalent
+                            : t.educationalQualification?.graduation}
+                          :
+                        </TableCell>
+                        <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                          {edu.group} ({edu.year})
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.educationalQualification?.othersEducation}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.education?.other.join(", ")}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Family Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <Users className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.familyInformation?.familyInfo}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.familyInformation?.fatherProfession}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.family?.fatherProfession}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.familyInformation?.fatherAlive}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        <Badge
+                          variant={
+                            biodata?.family?.fatherAlive
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {biodata?.family?.fatherAlive ? "জীবিত" : "মৃত"}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.familyInformation?.motherAlive}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        <Badge
+                          variant={
+                            biodata?.family.motherAlive
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {biodata?.family?.motherAlive ? "জীবিত" : "মৃত"}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.familyInformation?.brother}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.family?.brothers}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.familyInformation?.sister}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.family?.sisters} -{" "}
+                        {biodata?.family?.sistersInfo.join(", ")}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.familyInformation?.familyStatus}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.family?.financialStatus}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Occupation Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <Briefcase className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.OccupationalInformation?.occupation}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.OccupationalInformation?.occupation}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.occupation?.current}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.OccupationalInformation?.profession}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.occupation?.description}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.OccupationalInformation?.income}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.occupation?.income.amount}{" "}
+                        {biodata?.occupation?.income.currency}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Personal Information Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <User className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.personalInformation?.personalInfo}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.dressUp}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.dress}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.pray5times}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.prayerHabit}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.quranReading}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.quranReading}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.favoriteBooks}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.favoriteBooks.join(", ")}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.hobbies}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.hobbies.join(", ")}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.specialSkills}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.specialSkills}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.personalInformation?.diseases}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.personal?.healthIssues}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Marriage Information Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <Heart className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.marriageRelatedInformation?.marriageInfo}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.marriageRelatedInformation?.guardiansAgree}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        <Badge
+                          variant={
+                            biodata?.marriage?.guardiansAgree
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {biodata?.marriage?.guardiansAgree ? "আছে" : "নেই"}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.marriageRelatedInformation?.jobContinue}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.marriage?.jobStatus}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.marriageRelatedInformation?.studyContinue}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.marriage?.studyContinue}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.marriageRelatedInformation?.reason}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.marriage?.reason}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Preference Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <Target className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.expectedLifePartner?.expectedPartner}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.age}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.ageRange} বছর
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.height}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.height}"
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.educationQualification}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.education}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.maritalStatus}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.maritalStatus}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.financialCondition}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.financialCondition}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.profession}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.profession}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.district}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.location}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.expectedLifePartner?.qualities}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.preference?.qualities.join(", ")}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Contact Information Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <FileText className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.contactInfo?.contactInformation}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.contactInfo?.email}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.userId?.email}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="w-1/2 font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">
+                        {t.contactInfo?.phone}:
+                      </TableCell>
+                      <TableCell className="w-1/2 text-gray-800 dark:text-gray-100">
+                        {biodata?.userId?.phone}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

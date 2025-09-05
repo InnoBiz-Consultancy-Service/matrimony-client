@@ -27,6 +27,9 @@ interface BiodataProps {
   preference: {
     height: string;
   };
+  userId: {
+    _id: string;
+  };
   occupation: {
     current: string;
   };
