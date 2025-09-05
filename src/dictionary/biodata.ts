@@ -40,6 +40,7 @@ export const biodataTranslation = {
       othersEducationPlaceholder: "e.g., Quran learning, Hadith learning. etc.",
       otherBtn: "Add other",
       institution: "Institution",
+      educationalQualification: "Educational Qualification",
     },
     familyInformation: {
       fatherAlive: "Is your father alive",
@@ -65,6 +66,7 @@ export const biodataTranslation = {
       middle: "Middle Class",
       upper: "Upper Middle Class",
       rich: "Rich",
+      familyInfo: "Family Information",
     },
     personalInformation: {
       name: "Enter Your Name",
@@ -92,6 +94,7 @@ export const biodataTranslation = {
       maliki: "Maliki",
       hanbali: "Hanbali",
       age: "Age",
+      personalInfo: "Personal Information",
     },
 
     OccupationalInformation: {
@@ -126,6 +129,7 @@ export const biodataTranslation = {
       importantNote: "Important Note",
       noteDescription:
         "Please discuss these matters with your family and potential spouse.Clear communication about expectations is essential for a successful marriage.",
+      marriageInfo: "Marriage information",
     },
 
     expectedLifePartner: {
@@ -156,6 +160,7 @@ export const biodataTranslation = {
       selectEducationPlaceHolder: "Select Education",
       selectMaritalStatusPlaceHolder: "Select Marital Status",
       selectComplexion: "Select Complexion",
+      expectedPartner: "Expected Life Partner",
     },
 
     pledge: {
@@ -186,7 +191,13 @@ export const biodataTranslation = {
       conclusion:
         " By checking all the boxes above and submitting this form, you agree to our terms and conditions for biodata matching services.",
     },
+    contactInfo: {
+      contactInformation: "Contact Information",
+      email: "Email",
+      phone: "Mobile",
+    },
     biodataBtn: "Biodata",
+    sendInterest: "Send Interest",
     singleBiodata: {
       nationality: "Nationality",
       bangladeshi: "Bangladeshi",
@@ -239,6 +250,7 @@ export const biodataTranslation = {
       othersEducationPlaceholder: "যেমন, কুরআন শিক্ষা, হাদিস শিক্ষা ইত্যাদি।",
       otherBtn: "অন্যান্য যোগ করুন",
       institution: "প্রতিষ্ঠানের নাম",
+      educationalQualification: "শিক্ষাগত যোগ্যতা",
     },
     familyInformation: {
       fatherAlive: "আপনার বাবা বেঁচে আছেন কি?",
@@ -264,6 +276,7 @@ export const biodataTranslation = {
       middle: "মধ্যবিত্ত",
       upper: "উচ্চ মধ্যবিত্ত",
       rich: "বড়লোক",
+      familyInfo: "পারিবারিক তথ্য",
     },
     personalInformation: {
       name: "আপনার নাম লিখুন",
@@ -288,6 +301,7 @@ export const biodataTranslation = {
       maliki: "মালিকি",
       hanbali: "হাম্বলি",
       age: "বয়স",
+      personalInfo: "ব্যাক্তিগত তথ্য",
     },
 
     OccupationalInformation: {
@@ -322,6 +336,7 @@ export const biodataTranslation = {
       importantNote: "গুরুত্বপূর্ণ তথ্য",
       noteDescription:
         "আপনার পরিবার এবং সম্ভাব্য জীবনসঙ্গীর সাথে এই বিষয়গুলি নিয়ে আলোচনা করুন। একটি সফল বিবাহের জন্য প্রত্যাশা সম্পর্কে স্পষ্ট যোগাযোগ অপরিহার্য।",
+      marriageInfo: "বিবাহ সংক্রান্ত তথ্য",
     },
 
     expectedLifePartner: {
@@ -353,6 +368,7 @@ export const biodataTranslation = {
       selectEducationPlaceHolder: "শিক্ষা নির্বাচন করুন",
       selectMaritalStatusPlaceHolder: "বৈবাহিক অবস্থা নির্বাচন করুন",
       selectComplexion: "গায়ের রঙ নির্বাচন করুন",
+      expectedPartner: "প্রত্যাশিত জীবন্সঙ্গী",
     },
 
     pledge: {
@@ -382,7 +398,13 @@ export const biodataTranslation = {
       conclusion:
         "উপরের সমস্ত বাক্সে টিক চিহ্ন দিয়ে এবং এই ফর্মটি জমা দেওয়ার মাধ্যমে, আপনি বায়োডাটা ম্যাচিং পরিষেবার জন্য আমাদের শর্তাবলীতে সম্মত হচ্ছেন।",
     },
+    contactInfo: {
+      contactInformation: "যোগাযোগের তথ্য",
+      email: "ইমেইল",
+      phone: "মোবাইল",
+    },
     biodataBtn: "বায়োডাটা",
+    sendInterest: "আগ্রহ পাঠান",
     singleBiodata: {
       nationality: "জাতীয়তা",
       bangladeshi: "বাংলাদেশী",
