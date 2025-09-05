@@ -28,10 +28,17 @@ import { Profile } from "@/types/bioData";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import femaleAvatar from "../../../../../../public/men_avatar.webp";
 import maleAvatar from "../../../../../../public/female_avatar.jpg";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useLanguage } from "@/hooks/use-language";
+import { biodataTranslation } from "@/dictionary/biodata";
 
 export default function Biodata({ id }: { id: string }) {
   const [activeTab, setActiveTab] = React.useState("overview");
   const [biodata, setBiodata] = React.useState<Profile | undefined>();
+
+  // Translation function
+  const { language } = useLanguage();
+  const t = biodataTranslation[language];
 
   const { user } = useAuth();
   React.useEffect(() => {
@@ -138,7 +145,7 @@ export default function Biodata({ id }: { id: string }) {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 ">
       <div className="flex container mx-auto px-4">
         <div className="w-[30%]">
-          <div className="border bg-yellow-500/10 min-h-screen my-4">
+          <div className="border bg-yellow-500/10 p-6 my-4">
             <div className="flex justify-center items-center">
               <Avatar className="h-40 w-40 rounded-full ring-white dark:ring-gray-800 shadow-md mt-12">
                 <AvatarImage
@@ -155,8 +162,55 @@ export default function Biodata({ id }: { id: string }) {
               </Avatar>
             </div>
             <div className="mt-8">
-              <h2 className="text-2xl font-bold text-center">{biodata?.name}</h2>
+              <h2 className="text-2xl font-bold text-center">
+                {biodata?.name}
+              </h2>
             </div>
+            <div>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="text-left">
+                      {t.singleBiodata?.typesOfBiodata}:
+                    </TableCell>
+                    {biodata?.gender === "male" ? (
+                      <TableCell className="text-right">
+                        {t.singleBiodata?.maleBiodata}
+                      </TableCell>
+                    ) : (
+                      <TableCell className="text-right">
+                        {t.singleBiodata?.femaleBiodata}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-left">
+                      {t.singleBiodata?.age}:
+                    </TableCell>
+                    <TableCell className="text-right">{biodata?.age}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-left">
+                      {t.singleBiodata?.complexion}:
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {biodata?.preference?.complexion}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-left">
+                      {t.singleBiodata?.nationality}:
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {t.singleBiodata?.bangladeshi}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+          <div className="w-full">
+            <Button className="w-full">Send Interest</Button>
           </div>
         </div>
         <div className="w-[70%]">right side</div>
