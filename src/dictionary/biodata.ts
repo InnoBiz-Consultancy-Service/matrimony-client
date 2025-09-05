@@ -91,6 +91,7 @@ export const biodataTranslation = {
       shafi: "Shafi",
       maliki: "Maliki",
       hanbali: "Hanbali",
+      age: "Age",
     },
 
     OccupationalInformation: {
@@ -185,6 +186,7 @@ export const biodataTranslation = {
       conclusion:
         " By checking all the boxes above and submitting this form, you agree to our terms and conditions for biodata matching services.",
     },
+    biodataBtn: "Biodata",
   },
 
   bn: {
@@ -276,6 +278,7 @@ export const biodataTranslation = {
       shafi: "শাফি",
       maliki: "মালিকি",
       hanbali: "হাম্বলি",
+      age: "বয়স",
     },
 
     OccupationalInformation: {
@@ -370,6 +373,7 @@ export const biodataTranslation = {
       conclusion:
         "উপরের সমস্ত বাক্সে টিক চিহ্ন দিয়ে এবং এই ফর্মটি জমা দেওয়ার মাধ্যমে, আপনি বায়োডাটা ম্যাচিং পরিষেবার জন্য আমাদের শর্তাবলীতে সম্মত হচ্ছেন।",
     },
+    biodataBtn: "বায়োডাটা",
   },
 };
 
