@@ -18,6 +18,7 @@ import { setCookie } from "@/app/(auth)/login/page";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const STORAGE_KEY = "biodata-form-data";
 const STEP_KEY = "biodata-current-step";
@@ -37,6 +38,8 @@ export default function BiodataForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<BiodataFormData>({});
   const [mounted, setMounted] = useState(false);
+
+  const router = useRouter();
 
   const { user } = useAuth();
   // Load data from localStorage on mount
@@ -102,9 +105,9 @@ export default function BiodataForm() {
         name: user?.name,
         userId: user?.userId,
         age: formData?.personal?.age,
-        gender: user?.gender
+        gender: user?.gender,
       };
-      console.log(payload)
+      // console.log(payload);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
         payload,
@@ -116,9 +119,11 @@ export default function BiodataForm() {
         }
       );
 
-      // console.log("Profile update successful:", response.data);
-      toast.success("Profile post successfully!");
-
+      if (response.status === 200) {
+        toast.success("Profile post successfully!");
+        setCookie("profileStatus", "true");
+        router.push("/");
+      }
       return response.data;
     } catch (error: unknown) {
       console.error("Profile post failed:", error);

@@ -116,7 +116,6 @@ const authService = {
       // Store in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(userData));
-
       // Store in cookies
       // Token cookie - expires based on remember me option
       const tokenExpiryDays = rememberMe ? 30 : 7;
@@ -257,8 +256,6 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const router = useRouter();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -313,6 +310,19 @@ export default function LoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  // try {
+  //   const token = localStorage.getItem("token");
+  //   // console.log(token)
+  //   axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/biodata/my-biodata`, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: token,
+  //     },
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  // }
 
   // Password toggle component
   const PasswordToggle = () => (
