@@ -1,5 +1,5 @@
 "use client";
-import { Heart, Users, Shield, ArrowRight, Play } from "lucide-react";
+import { Heart, Users, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useLanguage } from "@/hooks/use-language";

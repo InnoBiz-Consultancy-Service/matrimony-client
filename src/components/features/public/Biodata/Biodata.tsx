@@ -14,6 +14,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
 
 interface BiodataProps {
+  _id: string;
   preference: {
     height: string;
   };
@@ -210,7 +211,7 @@ export default function ProfessionalBiodatasPage() {
           <div className="grid grid-cols-4 gap-7 mt-4">
             {profiles.map((biodata) => {
               return (
-                <Card className="flex items-start p-4 shadow-md dark:shadow-gray-800 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+                <Card key={biodata._id} className="flex items-start p-4 shadow-md dark:shadow-gray-800 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
                   {/* Left side */}
                   <div className="flex items-center gap-4">
                     <Avatar className="w-16 h-16 border border-emerald-500 dark:border-emerald-400">

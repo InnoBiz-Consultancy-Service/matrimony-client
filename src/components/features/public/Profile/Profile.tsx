@@ -17,8 +17,6 @@ import {
   Crown,
   Activity,
   BookOpen,
-  MessageCircle,
-  Share2,
   Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,7 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
+// import { Progress } from "@/components/ui/progress";
 import { IBiodata } from "@/types/bioData";
 import Link from "next/link";
 import axios from "axios";

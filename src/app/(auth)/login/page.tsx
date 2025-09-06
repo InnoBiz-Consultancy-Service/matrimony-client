@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { setCookie } from "@/utils/setCookie";
 // Auth service abstraction
 // const authService = {
 //   login: async (credentials: {
@@ -58,15 +58,6 @@ import { useRouter } from "next/navigation";
 //     localStorage.removeItem("user");
 //   },
 // };
-
-// Cookie utility functions
-export const setCookie = (name: string, value: string, days: number = 7) => {
-  const expires = new Date();
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict;Secure=${
-    window.location.protocol === "https:"
-  }`;
-};
 
 const getCookie = (name: string): string | null => {
   const nameEQ = name + "=";
