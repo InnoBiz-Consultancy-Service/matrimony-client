@@ -14,6 +14,7 @@ import {
   Briefcase,
   GraduationCap,
   Heart,
+  Loader2,
   MapPin,
   Target,
   User,
@@ -22,9 +23,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { BiodataType } from "@/types/publicBiodata";
 import { toast } from "sonner";
+import { PageLoader } from "@/components/common/Loader";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
+  const [loading, setLoading] = React.useState(false);
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
@@ -32,6 +35,7 @@ export default function Biodata({ id }: { id: string }) {
   const { user } = useAuth();
   React.useEffect(() => {
     const getbiodata = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
@@ -46,11 +50,14 @@ export default function Biodata({ id }: { id: string }) {
         console.log(response.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     getbiodata();
   }, [id]);
   const handleSendInterest = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
@@ -70,6 +77,8 @@ export default function Biodata({ id }: { id: string }) {
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;
       toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,7 +90,15 @@ export default function Biodata({ id }: { id: string }) {
       .toUpperCase();
   };
 
-  // console.log(biodata);
+  {
+    if (loading) {
+      return (
+        <>
+          <PageLoader />
+        </>
+      );
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 p-4">
@@ -157,10 +174,15 @@ export default function Biodata({ id }: { id: string }) {
 
             <Button
               onClick={handleSendInterest}
+              disabled={loading}
               className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800"
             >
-              <Heart className="w-4 h-4 mr-2" />
-              {t.sendInterest}
+              {loading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Heart className="w-4 h-4 mr-2" />
+              )}
+              {loading ? "Sending..." : t.sendInterest}
             </Button>
           </div>
 

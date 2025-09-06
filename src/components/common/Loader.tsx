@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 // Main Page Loader
 export function PageLoader() {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl animate-pulse"></div>
