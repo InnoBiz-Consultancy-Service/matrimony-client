@@ -1,11 +1,12 @@
 // write your code here
 
+import UnderDevelopment from '@/components/common/underDevelopment'
 import React from 'react'
 
 const Contact = () => {
   return (
     <div>
-      <h2>This is the contact page</h2>
+      <UnderDevelopment />
     </div>
   )
 }
