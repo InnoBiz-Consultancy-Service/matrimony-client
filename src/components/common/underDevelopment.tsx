@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { Button } from "../ui/button";
+
 export default function UnderDevelopment() {
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-pink-100 via-white to-pink-200">
@@ -58,12 +61,11 @@ export default function UnderDevelopment() {
         </div>
 
         {/* Back to home button */}
-        <a
-          href="/"
-          className="mt-8 inline-block rounded-xl bg-pink-500 px-6 py-2 text-white font-semibold shadow-md hover:bg-pink-600 transition"
-        >
-          Go Back Home
-        </a>
+        <Link href="/">
+          <Button className="mt-8 inline-block rounded-xl bg-pink-500 px-6 py-2 text-white font-semibold shadow-md hover:bg-pink-600 transition">
+            Go Back Home
+          </Button>
+        </Link>
       </div>
     </div>
   );
