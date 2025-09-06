@@ -5,7 +5,7 @@ import Link from "next/link";
 import { SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ProfileSkeleton } from "@/components/common/Loader";
+import { PageLoader } from "@/components/common/Loader";
 import axios, { AxiosError } from "axios";
 import { useSearchParams, useRouter } from "next/navigation";
 import SearchFilters from "../Home/SearchFilters/SearchFilters";
@@ -206,12 +206,15 @@ export default function ProfessionalBiodatasPage() {
         </>
       )}
       <div className="container mx-auto px-4">
-        {isLoading && <ProfileSkeleton />}
+        {isLoading && <PageLoader />}
         {profiles.length > 0 ? (
-          <div className="grid grid-cols-4 gap-7 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 mt-4">
             {profiles.map((biodata) => {
               return (
-                <Card key={biodata._id} className="flex items-start p-4 shadow-md dark:shadow-gray-800 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+                <Card
+                  key={biodata._id}
+                  className="flex flex-col justify-between p-4 shadow-md dark:shadow-gray-800 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-200"
+                >
                   {/* Left side */}
                   <div className="flex items-center gap-4">
                     <Avatar className="w-16 h-16 border border-emerald-500 dark:border-emerald-400">
@@ -239,7 +242,7 @@ export default function ProfessionalBiodatasPage() {
                   </div>
 
                   {/* Right side */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex justify-end mt-4">
                     <Link href={`/biodatas/${biodata.userId?._id}`}>
                       <Button
                         variant="outline"
