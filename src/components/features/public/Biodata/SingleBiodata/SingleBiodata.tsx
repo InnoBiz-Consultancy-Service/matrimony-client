@@ -81,31 +81,7 @@ export default function Biodata({ id }: { id: string }) {
       .toUpperCase();
   };
 
-  const InfoCard = ({
-    title,
-    icon: Icon,
-    children,
-    className = "",
-  }: {
-    title: string;
-    icon: React.ElementType;
-    children: React.ReactNode;
-    className?: string;
-  }) => (
-    <Card
-      className={`border-emerald-100 hover:shadow-lg transition-all duration-300 ${className}`}
-    >
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-gray-800 flex items-center">
-          <Icon className="h-5 w-5 mr-2 text-emerald-600" />
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">{children}</CardContent>
-    </Card>
-  );
-
-  console.log(biodata);
+  // console.log(biodata);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 p-4">
@@ -572,7 +548,7 @@ export default function Biodata({ id }: { id: string }) {
                       {t.expectedLifePartner?.height}:
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
-                      {biodata?.preference?.height}"
+                      {biodata?.preference?.height}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">

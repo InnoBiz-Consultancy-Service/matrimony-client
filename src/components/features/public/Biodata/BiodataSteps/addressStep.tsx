@@ -35,10 +35,13 @@ export default function AddressStep({ data, updateData }: StepProps) {
     grewUpAt: "",
     ...data.address,
   });
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [districts, setDistricts] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [upazilas, setUpazilas] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [presentDistricts, setPresentDistricts] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [presentUpazilas, setPresentUpazilas] = useState<any[]>([]);
 
   const { language } = useLanguage();
@@ -66,11 +69,13 @@ export default function AddressStep({ data, updateData }: StepProps) {
 
     // Filter districts for this division
     const filteredDistricts = districtsData.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (d: any) => d.divisionName === divisionName
     );
 
     // Remove duplicates
     const uniqueDistricts = filteredDistricts.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (district: any, index: number, self: any[]) =>
         index ===
         self.findIndex((d) => d.districtsName === district.districtsName)
@@ -88,6 +93,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
 
     // Filter upazilas for this district
     const filteredUpazilas = upazilasData.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (u: any) => u.districtsName === districtName
     );
 
@@ -108,11 +114,13 @@ export default function AddressStep({ data, updateData }: StepProps) {
 
     // Filter districts for this division
     const filteredDistricts = districtsData.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (d: any) => d.divisionName === divisionName
     );
 
     // Remove duplicates
     const uniqueDistricts = filteredDistricts.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (district: any, index: number, self: any[]) =>
         index ===
         self.findIndex((d) => d.districtsName === district.districtsName)
@@ -130,6 +138,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
 
     // Filter upazilas for this district
     const filteredUpazilas = upazilasData.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (u: any) => u.districtsName === districtName
     );
 
@@ -173,6 +182,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   <SelectValue placeholder={t.address?.division} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {divisions.map((division: any) => (
                     <SelectItem
                       key={division.division_id}
@@ -198,6 +208,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   <SelectValue placeholder={t.address?.district} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {districts.map((district: any, index) => (
                     <SelectItem key={index} value={district.districtsName}>
                       {district.districtsName} ({district.bnDistrictsName})
@@ -223,6 +234,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   <SelectValue placeholder={t.address?.upazila} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {upazilas.map((upazila: any, index) => (
                     <SelectItem key={index} value={upazila.subDistrictsName}>
                       {upazila.subDistrictsName} ({upazila.bnSubDistrictsName})
@@ -268,6 +280,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   <SelectValue placeholder={t.address?.division} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {divisions.map((division: any) => (
                     <SelectItem
                       key={division.division_id}
@@ -291,6 +304,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   <SelectValue placeholder={t.address?.district} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {presentDistricts.map((district: any, index) => (
                     <SelectItem key={index} value={district.districtsName}>
                       {district.districtsName} ({district.bnDistrictsName})
@@ -316,6 +330,7 @@ export default function AddressStep({ data, updateData }: StepProps) {
                   <SelectValue placeholder={t.address?.upazila} />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {presentUpazilas.map((upazila: any, index) => (
                     <SelectItem key={index} value={upazila.subDistrictsName}>
                       {upazila.subDistrictsName} ({upazila.bnSubDistrictsName})
