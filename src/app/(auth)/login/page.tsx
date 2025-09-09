@@ -287,6 +287,7 @@ const authService = {
 
   storeAuthData: (
     token: string,
+     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */},
     userData: any = {},
     rememberMe: boolean = false
   ) => {
