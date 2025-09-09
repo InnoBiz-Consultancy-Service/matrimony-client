@@ -11,11 +11,13 @@ import maleAvatar from "../../../../../../public/female_avatar.jpg";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
 import {
+  Ban,
   Briefcase,
   GraduationCap,
   Heart,
   Loader2,
   MapPin,
+  Star,
   Target,
   User,
   Users,
@@ -24,11 +26,14 @@ import { Badge } from "@/components/ui/badge";
 import { BiodataType } from "@/types/publicBiodata";
 import { toast } from "sonner";
 import { PageLoader } from "@/components/common/Loader";
+import { useRouter } from "next/navigation";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
   const [ButtonLoader, setButtonLoader] = React.useState(false);
+
+  const router = useRouter();
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
@@ -75,6 +80,55 @@ export default function Biodata({ id }: { id: string }) {
       );
       console.log("Interest sent successfully:", response.data);
       toast.success("Interest sent successfully");
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setButtonLoader(false);
+    }
+  };
+  // TO DO: handleShortlist and handleBlock functions
+  const handleShortlist = async () => {
+    if (!user) return router.push("/login");
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/shortlist`,
+        {
+          userId: user?.userId,
+          biodataId: biodata?.userId?._id,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("Shortlisted successfully:", response.data);
+      toast.success("Shortlisted successfully");
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setButtonLoader(false);
+    }
+  };
+  const handleBlock = async () => {
+    if (!user) return router.push("/login");
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/block`,
+        {
+          userId: user?.userId,
+          biodataId: biodata?.userId?._id,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("Blocked successfully:", response.data);
+      toast.success("Blocked successfully");
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -177,6 +231,22 @@ export default function Biodata({ id }: { id: string }) {
               )}
               {ButtonLoader ? "Sending..." : t.sendInterest}
             </Button>
+            <div className="flex items-center space-x-7 mt-6 justify-center">
+              <Button
+                className="cursor-pointer border-green-400"
+                variant="outline"
+                onClick={handleShortlist}
+              >
+                <Star className="text-green-400" /> Shortlist
+              </Button>
+              <Button
+                className="cursor-pointer border-red-400"
+                variant="outline"
+                onClick={handleBlock}
+              >
+                <Ban className="text-red-400" /> Ignore
+              </Button>
+            </div>
           </div>
 
           {/* Right Side - Detailed Information */}
