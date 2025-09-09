@@ -12,7 +12,22 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { setCookie } from "@/utils/setCookie";
-// Auth service abstraction
+
+// const getCookie = (name: string): string | null => {
+//   const nameEQ = name + "=";
+//   const ca = document.cookie.split(";");
+//   for (let i = 0; i < ca.length; i++) {
+//     let c = ca[i];
+//     while (c.charAt(0) === " ") c = c.substring(1, c.length);
+//     if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+//   }
+//   return null;
+// };
+
+// const deleteCookie = (name: string) => {
+//   document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Strict`;
+// };
+
 // const authService = {
 //   login: async (credentials: {
 //     email: string;
@@ -31,33 +46,211 @@ import { setCookie } from "@/utils/setCookie";
 //     return response.data;
 //   },
 
-//   storeAuthData: (token: string) => {
+//   storeAuthData: (token: string, rememberMe: boolean = false) => {
 //     try {
 //       const decoded = jwtDecode<{ id: string; email: string; exp: number }>(
 //         token
 //       );
 
-//       // Store only necessary non-sensitive data
+//       // User data object
+//       const userData = {
+//         id: decoded.id,
+//         email: decoded.email,
+//       };
+
+//       // Store in localStorage
 //       localStorage.setItem("token", token);
-//       localStorage.setItem(
-//         "user",
-//         JSON.stringify({
-//           id: decoded.id,
-//           email: decoded.email,
-//         })
-//       );
+//       localStorage.setItem("user", JSON.stringify(userData));
+//       // Store in cookies
+//       // Token cookie - expires based on remember me option
+//       const tokenExpiryDays = rememberMe ? 30 : 7;
+//       setCookie("token", token, tokenExpiryDays);
+
+//       // User data cookie
+//       // setCookie("user", JSON.stringify(userData), tokenExpiryDays);
+
+//       // Profile status cookie (default false for new login)
+//       setCookie("profileStatus", "false", tokenExpiryDays);
 
 //       return decoded;
-//     } catch {
+//     } catch (error) {
+//       console.error("❌ Error storing auth data:", error);
 //       throw new Error("Invalid token format");
 //     }
 //   },
 
+//   updateProfileStatus: (status: boolean) => {
+//     try {
+//       // Update in cookie
+//       setCookie("profileStatus", status.toString(), 30);
+
+//       // Update in localStorage if needed
+//       const user = localStorage.getItem("user");
+//       if (user) {
+//         const userData = JSON.parse(user);
+//         userData.profileComplete = status;
+//         localStorage.setItem("user", JSON.stringify(userData));
+//       }
+
+//       console.log("✅ Profile status updated:", status);
+//     } catch (error) {
+//       console.error("❌ Error updating profile status:", error);
+//     }
+//   },
+
 //   clearAuthData: () => {
-//     localStorage.removeItem("token");
-//     localStorage.removeItem("user");
+//     try {
+//       // Clear localStorage
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("user");
+
+//       // Clear cookies
+//       deleteCookie("token");
+//       deleteCookie("user");
+//       deleteCookie("profileStatus");
+
+//     } catch (error) {
+//       console.error("❌ Error clearing auth data:", error);
+//     }
+//   },
+
+//   getToken: (): string | null => {
+//     // First try localStorage, then cookies
+//     return localStorage.getItem("token") || getCookie("token");
+//   },
+
+//   getUser: () => {
+//     try {
+//       // First try localStorage, then cookies
+//       const userStr = localStorage.getItem("user") || getCookie("user");
+//       return userStr ? JSON.parse(userStr) : null;
+//     } catch {
+//       return null;
+//     }
+//   },
+
+//   getProfileStatus: (): boolean => {
+//     // Check cookie first, then localStorage
+//     const cookieStatus = getCookie("profileStatus");
+//     const user = authService.getUser();
+
+//     if (cookieStatus) {
+//       return cookieStatus === "true";
+//     }
+
+//     return user?.profileComplete || false;
+//   },
+
+//   isAuthenticated: (): boolean => {
+//     const token = authService.getToken();
+//     if (!token) return false;
+
+//     try {
+//       const decoded = jwtDecode<{ exp: number }>(token);
+//       const currentTime = Date.now() / 1000;
+
+//       if (decoded.exp < currentTime) {
+//         console.log("⚠️ Token expired, clearing auth data");
+//         authService.clearAuthData();
+//         return false;
+//       }
+
+//       return true;
+//     } catch {
+//       console.log("⚠️ Invalid token, clearing auth data");
+//       authService.clearAuthData();
+//       return false;
+//     }
+//   },
+
+//   // Login with cookie support
+//   loginWithCookies: async (credentials: {
+//     email: string;
+//     password: string;
+//     rememberMe: boolean;
+//   }) => {
+//     try {
+//       const response = await authService.login(credentials);
+
+//       if (response.token) {
+//         // Store auth data in both localStorage and cookies
+//         authService.storeAuthData(response.token, credentials.rememberMe);
+
+//         // If user data includes profile status, update it
+//         if (response.user?.profileComplete !== undefined) {
+//           authService.updateProfileStatus(response.user.profileComplete);
+//         }
+//       }
+
+//       return response;
+//     } catch (error) {
+//       console.error("❌ Login failed:", error);
+//       throw error;
+//     }
 //   },
 // };
+
+// export default function LoginPage() {
+//   const [showPassword, setShowPassword] = React.useState(false);
+//   const [email, setEmail] = React.useState("");
+//   const [password, setPassword] = React.useState("");
+//   const [rememberMe, setRememberMe] = React.useState(false);
+//   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setIsSubmitting(true);
+
+//     try {
+//       // Input validation
+//       if (!email || !password) {
+//         throw new Error("Please enter both email and password");
+//       }
+
+//       // Email format validation
+//       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+//         throw new Error("Please enter a valid email address");
+//       }
+
+//       const { token } = await authService.login({
+//         email,
+//         password,
+//         rememberMe,
+//       });
+//       authService.storeAuthData(token);
+//       window.location.href = "/";
+//       // router.push("/");
+//       toast.success("Login success", {
+//         position: "top-center",
+//         className: "bg-red-600 text-white font-semibold shadow-lg",
+//         style: {
+//           border: "2px solid #34A853",
+//           padding: "12px",
+//           borderRadius: "8px",
+//         },
+//       });
+//     } catch (err: unknown) {
+//       authService.clearAuthData();
+
+//       let message = "Something went wrong!";
+
+//       if (axios.isAxiosError(err) && err.response?.data?.message) {
+//         message = err.response.data.message;
+//       }
+
+//       toast.error(message, {
+//         position: "top-center",
+//         className: "bg-red-600 text-white font-semibold shadow-lg",
+//         style: {
+//           border: "2px solid #ef4444",
+//           padding: "12px",
+//           borderRadius: "8px",
+//         },
+//       });
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
 
 const getCookie = (name: string): string | null => {
   const nameEQ = name + "=";
@@ -92,34 +285,42 @@ const authService = {
     return response.data;
   },
 
-  storeAuthData: (token: string, rememberMe: boolean = false) => {
+  storeAuthData: (
+    token: string,
+    userData: any = {},
+    rememberMe: boolean = false
+  ) => {
     try {
-      const decoded = jwtDecode<{ id: string; email: string; exp: number }>(
-        token
-      );
+      const decoded = jwtDecode<{
+        id: string;
+        email: string;
+        role?: string;
+        exp: number;
+      }>(token);
 
-      // User data object
-      const userData = {
+      const userDataToStore = {
         id: decoded.id,
         email: decoded.email,
+        role: decoded.role || userData.role || "user",
+        ...userData,
       };
+
+      
+      const tokenExpiryDays = rememberMe ? 30 : 7;
 
       // Store in localStorage
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(userData));
-      // Store in cookies
-      // Token cookie - expires based on remember me option
-      const tokenExpiryDays = rememberMe ? 30 : 7;
-      setCookie("token", token, tokenExpiryDays);
+      localStorage.setItem("user", JSON.stringify(userDataToStore));
 
-      // User data cookie
-      setCookie("user", JSON.stringify(userData), tokenExpiryDays);
+      // Store in cookies
+      setCookie("token", token, tokenExpiryDays);
+      setCookie("user", JSON.stringify(userDataToStore), tokenExpiryDays);
+
+      // Store user role separately in cookie for easy access
+      setCookie("userRole", userDataToStore.role, tokenExpiryDays);
 
       // Profile status cookie (default false for new login)
       setCookie("profileStatus", "false", tokenExpiryDays);
-
-      console.log("✅ Auth data stored in localStorage and cookies");
-      console.log("Token expires in:", tokenExpiryDays, "days");
 
       return decoded;
     } catch (error) {
@@ -156,9 +357,10 @@ const authService = {
       // Clear cookies
       deleteCookie("token");
       deleteCookie("user");
+      deleteCookie("userRole");
       deleteCookie("profileStatus");
 
-      console.log("✅ Auth data cleared from localStorage and cookies");
+      console.log("✅ Auth data cleared");
     } catch (error) {
       console.error("❌ Error clearing auth data:", error);
     }
@@ -177,6 +379,18 @@ const authService = {
     } catch {
       return null;
     }
+  },
+
+  getUserRole: (): string | null => {
+    // First check cookie for quick access
+    const roleFromCookie = getCookie("userRole");
+    if (roleFromCookie) {
+      return roleFromCookie;
+    }
+
+    // Fallback to user object
+    const user = authService.getUser();
+    return user?.role || null;
   },
 
   getProfileStatus: (): boolean => {
@@ -213,6 +427,18 @@ const authService = {
     }
   },
 
+  // Check if user has specific role
+  hasRole: (role: string): boolean => {
+    const userRole = authService.getUserRole();
+    return userRole === role;
+  },
+
+  // Check if user has any of the specified roles
+  hasAnyRole: (roles: string[]): boolean => {
+    const userRole = authService.getUserRole();
+    return userRole ? roles.includes(userRole) : false;
+  },
+
   // Login with cookie support
   loginWithCookies: async (credentials: {
     email: string;
@@ -223,8 +449,12 @@ const authService = {
       const response = await authService.login(credentials);
 
       if (response.token) {
-        // Store auth data in both localStorage and cookies
-        authService.storeAuthData(response.token, credentials.rememberMe);
+        // Store auth data in both localStorage and cookies with user data
+        authService.storeAuthData(
+          response.token,
+          response.user,
+          credentials.rememberMe
+        );
 
         // If user data includes profile status, update it
         if (response.user?.profileComplete !== undefined) {
@@ -262,17 +492,21 @@ export default function LoginPage() {
         throw new Error("Please enter a valid email address");
       }
 
-      const { token } = await authService.login({
-        email,
-        password,
-        rememberMe,
-      });
-      authService.storeAuthData(token);
+      // Use loginWithCookies instead of direct login
+      // const response = await authService.loginWithCookies({
+      //   email,
+      //   password,
+      //   rememberMe,
+      // });
+
+      // Log user role for debugging
+      console.log("User logged in with role:", authService.getUserRole());
+
       window.location.href = "/";
-      // router.push("/");
+
       toast.success("Login success", {
         position: "top-center",
-        className: "bg-red-600 text-white font-semibold shadow-lg",
+        className: "bg-green-600 text-white font-semibold shadow-lg",
         style: {
           border: "2px solid #34A853",
           padding: "12px",
@@ -302,20 +536,6 @@ export default function LoginPage() {
     }
   };
 
-  // try {
-  //   const token = localStorage.getItem("token");
-  //   // console.log(token)
-  //   axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/biodata/my-biodata`, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: token,
-  //     },
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  // }
-
-  // Password toggle component
   const PasswordToggle = () => (
     <button
       type="button"
@@ -564,4 +784,3 @@ export default function LoginPage() {
   );
 }
 
-// added comment
