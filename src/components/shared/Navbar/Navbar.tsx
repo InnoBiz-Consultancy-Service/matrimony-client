@@ -118,7 +118,6 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
-
           {/* Desktop CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <LanguageSelector />
@@ -289,7 +288,7 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                   >
-                    <X className="h-5 w-5" />
+                    {/* <X className="h-5 w-5" /> */}
                   </Button>
                 </div>
 
@@ -361,6 +360,11 @@ export default function Navbar() {
 
                 {/* Mobile CTA Buttons */}
                 <div className="border-t border-emerald-100 dark:border-emerald-900 p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <LanguageSelector />
+                    <ThemeToggle />
+                  </div>
+
                   {isAuthenticated ? (
                     <Button
                       onClick={handleLogout}
