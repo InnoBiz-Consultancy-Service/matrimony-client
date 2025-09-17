@@ -116,16 +116,12 @@ export default function RegistrationPage() {
     },
   });
 
-  const onSubmit = async (data: RegistrationFormData) => {
-    setIsSubmitting(true);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({ email: data.email, phone: data.phone })
-      );
-      const response = await axios.post(`api/auth/registration`, {
+ const onSubmit = async (data: RegistrationFormData) => {
+  setIsSubmitting(true);
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/user/register`,
+      {
         agreeToPrivacy: data.agreeToPrivacy,
         agreeToTerms: data.agreeToTerms,
         role: data.role,
@@ -134,20 +130,27 @@ export default function RegistrationPage() {
         phone: data.phone,
         email: data.email,
         name: data.name,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        isVerified: false,
-      });
-      console.log("Registration response:", response.data);
-      localStorage.setItem("userId", JSON.stringify(response.data.userId));
-      router.push("verify-otp");
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ message: string }>;
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      
+      }
+    );
+
+    console.log("Registration response:", response.data);
+console.log("Storing userId in localStorage:", response.data?.data?.userId);
+    localStorage.setItem("userId", JSON.stringify(response.data?.data?.userId));
+    localStorage.setItem(
+      "userInfo",
+      JSON.stringify({ email: data.email, phone: data.phone })
+    );
+
+    router.push("verify-otp");
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+    toast.error(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const nextStep = async () => {
     const fieldsToValidate =
@@ -315,7 +318,7 @@ export default function RegistrationPage() {
                                 <Input
                                   {...field}
                                   placeholder="Enter your name"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300 placeholder:text-gray-400 text-black"
                                 />
                               </div>
                             </FormControl>
@@ -340,7 +343,7 @@ export default function RegistrationPage() {
                                   {...field}
                                   type="email"
                                   placeholder="Enter your email address"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl placeholder:text-gray-400 transition-all duration-300 text-black"
                                 />
                               </div>
                             </FormControl>
@@ -380,7 +383,7 @@ export default function RegistrationPage() {
                                   {...field}
                                   type={showPassword ? "text" : "password"}
                                   placeholder="Create a strong password"
-                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
                                 />
                                 <button
                                   type="button"
@@ -418,7 +421,7 @@ export default function RegistrationPage() {
                                     showConfirmPassword ? "text" : "password"
                                   }
                                   placeholder="Confirm your password"
-                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
                                 />
                                 <button
                                   type="button"
@@ -456,7 +459,7 @@ export default function RegistrationPage() {
                                   {...field}
                                   type="tel"
                                   placeholder="+1 (555) 123-4567"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
                                 />
                               </div>
                             </FormControl>
@@ -488,7 +491,7 @@ export default function RegistrationPage() {
                                   />
                                   <Label
                                     htmlFor="male"
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-black "
                                   >
                                     Male
                                   </Label>
@@ -501,7 +504,7 @@ export default function RegistrationPage() {
                                   />
                                   <Label
                                     htmlFor="female"
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-black"
                                   >
                                     Female
                                   </Label>
