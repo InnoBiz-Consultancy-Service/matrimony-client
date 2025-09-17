@@ -70,31 +70,9 @@ const Layout = ({
   return (
     <html>
       <body>
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="w-full">
-            <div className="flex items-center space-x-10">
-              <div>
-                <SidebarTrigger />
-              </div>
-              <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full border-b bg-white px-4 sm:px-6 py-4 shadow-sm gap-4">
-                <div className="w-full sm:w-auto">
-                  <Breadcrumb>
-                    <BreadcrumbList>{breadcrumbItems}</BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-
-                <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <button className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100 flex-shrink-0 border ">
-                    <UserRoundPen className="h-5 w-5" />
-                    {/* <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-indigo-500"></span> */}
-                  </button>
-                </div>
-              </header>
-            </div>
-            <div className="px-4">{children}</div>
-          </main>
-        </SidebarProvider>
+        <main className="w-full">
+          <div className="px-4">{children}</div>
+        </main>
       </body>
     </html>
   );
