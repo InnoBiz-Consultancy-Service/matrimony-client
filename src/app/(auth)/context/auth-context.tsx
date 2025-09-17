@@ -1,127 +1,103 @@
-"use client";
+"use client"
 
-import {
-  createContext,
-  useContext,
-  ReactNode,
-  useState,
-  useEffect,
-} from "react";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { User } from "@/types/user";
+import type React from "react"
+import { createContext, useContext, useState, useEffect } from "react"
 
-type AuthContextType = {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (token: string) => void;
-  logout: () => Promise<void>;
-};
+interface User {
+  userId: string
+  name: string
+  userEmail: string
+  gender?: string
+  role?: string
+}
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+interface AuthContextType {
+  user: User | null
+  isAuthenticated: boolean
+  login: (userData: User, token: string) => void
+  logout: () => void
+  loading: boolean
+}
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  const isAuthenticated = !!user
+
+  // Check for existing auth on mount
   useEffect(() => {
-    initializeAuth();
-  }, []);
-
-  const initializeAuth = () => {
-    const token = getCookie("token") || localStorage.getItem("token");
-
-    if (token) {
+    const checkAuth = () => {
       try {
-        const decoded = jwtDecode<User>(token);
-        setUser(decoded);
+        const token = localStorage.getItem("authToken") || getCookie("authToken")
+        const userData = localStorage.getItem("authUser")
+
+        if (token && userData) {
+          const parsedUser = JSON.parse(userData)
+          setUser(parsedUser)
+        }
       } catch (error) {
-        console.error("Invalid token:", error);
-        clearAuthData();
+        console.error("Error checking auth:", error)
+        // Clear invalid data
+        localStorage.removeItem("authToken")
+        localStorage.removeItem("authUser")
+        deleteCookie("authToken")
+      } finally {
+        setLoading(false)
       }
     }
 
-    setIsLoading(false);
-  };
+    checkAuth()
+  }, [])
 
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
-    setCookie("accessToken", token, 7);
-    const decoded = jwtDecode<User>(token);
-    setUser(decoded);
-  };
+  const login = (userData: User, token: string) => {
+    setUser(userData)
+    localStorage.setItem("authToken", token)
+    localStorage.setItem("authUser", JSON.stringify(userData))
+    setCookie("authToken", token, 7) // 7 days
+  }
 
-  const logout = async () => {
-    try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/logout`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-
-      clearAuthData();
-
-      // Redirect to login page
-      router.push("/login");
-      router.refresh();
-    } catch (error) {
-      console.error("Logout failed:", error);
-      clearAuthData();
-      router.push("/login");
-    }
-  };
-
-  const clearAuthData = () => {
-    localStorage.removeItem("token");
-    deleteCookie("accessToken");
-    deleteCookie("token");
-    deleteCookie("userRole");
-    deleteCookie("user");
-    deleteCookie("profileStatus");
-    setUser(null);
-  };
-
-  // Helper functions for cookie management
-  const setCookie = (name: string, value: string, days: number) => {
-    const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
-  };
-
-  const getCookie = (name: string) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(";").shift();
-  };
-
-  const deleteCookie = (name: string) => {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/`;
-  };
+  const logout = () => {
+    setUser(null)
+    localStorage.removeItem("authToken")
+    localStorage.removeItem("authUser")
+    deleteCookie("authToken")
+    window.location.href = "/login"
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        isLoading,
-        login,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, loading }}>{children}</AuthContext.Provider>
+  )
+}
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
+export function useAuth() {
+  const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth must be used within an AuthProvider")
   }
-  return context;
-};
+  return context
+}
+
+// Cookie utility functions
+function setCookie(name: string, value: string, days: number) {
+  const expires = new Date()
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;secure;samesite=strict`
+}
+
+function getCookie(name: string): string | null {
+  const nameEQ = name + "="
+  const ca = document.cookie.split(";")
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i]
+    while (c.charAt(0) === " ") c = c.substring(1, c.length)
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length)
+  }
+  return null
+}
+
+function deleteCookie(name: string) {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`
+}

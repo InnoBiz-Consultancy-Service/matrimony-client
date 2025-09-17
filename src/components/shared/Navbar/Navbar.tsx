@@ -1,62 +1,71 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, Heart, User, LogOut, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useAuth } from "@/app/(auth)/context/auth-context";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import femaleAvatar from "../../../../public/female_avatar.jpg";
-import maleAvatar from "../../../../public/men_avatar.webp";
-import type { User as UserType } from "@/types/user";
-import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle";
-import { LanguageSelector } from "../languageSelector/LanguageSelector";
-import { useLanguage } from "@/hooks/use-language";
-import { navbarTranslation } from "@/dictionary/navbar";
+import * as React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Menu, Heart, User, LogOut, ChevronDown } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+import { authService } from "@/lib/auth-service"
+import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle"
+import { LanguageSelector } from "../languageSelector/LanguageSelector"
+
 
 export default function Navbar() {
-  const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = React.useState(false);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
-  const {
-    user,
-    isAuthenticated,
-    logout,
-  }: { user: UserType | null; isAuthenticated: boolean; logout: () => void } =
-    useAuth();
+  const pathname = usePathname()
+  const [isScrolled, setIsScrolled] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [isProfileOpen, setIsProfileOpen] = React.useState(false)
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false)
+  const [user, setUser] = React.useState<any>(null)
 
-  const { language } = useLanguage();
-  const t = navbarTranslation[language];
   const navigationItems = [
-    { title: t.home, href: "/" },
-    { title: t.findMatch, href: "/biodatas" },
-    { title: t.successStories, href: "/success-stories" },
-    { title: t.about, href: "/about" },
-    { title: t.contact, href: "/contact" },
-  ];
+    { title: "Home", href: "/" },
+    { title: "Find Match", href: "/biodatas" },
+    { title: "Success Stories", href: "/success-stories" },
+    { title: "About", href: "/about" },
+    { title: "Contact", href: "/contact" },
+  ]
+
+  React.useEffect(() => {
+    const checkAuthStatus = () => {
+      const authenticated = authService.isAuthenticated()
+      const userData = authService.getUser()
+
+      setIsAuthenticated(authenticated)
+      setUser(userData)
+    }
+
+    checkAuthStatus()
+
+    // Listen for storage changes (when user logs in from another tab)
+    const handleStorageChange = () => {
+      checkAuthStatus()
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+    return () => window.removeEventListener("storage", handleStorageChange)
+  }, [pathname])
+
   // Handle scroll effect
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-  const handleLogout = () => {
-    logout();
-    setIsProfileOpen(false);
-  };
+  const handleLogout = async () => {
+    await authService.logout()
+    setIsAuthenticated(false)
+    setUser(null)
+    setIsProfileOpen(false)
+  }
 
   const getInitials = (name: string) => {
     return (
@@ -65,8 +74,8 @@ export default function Navbar() {
         .map((n) => n[0])
         .join("")
         .toUpperCase() || "U"
-    );
-  };
+    )
+  }
 
   return (
     <header
@@ -74,7 +83,7 @@ export default function Navbar() {
         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
         isScrolled
           ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-lg border-emerald-100 dark:border-gray-800"
-          : "bg-white dark:bg-gray-950 border-emerald-50 dark:border-gray-800"
+          : "bg-white dark:bg-gray-950 border-emerald-50 dark:border-gray-800",
       )}
     >
       <div className="container mx-auto px-4 lg:px-8">
@@ -107,7 +116,7 @@ export default function Navbar() {
                   "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 group",
                   pathname === item.href
                     ? "text-[#50C878] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70"
-                    : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400"
+                    : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400",
                 )}
               >
                 {item.title}
@@ -118,6 +127,7 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
+
           {/* Desktop CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <LanguageSelector />
@@ -132,14 +142,6 @@ export default function Navbar() {
                       className="flex items-center space-x-2 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-all duration-200 p-2 rounded-lg cursor-pointer"
                     >
                       <Avatar className="h-8 w-8 rounded-lg ring-2 ring-emerald-100 dark:ring-emerald-900 hover:ring-emerald-200 dark:hover:ring-emerald-700 transition-all duration-200">
-                        <AvatarImage
-                          src={
-                            user?.gender === "male"
-                              ? maleAvatar.src
-                              : femaleAvatar.src
-                          }
-                          alt={user?.name}
-                        />
                         <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold text-sm">
                           {getInitials(user?.name || "")}
                         </AvatarFallback>
@@ -155,27 +157,20 @@ export default function Navbar() {
                     <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 dark:from-emerald-950/50 dark:to-pink-950/50 border-b border-emerald-100 dark:border-emerald-900">
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white dark:ring-gray-800 shadow-md">
-                          <AvatarImage
-                            src={
-                              user?.gender === "male"
-                                ? maleAvatar.src
-                                : femaleAvatar.src
-                            }
-                            alt={user?.name}
-                          />
                           <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold text-lg">
                             {getInitials(user?.name || "")}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-gray-800 dark:text-gray-200 truncate">
+                            {user?.name || "User"}
+                          </p>
                           <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                             {user?.userEmail || "user@example.com"}
                           </p>
                           <div className="flex items-center space-x-2 mt-1">
                             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                              Online
-                            </span>
+                            <span className="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
                           </div>
                         </div>
                       </div>
@@ -183,37 +178,24 @@ export default function Navbar() {
 
                     {/* Menu Items */}
                     <div className="py-2">
-                      <button
+                      <Link
+                        href={user?.role === "admin" ? "/dashboard" : "/profile"}
                         onClick={() => setIsProfileOpen(false)}
                         className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
                       >
                         <div className="h-9 w-9 rounded-lg bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800 transition-colors">
                           <User className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
-                        {user?.role === "admin" ? (
-                          <Link href={"/dashboard"}>
-                            <div className="flex-1">
-                              <p className="font-medium text-gray-800 dark:text-gray-200">
-                                Admin Dashboard
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Manage users and content
-                              </p>
-                            </div>
-                          </Link>
-                        ) : (
-                          <Link href={"/profile"}>
-                            <div>
-                              <p className="font-medium text-gray-800 dark:text-gray-200">
-                                My Profile
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                View and edit your profile
-                              </p>
-                            </div>
-                          </Link>
-                        )}
-                      </button>
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-800 dark:text-gray-200">
+                            {user?.role === "admin" ? "Admin Dashboard" : "My Profile"}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {user?.role === "admin" ? "Manage users and content" : "View and edit your profile"}
+                          </p>
+                        </div>
+                      </Link>
+
                       <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
 
                       <button
@@ -224,12 +206,8 @@ export default function Navbar() {
                           <LogOut className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-800 dark:text-gray-200">
-                            Sign Out
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Logout from your account
-                          </p>
+                          <p className="font-medium text-gray-800 dark:text-gray-200">Sign Out</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Logout from your account</p>
                         </div>
                       </button>
                     </div>
@@ -243,12 +221,12 @@ export default function Navbar() {
                     variant="ghost"
                     className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 font-medium transition-all duration-200"
                   >
-                    {t.login}
+                    Login
                   </Button>
                 </Link>
                 <Link href="/registration">
                   <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white shadow-lg hover:shadow-emerald-200 dark:hover:shadow-emerald-800/30 transition-all duration-300 font-medium px-6">
-                    {t.registration}
+                    Join Free
                   </Button>
                 </Link>
               </>
@@ -282,14 +260,6 @@ export default function Navbar() {
                       Nikah
                     </span>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setIsOpen(false)}
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-                  >
-                    {/* <X className="h-5 w-5" /> */}
-                  </Button>
                 </div>
 
                 {/* User Info in Mobile */}
@@ -297,14 +267,6 @@ export default function Navbar() {
                   <div className="p-4 bg-gradient-to-r from-emerald-50 to-pink-50 dark:from-emerald-950/50 dark:to-pink-950/50 border-b border-emerald-100 dark:border-emerald-900">
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-12 w-12 rounded-lg ring-2 ring-white dark:ring-gray-800 shadow-md">
-                        <AvatarImage
-                          src={
-                            user?.gender === "male"
-                              ? maleAvatar.src
-                              : femaleAvatar.src
-                          }
-                          alt={user?.name}
-                        />
                         <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 text-white font-semibold">
                           {getInitials(user?.name || "")}
                         </AvatarFallback>
@@ -334,28 +296,12 @@ export default function Navbar() {
                         "flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 mx-2",
                         pathname === item.href
                           ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70 border-l-4 border-emerald-600 dark:border-emerald-500 shadow-sm"
-                          : "text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
+                          : "text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50",
                       )}
                     >
                       {item.title}
                     </Link>
                   ))}
-
-                  {/* Mobile User Menu Items */}
-                  {isAuthenticated && (
-                    <>
-                      <Separator className="my-4 bg-emerald-100 dark:bg-emerald-900" />
-
-                      <Link
-                        href="/profile"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center space-x-3 px-6 py-3 text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-all duration-200 mx-2 rounded-lg"
-                      >
-                        <User className="h-5 w-5" />
-                        <span className="font-medium">My Profile</span>
-                      </Link>
-                    </>
-                  )}
                 </nav>
 
                 {/* Mobile CTA Buttons */}
@@ -401,5 +347,5 @@ export default function Navbar() {
         </div>
       </div>
     </header>
-  );
+  )
 }
