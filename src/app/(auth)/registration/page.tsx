@@ -383,7 +383,7 @@ console.log("Storing userId in localStorage:", response.data?.data?.userId);
                                   {...field}
                                   type={showPassword ? "text" : "password"}
                                   placeholder="Create a strong password"
-                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 pr-10 py-3 border-2  text-gray-900 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
                                 />
                                 <button
                                   type="button"
@@ -421,7 +421,7 @@ console.log("Storing userId in localStorage:", response.data?.data?.userId);
                                     showConfirmPassword ? "text" : "password"
                                   }
                                   placeholder="Confirm your password"
-                                  className="pl-10 pr-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 pr-10 py-3 border-2 text-gray-900 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
                                 />
                                 <button
                                   type="button"
@@ -459,7 +459,7 @@ console.log("Storing userId in localStorage:", response.data?.data?.userId);
                                   {...field}
                                   type="tel"
                                   placeholder="+1 (555) 123-4567"
-                                  className="pl-10 py-3 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
+                                  className="pl-10 py-3 border-2 text-gray-900 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 placeholder:text-gray-400 rounded-xl transition-all duration-300"
                                 />
                               </div>
                             </FormControl>
