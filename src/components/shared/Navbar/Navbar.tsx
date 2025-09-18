@@ -169,6 +169,24 @@ export default function Navbar() {
                           </p>
                         </div>
                       </Link>
+                        <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
+                      <Link
+    href="/profile/post-testimony"
+    onClick={() => setIsProfileOpen(false)}
+    className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
+  >
+    <div className="h-9 w-9 rounded-lg bg-pink-100 dark:bg-pink-900 flex items-center justify-center group-hover:bg-pink-200 dark:group-hover:bg-pink-800 transition-colors">
+      <Heart className="h-4 w-4 text-pink-600 dark:text-pink-400" />
+    </div>
+    <div className="flex-1">
+      <p className="font-medium text-gray-800 dark:text-gray-200">Submit Testimony</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        Share your success story with others
+      </p>
+    </div>
+  </Link>
+
+
 
                       <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
 

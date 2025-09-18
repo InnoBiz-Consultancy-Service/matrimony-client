@@ -58,7 +58,7 @@ export default function BkashManualPayment() {
   const planId = searchParams.get("plan") || "premium";
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const router = useRouter();
 
   const { language } = useLanguage();
@@ -161,7 +161,7 @@ export default function BkashManualPayment() {
         setIsSubmitting(false);
         return;
       }
-      const token = localStorage.getItem("token");
+      
       if (!token) {
         throw new Error("No authentication token found");
       }
