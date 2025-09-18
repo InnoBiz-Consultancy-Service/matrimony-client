@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react"
@@ -13,255 +13,101 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import { toast } from "sonner"
-import { setCookie } from "@/utils/setCookie"
+
+// Cookie helpers
+const setCookie = (name: string, value: string, days: number) => {
+  const expires = new Date()
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Strict`
+}
 
 const getCookie = (name: string): string | null => {
-  if (typeof window === "undefined") return null
   const nameEQ = name + "="
   const ca = document.cookie.split(";")
   for (let i = 0; i < ca.length; i++) {
-    let c = ca[i]
-    while (c.charAt(0) === " ") c = c.substring(1, c.length)
-    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length)
+    let c = ca[i].trim()
+    if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length))
   }
   return null
 }
 
 const deleteCookie = (name: string) => {
-  if (typeof window === "undefined") return
   document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Strict`
 }
 
+// Auth service using only cookies
 const authService = {
-  login: async (credentials: {
-    email: string
-    password: string
-    rememberMe: boolean
-  }) => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, credentials, {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    })
+  login: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+      credentials,
+      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+    )
 
-    if (!response.data?.data.token) {
-      throw new Error("Authentication failed: No token received")
-    }
-
+    if (!response.data?.data.token) throw new Error("Authentication failed: No token received")
     return response.data?.data
   },
 
-  storeAuthData: (
-    token: string,
-    userData: any = {},
-    rememberMe = false,
-  ) => {
-    try {
-      const decoded = jwtDecode<{
-        userId: string
-        email: string
-        role?: string
-        exp: number
-      }>(token)
-
-      const userDataToStore = {
-        userId: decoded.userId,
-        email: decoded.email,
-        role: decoded.role || userData.role || "user",
-        ...userData,
-      }
-
-      const tokenExpiryDays = rememberMe ? 30 : 7
-
-      // Store in localStorage
-      localStorage.setItem("token", token)
-      localStorage.setItem("user", JSON.stringify(userDataToStore))
-
-      // Store in cookies
-      setCookie("token", token, tokenExpiryDays)
-      setCookie("user", JSON.stringify(userDataToStore), tokenExpiryDays)
-
-      // Store user role separately in cookie for easy access
-      setCookie("userRole", userDataToStore.role, tokenExpiryDays)
-
-      // Profile status cookie (default false for new login)
-      setCookie("profileStatus", "false", tokenExpiryDays)
-
-      return decoded
-    } catch (error) {
-      console.error("❌ Error storing auth data:", error)
-      throw new Error("Invalid token format")
+  storeAuthData: (token: string, userData: any = {}, rememberMe = false) => {
+    const decoded = jwtDecode<{ userId: string; email: string; role?: string; exp: number , name: string }>(token)
+    const userToStore = {
+      userId: decoded.userId,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role || userData.role || "user",
+      ...userData,
     }
-  },
-
-  updateProfileStatus: (status: boolean) => {
-    try {
-      // Update in cookie
-      setCookie("profileStatus", status.toString(), 30)
-
-      // Update in localStorage if needed
-      const user = localStorage.getItem("user")
-      if (user) {
-        const userData = JSON.parse(user)
-        userData.profileComplete = status
-        localStorage.setItem("user", JSON.stringify(userData))
-      }
-
-      console.log("✅ Profile status updated:", status)
-    } catch (error) {
-      console.error("❌ Error updating profile status:", error)
-    }
+    const days = rememberMe ? 30 : 7
+    setCookie("token", token, days)
+    setCookie("user", JSON.stringify(userToStore), days)
+    setCookie("userRole", userToStore.role, days)
+    setCookie("hasBiodata", userToStore.hasBiodata ? "true" : "false", days)
+    setCookie("subscriptionType", userToStore.subscriptionType || "free", days)
+    return decoded
   },
 
   clearAuthData: () => {
-    try {
-      // Clear localStorage
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
-
-      // Clear cookies
-      deleteCookie("token")
-      deleteCookie("user")
-      deleteCookie("userRole")
-      deleteCookie("profileStatus")
-
-      console.log("✅ Auth data cleared")
-    } catch (error) {
-      console.error("❌ Error clearing auth data:", error)
-    }
-  },
-
-  getToken: (): string | null => {
-    if (typeof window === 'undefined') return null
-    
-    // First try localStorage, then cookies
-    const tokenFromLocalStorage = localStorage.getItem("token")
-    if (tokenFromLocalStorage) return tokenFromLocalStorage
-
-    // Then check both types of cookies
-    return getCookie("token") || getCookie("accessToken")
-  },
-
-  getUser: () => {
-    try {
-      // First try localStorage, then cookies
-      const userStr = localStorage.getItem("user") || getCookie("user")
-      return userStr ? JSON.parse(userStr) : null
-    } catch {
-      return null
-    }
-  },
-
-  getUserRole: (): string | null => {
-    // First check cookie for quick access
-    const roleFromCookie = getCookie("userRole")
-    if (roleFromCookie) {
-      return roleFromCookie
-    }
-
-    // Fallback to user object
-    const user = authService.getUser()
-    return user?.role || null
-  },
-
-  getProfileStatus: (): boolean => {
-    // Check cookie first, then localStorage
-    const cookieStatus = getCookie("profileStatus")
-    const user = authService.getUser()
-
-    if (cookieStatus) {
-      return cookieStatus === "true"
-    }
-
-    return user?.profileComplete || false
+    deleteCookie("token")
+    deleteCookie("user")
+    deleteCookie("userRole")
+    deleteCookie("profileStatus")
   },
 
   isAuthenticated: (): boolean => {
-    if (typeof window === 'undefined') return false
-    
-    const token = authService.getToken()
+    const token = getCookie("token")
     if (!token) return false
-
     try {
       const decoded = jwtDecode<{ exp: number }>(token)
       const currentTime = Date.now() / 1000
-
       if (decoded.exp < currentTime) {
-        console.log("⚠️ Token expired, clearing auth data")
         authService.clearAuthData()
         return false
       }
-
       return true
     } catch {
-      console.log("⚠️ Invalid token, clearing auth data")
       authService.clearAuthData()
       return false
-    }
-  },
-
-  // Check if user has specific role
-  hasRole: (role: string): boolean => {
-    const userRole = authService.getUserRole()
-    return userRole === role
-  },
-
-  // Check if user has any of the specified roles
-  hasAnyRole: (roles: string[]): boolean => {
-    const userRole = authService.getUserRole()
-    return userRole ? roles.includes(userRole) : false
-  },
-
-  // Login with cookie support
-  loginWithCookies: async (credentials: {
-    email: string
-    password: string
-    rememberMe: boolean
-  }) => {
-    try {
-      const response = await authService.login(credentials)
-
-      if (response.token) {
-        // Store auth data in both localStorage and cookies with user data
-        authService.storeAuthData(response.token, response.user, credentials.rememberMe)
-
-        // If user data includes profile status, update it
-        if (response.user?.profileComplete !== undefined) {
-          authService.updateProfileStatus(response.user.profileComplete)
-        }
-      }
-
-      return response
-    } catch (error) {
-      console.error("❌ Login failed:", error)
-      throw error
     }
   },
 }
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [email, setEmail] = React.useState("")
-  const [password, setPassword] = React.useState("")
-  const [rememberMe, setRememberMe] = React.useState(false)
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [isCheckingAuth, setIsCheckingAuth] = React.useState(true)
+  const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
   const router = useRouter()
 
-  // Check authentication status on component mount
   useEffect(() => {
-    const checkAuthStatus = () => {
-      if (authService.isAuthenticated()) {
-        console.log("User already logged in, redirecting to home")
-        router.push("/")
-      } else {
-        setIsCheckingAuth(false)
-      }
+    if (authService.isAuthenticated()) {
+      router.push("/")
+    } else {
+      setIsCheckingAuth(false)
     }
-
-    checkAuthStatus()
   }, [router])
 
-  // Show loading spinner while checking auth status
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -276,97 +122,23 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
-      // Input validation
-      if (!email || !password) {
-        throw new Error("Please enter both email and password")
-      }
+      if (!email || !password) throw new Error("Please enter both email and password")
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Please enter a valid email")
+      if (password.length < 8) throw new Error("Password must be at least 8 characters long")
 
-      // Email format validation
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        throw new Error("Please enter a valid email address")
-      }
+      const response = await authService.login({ email, password, rememberMe })
+      authService.storeAuthData(response.token, response.user, rememberMe)
 
-      // Password length validation
-      if (password.length < 8) {
-        throw new Error("Password must be at least 8 characters long")
-      }
-
-      // Use loginWithCookies
-      const response = await authService.loginWithCookies({
-        email,
-        password,
-        rememberMe,
-      })
-
-      // Log user role for debugging
-      console.log("User logged in with role:", authService.getUserRole())
-      console.log("Login successful:", response)
-
-      // Show success toast
-      toast.success("Login successful! Redirecting...", {
-        position: "top-center",
-        className: "bg-green-600 text-white font-semibold shadow-lg",
-        style: {
-          border: "2px solid #34A853",
-          padding: "12px",
-          borderRadius: "8px",
-        },
-      })
-
-      // Small delay to show toast before redirect
-      setTimeout(() => {
-        window.location.href = "/"
-      }, 1000)
-    } catch (err: unknown) {
-      // Clear auth data on error
+      toast.success("Login successful! Redirecting...", { position: "top-center" })
+      setTimeout(() => router.push("/"), 1000)
+    } catch (err: any) {
       authService.clearAuthData()
-
-      let message = "Something went wrong!"
-
-      if (axios.isAxiosError(err)) {
-        // Handle axios errors
-        if (err.response?.data?.message) {
-          message = err.response.data.data.message
-        } else if (err.response?.status === 401) {
-          message = "Invalid email or password"
-        } else if (err.response?.status === 404) {
-          message = "Account not found"
-        } else if (err.response && typeof err.response.status === "number" && err.response.status >= 500) {
-          message = "Server error. Please try again later"
-        } else if (err.code === "NETWORK_ERROR" || !err.response) {
-          message = "Network error. Please check your connection"
-        }
-      } else if (err instanceof Error) {
-        // Handle custom validation errors
-        message = err.message
-      }
-
-      console.error("Login error:", err)
-
-      toast.error(message, {
-        position: "top-center",
-        className: "bg-red-600 text-white font-semibold shadow-lg",
-        style: {
-          border: "2px solid #ef4444",
-          padding: "12px",
-          borderRadius: "8px",
-        },
-      })
+      const message = err.response?.data?.message || err.message || "Something went wrong!"
+      toast.error(message, { position: "top-center" })
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const handleGoogleLogin = () => {
-    console.log("Starting Google login...")
-    // Redirect to backend Google OAuth endpoint
-    window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`
-      setTimeout(() => {
-        window.location.href = "/"
-      }, 1000)
-
   }
 
   const PasswordToggle = () => (
@@ -379,6 +151,11 @@ export default function LoginPage() {
       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
     </button>
   )
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`
+     toast.success("Login successful! Redirecting...", { position: "top-center" })
+      setTimeout(() => router.push("/"), 1000)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center px-4">
