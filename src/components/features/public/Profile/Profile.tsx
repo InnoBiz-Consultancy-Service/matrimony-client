@@ -20,28 +20,32 @@ import { biodataTranslation } from "@/dictionary/biodata";
 import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
 import { PageLoader } from "@/components/common/Loader";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 export default function Profile() {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
 
+  const { token, user } = useAuth();
+  console.log(user);
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
 
   React.useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
       setLoading(true);
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/my-biodata`,
           {
             headers: {
-              Authorization: `${token}`,
+              "Content-Type": "application/json",
+              Authorization: token,
             },
           }
         );
+        console.log(response);
         setBiodata(response?.data?.data);
       } catch (error) {
         console.error("Error fetching profile:", error);
