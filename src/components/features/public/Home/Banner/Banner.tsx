@@ -10,7 +10,7 @@ export default function Banner() {
   const t = bannerContent[language];
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden transition-colors duration-300">
+    <section className="relative min-h-screen bg-gradient-to-br from-emerald-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden transition-colors duration-300">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/30 dark:bg-emerald-500/20 rounded-full blur-3xl"></div>

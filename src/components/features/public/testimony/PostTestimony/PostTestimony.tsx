@@ -1,50 +1,45 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { Star, Send, ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { useRouter } from "next/navigation"
-import axios from "axios"
-import toast, { Toaster } from "react-hot-toast"
-import { useAuth } from "@/app/(auth)/context/auth-context"
-
-
+import type React from "react";
+import { useState } from "react";
+import { Star, Send, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 export default function PostTestimony() {
-  const [rating, setRating] = useState(0)
-  const [hoveredRating, setHoveredRating] = useState(0)
-  const [comment, setComment] = useState("")
-   const {token} = useAuth()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const router = useRouter()
-  console.log("Token in PostTestimony:", token); // Debugging line to check token value
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const { token } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  console.log("Token in PostTestimony:", token);
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!rating || !comment.trim() ) {
-      toast.error("দয়া করে সব ফিল্ড পূরণ করুন")
-      return
+    if (!rating || !comment.trim()) {
+      toast.error("দয়া করে সব ফিল্ড পূরণ করুন");
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
-   
-
       if (!token) {
-        toast.error("অনুগ্রহ করে লগইন করুন")
-        setIsSubmitting(false)
-        return
+        toast.error("অনুগ্রহ করে লগইন করুন");
+        setIsSubmitting(false);
+        return;
       }
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/review`,
         {
-        
           rating,
           comment: comment,
         },
@@ -53,39 +48,47 @@ export default function PostTestimony() {
             Authorization: `${token}`,
           },
         }
-      )
+      );
 
- if (response.data.success) {
-    toast.success(response.data.message || "রিভিউ সফলভাবে জমা দেওয়া হয়েছে!")
-    setRating(0)
-    setComment("")
-  }
+      if (response.data.success) {
+        toast.success(
+          response.data.message || "রিভিউ সফলভাবে জমা দেওয়া হয়েছে!"
+        );
+        setRating(0);
+        setComment("");
+      }
     } catch (error: any) {
-      console.error("Review submission error:", error)
-      toast.error(error.response?.data?.message || "রিভিউ জমা দিতে সমস্যা হয়েছে")
+      console.error("Review submission error:", error);
+      toast.error(
+        error.response?.data?.message || "রিভিউ জমা দিতে সমস্যা হয়েছে"
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50">
-
       {/* Header */}
-     
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto px-4 py-8">
         <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="text-center pb-6">
-            <CardTitle className="text-2xl font-bold text-emerald-800 mb-2">আপনার মতামত জানান</CardTitle>
-            <p className="text-emerald-600">আমাদের সার্ভিস সম্পর্কে আপনার মতামত জানান</p>
+            <CardTitle className="text-2xl font-bold text-emerald-800 mb-2">
+              আপনার মতামত জানান
+            </CardTitle>
+            <p className="text-emerald-600">
+              আমাদের সার্ভিস সম্পর্কে আপনার মতামত জানান
+            </p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Rating Section */}
               <div className="space-y-3">
-                <Label className="text-emerald-700 font-medium">রেটিং দিন *</Label>
+                <Label className="text-emerald-700 font-medium">
+                  রেটিং দিন *
+                </Label>
                 <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -98,7 +101,9 @@ export default function PostTestimony() {
                     >
                       <Star
                         className={`w-8 h-8 ${
-                          star <= (hoveredRating || rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                          star <= (hoveredRating || rating)
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
                         } transition-colors`}
                       />
                     </button>
@@ -120,7 +125,10 @@ export default function PostTestimony() {
 
               {/* Comment Section */}
               <div className="space-y-2">
-                <Label htmlFor="comment" className="text-emerald-700 font-medium">
+                <Label
+                  htmlFor="comment"
+                  className="text-emerald-700 font-medium"
+                >
                   আপনার মন্তব্য *
                 </Label>
                 <Textarea
@@ -146,7 +154,7 @@ export default function PostTestimony() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                disabled={isSubmitting || !rating || !comment.trim() }
+                disabled={isSubmitting || !rating || !comment.trim()}
                 className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 text-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
@@ -168,7 +176,9 @@ export default function PostTestimony() {
         {/* Guidelines Card */}
         <Card className="mt-6 shadow-lg border-0 bg-white/60 backdrop-blur-sm">
           <CardContent className="pt-6">
-            <h3 className="font-bold text-emerald-800 mb-3">রিভিউ লেখার নির্দেশনা:</h3>
+            <h3 className="font-bold text-emerald-800 mb-3">
+              রিভিউ লেখার নির্দেশনা:
+            </h3>
             <ul className="space-y-2 text-emerald-700">
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-1">•</span>
@@ -192,5 +202,5 @@ export default function PostTestimony() {
         <Toaster position="top-right" reverseOrder={false} />
       </div>
     </div>
-  )
+  );
 }
