@@ -25,7 +25,7 @@ import { useAuth } from "@/app/(auth)/context/auth-context";
 export default function Profile() {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
-
+console.log(biodata)
   const { token, user } = useAuth();
   console.log(user);
   // Translation function
