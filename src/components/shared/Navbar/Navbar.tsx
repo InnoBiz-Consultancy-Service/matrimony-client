@@ -10,18 +10,15 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { authService } from "@/lib/auth-service"
 import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle"
+import { useAuth } from "@/app/(auth)/context/auth-context"
 import { LanguageSelector } from "../languageSelector/LanguageSelector"
-
-
 export default function Navbar() {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isOpen, setIsOpen] = React.useState(false)
   const [isProfileOpen, setIsProfileOpen] = React.useState(false)
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false)
-  const [user, setUser] = React.useState<any>(null)
+  const { user, isAuthenticated, logout } = useAuth()
 
   const navigationItems = [
     { title: "Home", href: "/" },
@@ -32,27 +29,6 @@ export default function Navbar() {
   ]
 
   React.useEffect(() => {
-    const checkAuthStatus = () => {
-      const authenticated = authService.isAuthenticated()
-      const userData = authService.getUser()
-
-      setIsAuthenticated(authenticated)
-      setUser(userData)
-    }
-
-    checkAuthStatus()
-
-    // Listen for storage changes (when user logs in from another tab)
-    const handleStorageChange = () => {
-      checkAuthStatus()
-    }
-
-    window.addEventListener("storage", handleStorageChange)
-    return () => window.removeEventListener("storage", handleStorageChange)
-  }, [pathname])
-
-  // Handle scroll effect
-  React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
@@ -61,9 +37,7 @@ export default function Navbar() {
   }, [])
 
   const handleLogout = async () => {
-    await authService.logout()
-    setIsAuthenticated(false)
-    setUser(null)
+    logout()
     setIsProfileOpen(false)
   }
 
@@ -166,7 +140,7 @@ export default function Navbar() {
                             {user?.name || "User"}
                           </p>
                           <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                            {user?.userEmail || "user@example.com"}
+                            {user?.email || "user@example.com"}
                           </p>
                           <div className="flex items-center space-x-2 mt-1">
                             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -278,7 +252,7 @@ export default function Navbar() {
                           </p>
                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                          {user?.userEmail || "user@example.com"}
+                          {user?.email || "user@example.com"}
                         </p>
                       </div>
                     </div>

@@ -65,10 +65,10 @@ export default function ProfileUpdate() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: user?.name || "",
-      age: "",
+      age: 0,
       description: "",
       phone: "",
-      email: user?.userEmail || "",
+      email: user?.email || "",
       country: "Bangladesh",
     },
   });
@@ -76,10 +76,10 @@ export default function ProfileUpdate() {
   useEffect(() => {
     form.reset({
       name: user?.name || "",
-      age: "",
+      age: 0,
       description: "",
       phone: "",
-      email: user?.userEmail || "",
+      email: user?.email || "",
       country: "Bangladesh",
     });
   }, [user]);
@@ -218,7 +218,7 @@ export default function ProfileUpdate() {
       // Add user information to payload
       const payload = {
         ...biodataPayload,
-        email: user?.userEmail, // Assuming 'user' is available in scope
+        email: user?.email, // Assuming 'user' is available in scope
       };
 
       console.debug("Submitting profile data:", payload);
@@ -885,22 +885,21 @@ export default function ProfileUpdate() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Status</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select status" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="alive">Alive</SelectItem>
-                                  <SelectItem value="deceased">
-                                    Deceased
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
+                             <Select
+  onValueChange={(value) => field.onChange(value === "alive")}
+  defaultValue={field.value ? "alive" : "deceased"}
+>
+  <FormControl>
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="Select status" />
+    </SelectTrigger>
+  </FormControl>
+  <SelectContent>
+    <SelectItem value="alive">Alive</SelectItem>
+    <SelectItem value="deceased">Deceased</SelectItem>
+  </SelectContent>
+</Select>
+
                               <FormMessage />
                             </FormItem>
                           )}
@@ -935,22 +934,21 @@ export default function ProfileUpdate() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Status</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select status" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="alive">Alive</SelectItem>
-                                  <SelectItem value="deceased">
-                                    Deceased
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
+                             <Select
+  onValueChange={(value) => field.onChange(value === "alive")}
+  defaultValue={field.value ? "alive" : "deceased"}
+>
+  <FormControl>
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="Select status" />
+    </SelectTrigger>
+  </FormControl>
+  <SelectContent>
+    <SelectItem value="alive">Alive</SelectItem>
+    <SelectItem value="deceased">Deceased</SelectItem>
+  </SelectContent>
+</Select>
+
                               <FormMessage />
                             </FormItem>
                           )}
@@ -1306,31 +1304,40 @@ export default function ProfileUpdate() {
                           </FormItem>
                         )}
                       />
-                      <FormField
-                        control={form.control}
-                        name="childAllow"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Children Allowed</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="w-full">
-                                  <SelectValue placeholder="Select preference" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="yes">Yes</SelectItem>
-                                <SelectItem value="no">No</SelectItem>
-                                <SelectItem value="depends">Depends</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                     <FormField
+  control={form.control}
+  name="childAllow"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Children Allowed</FormLabel>
+      <Select
+        onValueChange={(value) =>
+          field.onChange(value === "yes" ? true : value === "no" ? false : undefined)
+        }
+        defaultValue={
+          field.value === true
+            ? "yes"
+            : field.value === false
+            ? "no"
+            : "depends"
+        }
+      >
+        <FormControl>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select preference" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          <SelectItem value="yes">Yes</SelectItem>
+          <SelectItem value="no">No</SelectItem>
+          <SelectItem value="depends">Depends</SelectItem>
+        </SelectContent>
+      </Select>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+                    
                     </div>
                     <FormField
                       control={form.control}
