@@ -57,12 +57,6 @@ export default function ProfessionalBiodatasPage() {
       setIsLoading(true)
       setError("")
 
-      if (!token) {
-        setError("Authentication token not found. Please login first.")
-        router.push("/login")
-        return
-      }
-
       // Get search parameters from URL
       const lookingFor = searchParams.get("lookingFor") || ""
       const minAge = searchParams.get("minAge")
@@ -94,13 +88,9 @@ export default function ProfessionalBiodatasPage() {
       if (maritalStatus) queryParams["maritalInfo.maritalStatus"] = maritalStatus
       if (incomeRange) queryParams.incomeRange = incomeRange
 
-      console.log("Frontend sending these params:", queryParams)
+      // console.log("Frontend sending these params:", queryParams)
 
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/biodata`, {
-        headers: {
-          Authorization: `${token}`,
-          "Content-Type": "application/json",
-        },
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/biodata/all`, {
         params: queryParams,
         timeout: 10000,
       })
@@ -159,7 +149,7 @@ export default function ProfessionalBiodatasPage() {
     setError("")
     getAllBioData()
   }
-  console.log(profiles)
+  // console.log(profiles)
 
   const { language } = useLanguage()
   const t = biodataTranslation[language]

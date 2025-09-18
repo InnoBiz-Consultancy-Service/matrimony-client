@@ -265,16 +265,14 @@ function isAuthPage(pathname: string): boolean {
 }
 
 function isPublicPage(pathname: string): boolean {
-  const publicPaths = [
-    "/",
-    "/about",
-    "/contact",
-    "/success-stories",
-    "/biodatas",
-  ];
-  return publicPaths.includes(pathname);
-}
+  const publicPaths = ["/", "/about", "/contact", "/success-stories"];
+  const dynamicPublicPrefixes = ["/biodatas"];
 
+  return (
+    publicPaths.includes(pathname) ||
+    dynamicPublicPrefixes.some((prefix) => pathname.startsWith(prefix))
+  );
+}
 
 function isProfileCreationPage(pathname: string): boolean {
   return pathname === "/profile/create-biodata";
