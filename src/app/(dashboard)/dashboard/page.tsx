@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   Heart,
   Gift,
-  CreditCard,
   Mail,
   Star,
   Users,
@@ -12,19 +11,20 @@ import {
   X,
 } from "lucide-react";
 import PaymentPage from "@/components/features/admin/payment/PaymentPage";
-import SubscriptionPage from "@/components/features/admin/subscription/SubsciptionPage";
 import ReviewPage from "@/components/features/admin/reviews/ReviewPage";
 import SendMailPage from "@/components/features/admin/sendMail/SendMail";
 import SpecialOffersPage from "@/components/features/admin/specialOffer/SpecialOffer";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 const AdminDashboard = () => {
-  const [activeRoute, setActiveRoute] = useState("special-offers");
+  const [activeRoute, setActiveRoute] = useState("payment");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const { user } = useAuth();
+
   const routes = [
-    { id: "special-offers", label: "Special Offers", icon: Gift },
-    { id: "subscription", label: "Subscriptions", icon: CreditCard },
     { id: "payment", label: "Payments", icon: DollarSign },
+    { id: "special-offers", label: "Special Offers", icon: Gift },
     { id: "send-mail", label: "Send Mail", icon: Mail },
     { id: "review", label: "Reviews", icon: Star },
   ];
@@ -33,12 +33,10 @@ const AdminDashboard = () => {
 
   const renderContent = () => {
     switch (activeRoute) {
-      case "special-offers":
-        return <SpecialOffersPage />;
-      case "subscription":
-        return <SubscriptionPage />;
       case "payment":
         return <PaymentPage />;
+      case "special-offers":
+        return <SpecialOffersPage />;
       case "send-mail":
         return <SendMailPage />;
       case "review":
@@ -63,7 +61,7 @@ const AdminDashboard = () => {
               <Heart className="h-4 w-4 text-white fill-white" />
             </div>
             <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
-              Nikah Admin
+              Nikah Dashboard
             </span>
           </div>
           <button
@@ -104,11 +102,17 @@ const AdminDashboard = () => {
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
-              <span className="text-emerald-600 font-semibold text-sm">A</span>
+              <span className="text-emerald-600 font-semibold text-sm">
+                <Heart />
+              </span>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-800">Admin User</p>
-              <p className="text-xs text-gray-500">admin@nikah.com</p>
+              <p className="text-sm font-medium text-gray-800">
+                {user?.name || "Nikah Admin"}
+              </p>
+              <p className="text-xs text-gray-500">
+                {user?.email || "admin@nikah.com"}
+              </p>
             </div>
           </div>
         </div>
@@ -128,19 +132,6 @@ const AdminDashboard = () => {
             <h1 className="text-xl font-semibold text-gray-800 capitalize">
               {routes.find((r) => r.id === activeRoute)?.label || "Dashboard"}
             </h1>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-6 text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <Users className="w-4 h-4" />
-                <span>2,547 Active Users</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <DollarSign className="w-4 h-4" />
-                <span>$45,892 Revenue</span>
-              </div>
-            </div>
           </div>
         </header>
 
