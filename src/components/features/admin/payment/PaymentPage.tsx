@@ -79,7 +79,6 @@ const PaymentPage = () => {
       setApproving(paymentId);
       await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`,
-        {},
         {
           headers: {
             "Content-Type": "application/json",
