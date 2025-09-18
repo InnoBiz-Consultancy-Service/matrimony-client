@@ -68,7 +68,7 @@ export default function PricingSection() {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-emerald-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <section className="py-16 bg-gradient-to-br from-emerald-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
