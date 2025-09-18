@@ -285,8 +285,7 @@ export default function BiodataForm() {
   const [showStepDropdown, setShowStepDropdown] = useState(false);
 
   const router = useRouter();
-  const { user,token } = useAuth();
-
+  const { user, token } = useAuth();
   // Load data from localStorage on mount
   useEffect(() => {
     setMounted(true);
@@ -341,82 +340,80 @@ export default function BiodataForm() {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
 
-
-const handleSubmit = async () => {
-  try {
-  console.log("Token in BiodataForm:", token,user); // Debugging line
-   
-    if (!token) {
-      toast.error("No authentication token found");
-      return;
-    }
-
-const payload = {
-  ...formData,
-  name: user?.name || formData.personal?.name || "", 
-  gender: formData.personal?.gender?.toLowerCase() === "male" ? "male" : "female",
-  age: Number(formData.personal?.age),
-  personal: {
-    ...formData.personal,
-    maintainMahram: formData.personal?.maintainMahram === "true",
-    quranReading: formData.personal?.quranReading === "true",
-    entertainment: formData.personal?.entertainment === "true",
-    healthIssues: formData.personal?.healthIssues === "true",
-    favoriteBooks: Array.isArray(formData.personal?.favoriteBooks)
-      ? formData.personal.favoriteBooks
-      : formData.personal?.favoriteBooks?.split(",") || [],
-    hobbies: Array.isArray(formData.personal?.hobbies)
-      ? formData.personal.hobbies
-      : formData.personal?.hobbies?.split(",") || [],
-  },
-  education: {
-    ...formData.education,
-    history: formData.education?.history.map((h) => ({
-      ...h,
-      year: Number(h.year),
-    })),
-  },
-  marriage: {
-    ...formData.marriage,
-    studyContinue: formData.marriage?.studyContinue === "true",
-  },
-};
-
-
-
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token, 
-        },
+      if (!token) {
+        toast.error("No authentication token found");
+        return;
       }
-    );
 
-    if (response.status === 200) {
-      toast.success("Profile posted successfully!");
-      setCookie("profileStatus", "true", 7);
-      router.push("/");
+      const payload = {
+        ...formData,
+        name: user?.name || formData.personal?.name || "",
+        gender:
+          formData.personal?.gender?.toLowerCase() === "male"
+            ? "male"
+            : "female",
+        age: Number(formData.personal?.age),
+        personal: {
+          ...formData.personal,
+          maintainMahram: formData.personal?.maintainMahram === "true",
+          quranReading: formData.personal?.quranReading === "true",
+          entertainment: formData.personal?.entertainment === "true",
+          healthIssues: formData.personal?.healthIssues === "true",
+          favoriteBooks: Array.isArray(formData.personal?.favoriteBooks)
+            ? formData.personal.favoriteBooks
+            : formData.personal?.favoriteBooks?.split(",") || [],
+          hobbies: Array.isArray(formData.personal?.hobbies)
+            ? formData.personal.hobbies
+            : formData.personal?.hobbies?.split(",") || [],
+        },
+        education: {
+          ...formData.education,
+          history: formData.education?.history.map((h) => ({
+            ...h,
+            year: Number(h.year),
+          })),
+        },
+        marriage: {
+          ...formData.marriage,
+          studyContinue: formData.marriage?.studyContinue === "true",
+        },
+      };
+
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Profile posted successfully!");
+        setCookie("profileStatus", "true", 7);
+        router.push("/");
+      }
+
+      return response.data;
+    } catch (error: unknown) {
+      console.error("Profile post failed:", error);
+
+      let errorMessage = "Failed to post profile. Please try again.";
+      if (error instanceof Error) {
+        errorMessage = error.message || errorMessage;
+      } else if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || errorMessage;
+      }
+
+      toast.error(errorMessage);
+      throw error;
     }
-
-    return response.data;
-  } catch (error: unknown) {
-    console.error("Profile post failed:", error);
-
-    let errorMessage = "Failed to post profile. Please try again.";
-    if (error instanceof Error) {
-      errorMessage = error.message || errorMessage;
-    } else if (axios.isAxiosError(error)) {
-      errorMessage = error.response?.data?.message || errorMessage;
-    }
-
-    toast.error(errorMessage);
-    throw error;
-  }
-};
+  };
 
   const CurrentStepComponent = steps[currentStep - 1].component;
   const progress = (currentStep / steps.length) * 100;

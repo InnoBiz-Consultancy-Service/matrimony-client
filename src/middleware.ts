@@ -303,7 +303,7 @@ export function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get("token")?.value;
-  const profileStatus = request.cookies.get("profileStatus")?.value;
+  const profileStatus = request.cookies.get("hasBiodata")?.value;
   const userRole = request.cookies.get("userRole")?.value;
 
   const decodedJWT = token ? decodeJWT(token) : null;
