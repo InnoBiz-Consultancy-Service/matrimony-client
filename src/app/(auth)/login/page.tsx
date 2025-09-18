@@ -1,112 +1,127 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import axios from "axios"
-import { jwtDecode } from "jwt-decode"
-import { toast } from "sonner"
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner";
 
 // Cookie helpers
 const setCookie = (name: string, value: string, days: number) => {
-  const expires = new Date()
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Strict`
-}
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${encodeURIComponent(
+    value
+  )};expires=${expires.toUTCString()};path=/;SameSite=Strict`;
+};
 
 const getCookie = (name: string): string | null => {
-  const nameEQ = name + "="
-  const ca = document.cookie.split(";")
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
-    let c = ca[i].trim()
-    if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length))
+    let c = ca[i].trim();
+    if (c.indexOf(nameEQ) === 0)
+      return decodeURIComponent(c.substring(nameEQ.length));
   }
-  return null
-}
+  return null;
+};
 
 const deleteCookie = (name: string) => {
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Strict`
-}
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Strict`;
+};
 
 // Auth service using only cookies
 const authService = {
-  login: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
+  login: async (credentials: {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+  }) => {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
       credentials,
       { headers: { "Content-Type": "application/json" }, withCredentials: true }
-    )
+    );
 
-    if (!response.data?.data.token) throw new Error("Authentication failed: No token received")
-    return response.data?.data
+    if (!response.data?.data.token)
+      throw new Error("Authentication failed: No token received");
+    return response.data?.data;
   },
 
   storeAuthData: (token: string, userData: any = {}, rememberMe = false) => {
-    const decoded = jwtDecode<{ userId: string; email: string; role?: string; exp: number , name: string }>(token)
+    const decoded = jwtDecode<{
+      userId: string;
+      email: string;
+      role?: string;
+      exp: number;
+      name: string;
+    }>(token);
     const userToStore = {
       userId: decoded.userId,
       name: decoded.name,
       email: decoded.email,
       role: decoded.role || userData.role || "user",
       ...userData,
-    }
-    const days = rememberMe ? 30 : 7
-    setCookie("token", token, days)
-    setCookie("user", JSON.stringify(userToStore), days)
-    setCookie("userRole", userToStore.role, days)
-    setCookie("hasBiodata", userToStore.hasBiodata ? "true" : "false", days)
-    setCookie("subscriptionType", userToStore.subscriptionType || "free", days)
-    return decoded
+    };
+    const days = rememberMe ? 30 : 7;
+    setCookie("token", token, days);
+    setCookie("user", JSON.stringify(userToStore), days);
+    setCookie("userRole", userToStore.role, days);
+    setCookie("hasBiodata", userToStore.hasBiodata ? "true" : "false", days);
+    setCookie("subscriptionType", userToStore.subscriptionType || "free", days);
+    return decoded;
   },
 
   clearAuthData: () => {
-    deleteCookie("token")
-    deleteCookie("user")
-    deleteCookie("userRole")
-    deleteCookie("profileStatus")
+    deleteCookie("token");
+    deleteCookie("user");
+    deleteCookie("userRole");
+    deleteCookie("hasBiodata");
+    deleteCookie("subscriptionType");
   },
 
   isAuthenticated: (): boolean => {
-    const token = getCookie("token")
-    if (!token) return false
+    const token = getCookie("token");
+    if (!token) return false;
     try {
-      const decoded = jwtDecode<{ exp: number }>(token)
-      const currentTime = Date.now() / 1000
+      const decoded = jwtDecode<{ exp: number }>(token);
+      const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
-        authService.clearAuthData()
-        return false
+        authService.clearAuthData();
+        return false;
       }
-      return true
+      return true;
     } catch {
-      authService.clearAuthData()
-      return false
+      authService.clearAuthData();
+      return false;
     }
   },
-}
+};
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [rememberMe, setRememberMe] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
-  const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (authService.isAuthenticated()) {
-      router.push("/")
+      router.push("/");
     } else {
-      setIsCheckingAuth(false)
+      setIsCheckingAuth(false);
     }
-  }, [router])
+  }, [router]);
 
   if (isCheckingAuth) {
     return (
@@ -116,30 +131,36 @@ export default function LoginPage() {
           <p className="text-gray-600">Checking authentication status...</p>
         </div>
       </div>
-    )
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
     try {
-      if (!email || !password) throw new Error("Please enter both email and password")
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Please enter a valid email")
-      if (password.length < 8) throw new Error("Password must be at least 8 characters long")
+      if (!email || !password)
+        throw new Error("Please enter both email and password");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+        throw new Error("Please enter a valid email");
+      if (password.length < 8)
+        throw new Error("Password must be at least 8 characters long");
 
-      const response = await authService.login({ email, password, rememberMe })
-      authService.storeAuthData(response.token, response.user, rememberMe)
+      const response = await authService.login({ email, password, rememberMe });
+      authService.storeAuthData(response.token, response.user, rememberMe);
 
-      toast.success("Login successful! Redirecting...", { position: "top-center" })
-      setTimeout(() => router.push("/"), 1000)
+      toast.success("Login successful! Redirecting...", {
+        position: "top-center",
+      });
+      setTimeout(() => router.push("/"), 1000);
     } catch (err: any) {
-      authService.clearAuthData()
-      const message = err.response?.data?.message || err.message || "Something went wrong!"
-      toast.error(message, { position: "top-center" })
+      authService.clearAuthData();
+      const message =
+        err.response?.data?.message || err.message || "Something went wrong!";
+      toast.error(message, { position: "top-center" });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const PasswordToggle = () => (
     <button
@@ -148,14 +169,20 @@ export default function LoginPage() {
       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
       aria-label={showPassword ? "Hide password" : "Show password"}
     >
-      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+      {showPassword ? (
+        <EyeOff className="h-5 w-5" />
+      ) : (
+        <Eye className="h-5 w-5" />
+      )}
     </button>
-  )
+  );
   const handleGoogleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`
-     toast.success("Login successful! Redirecting...", { position: "top-center" })
-      setTimeout(() => router.push("/"), 1000)
-  }
+    window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`;
+    toast.success("Login successful! Redirecting...", {
+      position: "top-center",
+    });
+    setTimeout(() => router.push("/"), 1000);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center px-4">
@@ -178,7 +205,9 @@ export default function LoginPage() {
                 <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                   Nikah
                 </span>
-                <span className="text-sm text-emerald-500/70 font-medium -mt-1">Find Your Perfect Match</span>
+                <span className="text-sm text-emerald-500/70 font-medium -mt-1">
+                  Find Your Perfect Match
+                </span>
               </div>
             </div>
           </Link>
@@ -192,8 +221,8 @@ export default function LoginPage() {
               </span>
             </h1>
             <p className="text-lg text-gray-600 leading-relaxed max-w-lg">
-              Continue your search for the perfect life partner. Thousands of verified profiles are waiting to connect
-              with you.
+              Continue your search for the perfect life partner. Thousands of
+              verified profiles are waiting to connect with you.
             </p>
           </div>
 
@@ -222,10 +251,13 @@ export default function LoginPage() {
                 </div>
                 <div>
                   <p className="text-gray-700 italic mb-2">
-                    I found my soulmate within 3 months. The platform is amazing and the profiles are genuine!
+                    I found my soulmate within 3 months. The platform is amazing
+                    and the profiles are genuine!
                   </p>
                   <div className="text-sm">
-                    <span className="font-semibold text-gray-800">Sarah Johnson</span>
+                    <span className="font-semibold text-gray-800">
+                      Sarah Johnson
+                    </span>
                     <span className="text-gray-500"> • Married in 2024</span>
                   </div>
                 </div>
@@ -249,8 +281,12 @@ export default function LoginPage() {
               </div>
 
               <div className="text-center space-y-2">
-                <h2 className="text-2xl font-bold text-gray-800">Welcome Back!</h2>
-                <p className="text-gray-600">Sign in to continue your journey</p>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Welcome Back!
+                </h2>
+                <p className="text-gray-600">
+                  Sign in to continue your journey
+                </p>
               </div>
             </CardHeader>
 
@@ -287,7 +323,9 @@ export default function LoginPage() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">Or continue with email</span>
+                  <span className="px-4 bg-white text-gray-500">
+                    Or continue with email
+                  </span>
                 </div>
               </div>
 
@@ -295,7 +333,10 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Email Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Email Address
                   </Label>
                   <div className="relative">
@@ -315,7 +356,10 @@ export default function LoginPage() {
 
                 {/* Password Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Password
                   </Label>
                   <div className="relative">
@@ -341,14 +385,22 @@ export default function LoginPage() {
                     <Checkbox
                       id="remember"
                       checked={rememberMe}
-                      onCheckedChange={(checked) => setRememberMe(checked === true)}
+                      onCheckedChange={(checked) =>
+                        setRememberMe(checked === true)
+                      }
                       className="border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                     />
-                    <Label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+                    <Label
+                      htmlFor="remember"
+                      className="text-sm text-gray-600 cursor-pointer"
+                    >
                       Remember me
                     </Label>
                   </div>
-                  <Link href="/forgot-password" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                  >
                     Forgot password?
                   </Link>
                 </div>
@@ -377,7 +429,10 @@ export default function LoginPage() {
               <div className="text-center pt-4 border-t border-gray-100">
                 <p className="text-gray-600">
                   Don&apos;t have an account?{" "}
-                  <Link href="/registration" className="text-emerald-600 hover:text-emerald-700 font-semibold">
+                  <Link
+                    href="/registration"
+                    className="text-emerald-600 hover:text-emerald-700 font-semibold"
+                  >
                     Create Account
                   </Link>
                 </p>
@@ -387,10 +442,12 @@ export default function LoginPage() {
 
           {/* Security Notice */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">🔒 Your data is protected with 256-bit SSL encryption</p>
+            <p className="text-sm text-gray-500">
+              🔒 Your data is protected with 256-bit SSL encryption
+            </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

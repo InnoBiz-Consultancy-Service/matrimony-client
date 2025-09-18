@@ -15,6 +15,7 @@ import ReviewPage from "@/components/features/admin/reviews/ReviewPage";
 import SendMailPage from "@/components/features/admin/sendMail/SendMail";
 import SpecialOffersPage from "@/components/features/admin/specialOffer/SpecialOffer";
 import { useAuth } from "@/app/(auth)/context/auth-context";
+import BiodataPage from "@/components/features/admin/biodata/BiodataPage";
 
 const AdminDashboard = () => {
   const [activeRoute, setActiveRoute] = useState("payment");
@@ -27,6 +28,7 @@ const AdminDashboard = () => {
     { id: "special-offers", label: "Special Offers", icon: Gift },
     { id: "send-mail", label: "Send Mail", icon: Mail },
     { id: "review", label: "Reviews", icon: Star },
+    { id: "biodata", label: "Biodata", icon: Star },
   ];
 
   // Special Offers Component
@@ -41,6 +43,8 @@ const AdminDashboard = () => {
         return <SendMailPage />;
       case "review":
         return <ReviewPage />;
+      case "biodata":
+        return <BiodataPage />;
       default:
         return <SpecialOffersPage />;
     }

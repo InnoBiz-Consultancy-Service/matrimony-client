@@ -27,33 +27,30 @@ import { BiodataType } from "@/types/publicBiodata";
 import { toast } from "sonner";
 import { PageLoader } from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
+import { getCookie } from "@/utils/getToken";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
   const [ButtonLoader, setButtonLoader] = React.useState(false);
-
   const router = useRouter();
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
 
   const { user } = useAuth();
+
+  const token = getCookie("token") || "";
+
   React.useEffect(() => {
     const getbiodata = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/${id}`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
-          }
+          `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/${id}`
         );
         setBiodata(response.data?.data);
-        console.log(response.data);
+        console.log(response);
       } catch (error) {
         console.log(error);
       } finally {
@@ -74,7 +71,7 @@ export default function Biodata({ id }: { id: string }) {
         },
         {
           headers: {
-            Authorization: `${localStorage.getItem("token")}`,
+            Authorization: token,
           },
         }
       );
@@ -89,7 +86,7 @@ export default function Biodata({ id }: { id: string }) {
   };
   // TO DO: handleShortlist and handleBlock functions
   const handleShortlist = async () => {
-    if (!user) return router.push("/login");
+    // if (!user) return router.push("/login");
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/shortlist`,
@@ -99,7 +96,7 @@ export default function Biodata({ id }: { id: string }) {
         },
         {
           headers: {
-            Authorization: `${localStorage.getItem("token")}`,
+            Authorization: token,
           },
         }
       );
@@ -113,7 +110,7 @@ export default function Biodata({ id }: { id: string }) {
     }
   };
   const handleBlock = async () => {
-    if (!user) return router.push("/login");
+    // if (!user) return router.push("/login");
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/block`,
@@ -123,7 +120,7 @@ export default function Biodata({ id }: { id: string }) {
         },
         {
           headers: {
-            Authorization: `${localStorage.getItem("token")}`,
+            Authorization: token,
           },
         }
       );
