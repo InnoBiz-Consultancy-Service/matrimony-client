@@ -23,7 +23,6 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const { user, isAuthenticated, logout } = useAuth();
-  console.log(user);
 
   const navigationItems = [
     { title: "Home", href: "/" },

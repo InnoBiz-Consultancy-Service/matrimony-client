@@ -2,7 +2,7 @@
 export type Gender = 'male' | 'female' | '';
 
 export interface FilterParams {
-  gender?: Gender;
+  lookingFor?: Gender;
   ageRange?: [number, number];
   division?: string;
   district?: string;
@@ -14,7 +14,7 @@ export interface FilterParams {
 }
 
 export const defaultFilters: FilterParams = {
-  gender: '',
+  lookingFor: '',
   ageRange: [18, 40],
   division: '',
   district: '',

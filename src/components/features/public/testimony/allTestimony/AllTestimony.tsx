@@ -68,12 +68,10 @@ export default function AllTestimony() {
 
   const fetchTestimonials = async () => {
     try {
-      console.log("[v0] Fetching testimonials from API...");
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/review`,
         {}
       );
-      console.log("[v0] API response:", response.data);
 
       let testimonialsData = response.data;
 

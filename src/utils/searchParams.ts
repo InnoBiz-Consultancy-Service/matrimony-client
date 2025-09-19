@@ -12,7 +12,7 @@ export function generateSearchParams(filters: FilterParams): URLSearchParams {
   };
 
   // Set each parameter
-  setParam('gender', filters.gender);
+  setParam('gender', filters.lookingFor);
   
   if (filters.ageRange) {
     setParam('minAge', filters.ageRange[0]);

@@ -48,7 +48,6 @@ export default function Biodata({ id }: { id: string }) {
           `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/${id}`
         );
         setBiodata(response.data?.data);
-        console.log(response);
       } catch (error) {
         console.log(error);
       } finally {
@@ -74,31 +73,6 @@ export default function Biodata({ id }: { id: string }) {
       );
       console.log("Interest sent successfully:", response.data);
       toast.success("Interest sent successfully");
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ message: string }>;
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setButtonLoader(false);
-    }
-  };
-  // TO DO: handleShortlist and handleBlock functions
-  const handleShortlist = async () => {
-    // if (!user) return router.push("/login");
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/shortlist`,
-        {
-          userId: user?.userId,
-          biodataId: biodata?.userId?._id,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      console.log("Shortlisted successfully:", response.data);
-      toast.success("Shortlisted successfully");
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -222,16 +196,9 @@ export default function Biodata({ id }: { id: string }) {
               )}
               {ButtonLoader ? "Sending..." : t.sendInterest}
             </Button>
-            <div className="flex items-center space-x-7 mt-6 justify-center">
+            <div className="mt-6 w-full">
               <Button
-                className="cursor-pointer border-green-400"
-                variant="outline"
-                onClick={handleShortlist}
-              >
-                <Star className="text-green-400" /> Shortlist
-              </Button>
-              <Button
-                className="cursor-pointer border-red-400"
+                className="cursor-pointer border-red-400 w-full"
                 variant="outline"
                 onClick={handleBlock}
               >

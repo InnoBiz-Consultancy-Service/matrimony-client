@@ -20,20 +20,17 @@ import { biodataTranslation } from "@/dictionary/biodata";
 import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
 import { PageLoader } from "@/components/common/Loader";
-import { useAuth } from "@/app/(auth)/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getCookie } from "@/utils/getToken";
 
 export default function Profile() {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
-  console.log(biodata);
-  const { token, user } = useAuth();
-  console.log(user);
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
-
+  const token = getCookie("token") || "";
   React.useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
@@ -47,7 +44,6 @@ export default function Profile() {
             },
           }
         );
-        console.log(response);
         setBiodata(response?.data?.data);
       } catch (error) {
         console.error("Error fetching profile:", error);

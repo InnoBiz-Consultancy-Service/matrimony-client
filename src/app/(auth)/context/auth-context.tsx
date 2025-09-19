@@ -150,7 +150,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const parsedUser = JSON.parse(userDataStr);
         setUser(parsedUser);
         setToken(tokenFromCookie);
-        console.log("Auth refreshed from cookies:", parsedUser);
       } catch (err) {
         console.error("Error parsing user cookie:", err);
         clearAuthData();
