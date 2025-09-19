@@ -1,6 +1,5 @@
 "use client";
 import { useAuth } from "@/app/(auth)/context/auth-context";
-import { getCookie } from "@/utils/getToken";
 import axios from "axios";
 import {
   Eye,

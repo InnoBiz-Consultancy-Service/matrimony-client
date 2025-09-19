@@ -505,34 +505,16 @@ export default function Biodata({ id }: { id: string }) {
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.personalInformation?.mahram}
                     </div>
-                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
-                      <Badge
-                        variant={
-                          biodata?.personal?.maintainMahram
-                            ? "default"
-                            : "destructive"
-                        }
-                        className="whitespace-nowrap"
-                      >
-                        {biodata?.personal?.maintainMahram ? "হ্যাঁ" : "না"}
-                      </Badge>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.maintainMahram}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.personalInformation?.quranReading}:
                     </div>
-                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
-                      <Badge
-                        variant={
-                          biodata?.personal?.quranReading
-                            ? "default"
-                            : "destructive"
-                        }
-                        className="whitespace-nowrap"
-                      >
-                        {biodata?.personal?.quranReading ? "হ্যাঁ" : "না"}
-                      </Badge>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.quranReading}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
@@ -547,17 +529,8 @@ export default function Biodata({ id }: { id: string }) {
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.personalInformation?.entertainment}
                     </div>
-                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
-                      <Badge
-                        variant={
-                          biodata?.personal?.entertainment
-                            ? "default"
-                            : "destructive"
-                        }
-                        className="whitespace-nowrap"
-                      >
-                        {biodata?.personal?.entertainment ? "হ্যাঁ" : "না"}
-                      </Badge>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.entertainment}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
