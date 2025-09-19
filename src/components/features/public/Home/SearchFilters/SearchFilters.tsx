@@ -36,7 +36,7 @@ import { filterTranslation } from "@/dictionary/filter";
 
 // Zod schema for form validation
 const filterSchema = z.object({
-  lookingFor: z.enum(["male", "female", ""]).optional(),
+  gender: z.enum(["male", "female", ""]).optional(),
   division: z.string().optional(),
   district: z.string().optional(),
   upazila: z.string().optional(),
@@ -58,7 +58,7 @@ export default function SearchFilters() {
   const form = useForm<FilterFormData>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      lookingFor: "",
+      gender: "",
       division: "",
       district: "",
       upazila: "",
@@ -149,7 +149,7 @@ export default function SearchFilters() {
                   {/* Looking For */}
                   <FormField
                     control={form.control}
-                    name="lookingFor"
+                    name="gender"
                     render={({ field }) => (
                       <FormItem className="space-y-4">
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
