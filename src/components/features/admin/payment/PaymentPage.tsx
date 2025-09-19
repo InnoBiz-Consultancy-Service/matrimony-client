@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 import { getCookie } from "@/utils/getToken";
 import axios from "axios";
 import {
@@ -46,8 +47,8 @@ const PaymentPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [approving, setApproving] = useState<string | null>(null);
 
-  const token = getCookie("token") || "";
-
+  const {token} = useAuth()
+console.log(token)
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -61,6 +62,7 @@ const PaymentPage = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: token,
+            
           },
           timeout: 10000,
         }
@@ -79,6 +81,7 @@ const PaymentPage = () => {
       setApproving(paymentId);
       await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`,
+        console.log( `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`),
         {
           headers: {
             "Content-Type": "application/json",
