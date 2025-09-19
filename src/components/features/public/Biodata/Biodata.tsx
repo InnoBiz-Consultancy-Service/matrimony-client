@@ -12,7 +12,6 @@ import SearchFilters from "../Home/SearchFilters/SearchFilters";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
-import { useAuth } from "@/app/(auth)/context/auth-context";
 
 interface BiodataProps {
   _id: string;
@@ -32,8 +31,6 @@ interface BiodataProps {
 export default function ProfessionalBiodatasPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const { user, token } = useAuth();
 
   const [showFilters, setShowFilters] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);

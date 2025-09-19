@@ -159,6 +159,7 @@ const SendMailPage = () => {
       localStorage.setItem("emailDraft", JSON.stringify(draftData));
       showNotification("success", "Draft saved successfully!");
     } catch (error) {
+      console.log(error);
       showNotification("error", "Failed to save draft");
     }
   };
@@ -179,6 +180,7 @@ const SendMailPage = () => {
         showNotification("error", "No saved draft found");
       }
     } catch (error) {
+      console.log(error);
       showNotification("error", "Failed to load draft");
     }
   };
@@ -335,7 +337,7 @@ const SendMailPage = () => {
             <ul className="mt-1 space-y-1">
               <li>• All fields marked with * are required</li>
               <li>• For single user emails, enter a valid email address</li>
-              <li>• Make sure you're logged in before sending</li>
+              <li>• Make sure you&apos;re logged in before sending</li>
             </ul>
           </div>
         </div>

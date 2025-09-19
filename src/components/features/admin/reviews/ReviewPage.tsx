@@ -274,6 +274,7 @@ const ReviewPage = () => {
       setSelectedReview(review);
       setIsModalOpen(true);
     } catch (error) {
+      console.log(error)
       toast.error("Failed to open review", {
         description: "An error occurred while opening the review details.",
       });
@@ -285,6 +286,7 @@ const ReviewPage = () => {
       setIsModalOpen(false);
       setSelectedReview(null);
     } catch (error) {
+      console.log(error)
       toast.error("Failed to close modal", {
         description: "An error occurred while closing the modal.",
       });

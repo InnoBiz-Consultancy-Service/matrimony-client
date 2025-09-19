@@ -23,22 +23,6 @@ interface ContactFormData {
   body: string;
 }
 
-interface Translations {
-  title: string;
-  description: string;
-  emailLabel: string;
-  emailPlaceholder: string;
-  subjectLabel: string;
-  subjectPlaceholder: string;
-  bodyLabel: string;
-  bodyPlaceholder: string;
-  submitButton: string;
-  successMessage: string;
-  errorMessage: string;
-  requiredField: string;
-  invalidEmail: string;
-}
-
 const translations = {
   en: {
     title: "Contact Us",
@@ -143,6 +127,7 @@ export default function ContactForm() {
         throw new Error("Failed to send message");
       }
     } catch (error) {
+      console.log(error)
       toast.error(t.errorMessage, {
         description: "Please check your connection and try again.",
       });

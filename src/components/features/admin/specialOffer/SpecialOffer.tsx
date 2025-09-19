@@ -1,5 +1,9 @@
 "use client";
-import { ApiError, FormData, SpecialOffer } from "@/types/dashboard/specialOffer";
+import {
+  ApiError,
+  FormData,
+  SpecialOffer,
+} from "@/types/dashboard/specialOffer";
 import { formatDate } from "@/utils/formatDate";
 import { getCookie } from "@/utils/getToken";
 import axios, { AxiosError } from "axios";
@@ -22,8 +26,10 @@ import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 
 // Error handling utility
+{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 const handleApiError = (error: any): ApiError => {
   if (axios.isAxiosError(error)) {
+   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
     const axiosError = error as AxiosError<any>;
 
     if (!axiosError.response) {
@@ -99,30 +105,42 @@ const handleApiError = (error: any): ApiError => {
 };
 
 // Toast wrapper with error handling
+type ToastAction = {
+  label: string;
+  onClick: () => void;
+};
+
+type ToastOptions = {
+  action?: ToastAction;
+  [key: string]: unknown;
+};
+
 const showToast = {
-  success: (message: string, options?: any) => {
+  success: (message: string, options?: ToastOptions) => {
     try {
       toast.success(message, {
-        ...options,
-        action: options?.action && {
-          label: options.action.label,
-          onClick: () => {
-            try {
-              options.action.onClick();
-            } catch (err) {
-              console.error("Toast action error:", err);
+        ...(typeof options === "object" && options !== null ? options : {}),
+        action: options?.action
+          ? {
+              label: options.action.label,
+              onClick: () => {
+                try {
+                  options?.action?.onClick();
+                } catch (err) {
+                  console.error("Toast action error:", err);
+                }
+              },
             }
-          },
-        },
+          : undefined,
       });
     } catch (error) {
       console.error("Toast success error:", error);
-      // Fallback to browser alert if toast fails
+      // fallback
       alert(`Success: ${message}`);
     }
   },
 
-  error: (message: string, options?: any) => {
+  error: (message: string, options?: ToastOptions) => {
     try {
       toast.error(message, {
         duration: 6000,
@@ -135,7 +153,7 @@ const showToast = {
     }
   },
 
-  loading: (message: string, options?: any) => {
+  loading: (message: string, options?: ToastOptions) => {
     try {
       return toast.loading(message, options);
     } catch (error) {
@@ -188,7 +206,7 @@ const SpecialOffersPage = () => {
             "Content-Type": "application/json",
             Authorization: token,
           },
-          timeout: 10000, // 10 second timeout
+          timeout: 10000,
         }
       );
 
@@ -213,7 +231,7 @@ const SpecialOffersPage = () => {
           },
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const apiError = handleApiError(error);
       setError(apiError.message);
       showToast.error(apiError.message, {
@@ -261,7 +279,7 @@ const SpecialOffersPage = () => {
     const loadingToast = showToast.loading("Creating special offer...");
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/special-offers`,
         {
           ...formData,
@@ -290,7 +308,7 @@ const SpecialOffersPage = () => {
       showToast.success("Special offer created successfully!", {
         description: `"${formData.title}" is now active`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       showToast.dismiss(loadingToast ?? undefined);
       const apiError = handleApiError(error);
       showToast.error("Failed to create special offer", {
@@ -338,7 +356,7 @@ const SpecialOffersPage = () => {
       showToast.success("Offer deleted successfully!", {
         description: `"${offerTitle}" has been removed`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       showToast.dismiss(loadingToast ?? undefined);
       const apiError = handleApiError(error);
       showToast.error("Failed to delete offer", {

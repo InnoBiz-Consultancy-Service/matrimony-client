@@ -2,12 +2,11 @@
 
 import type React from "react";
 import { useState } from "react";
-import { Star, Send, ArrowLeft } from "lucide-react";
+import { Star, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "@/app/(auth)/context/auth-context";
@@ -18,8 +17,6 @@ export default function PostTestimony() {
   const [comment, setComment] = useState("");
   const { token } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-  console.log("Token in PostTestimony:", token);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -57,6 +54,7 @@ export default function PostTestimony() {
         setRating(0);
         setComment("");
       }
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
     } catch (error: any) {
       console.error("Review submission error:", error);
       toast.error(

@@ -32,38 +32,8 @@ const BlockList: React.FC = () => {
   const [unblockingUsers, setUnblockingUsers] = useState<Set<string>>(
     new Set()
   );
-  const [darkMode, setDarkMode] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const token: string = getCookie("token") || "";
-
-  // Initialize dark mode from localStorage
-  useEffect(() => {
-    try {
-      const savedDarkMode = localStorage.getItem("darkMode") === "true";
-      setDarkMode(savedDarkMode);
-      if (savedDarkMode) {
-        document.documentElement.classList.add("dark");
-      }
-    } catch (error) {
-      console.error("Error loading dark mode preference:", error);
-    }
-  }, []);
-
-  // Toggle dark mode
-  const toggleDarkMode = (): void => {
-    try {
-      const newDarkMode = !darkMode;
-      setDarkMode(newDarkMode);
-      localStorage.setItem("darkMode", newDarkMode.toString());
-      if (newDarkMode) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    } catch (error) {
-      console.error("Error toggling dark mode:", error);
-    }
-  };
 
   // Fetch blocked users
   useEffect(() => {
@@ -298,7 +268,7 @@ const BlockList: React.FC = () => {
                 No blocked users
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                You haven't blocked any users yet.
+                You haven&apos;t blocked any users yet.
               </p>
             </div>
           </div>
