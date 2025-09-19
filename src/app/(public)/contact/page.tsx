@@ -109,13 +109,16 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/contactUs`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         toast.success(t.successMessage, {
@@ -127,7 +130,7 @@ export default function ContactForm() {
         throw new Error("Failed to send message");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error(t.errorMessage, {
         description: "Please check your connection and try again.",
       });
