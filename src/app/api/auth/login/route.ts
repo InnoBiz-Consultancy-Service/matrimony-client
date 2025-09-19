@@ -1,92 +1,159 @@
-// // app/api/auth/login/route.ts
-// export async function POST(req: Request) {
-//   const body = await req.json();
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(body),
-//     credentials: "include", // cookie forwarding
-//   });
-
-//   const data = await res.json();
-//   return new Response(JSON.stringify(data), { status: res.status });
-// }
-
 // app/api/auth/login/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
-// app/api/auth/login/route.ts
-import { NextResponse } from "next/server";
+interface LoginCredentials {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
 
-export async function POST(req: Request) {
-  const body = await req.json();
+interface UserData {
+  userId: string;
+  name: string;
+  email: string;
+  role?: string;
+  hasBiodata?: boolean;
+  subscriptionType?: string;
+  [key: string]: unknown;
+}
 
-  // Login API call
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-    credentials: "include", // cookie forwarding
-  });
+interface DecodedToken {
+  userId: string;
+  email: string;
+  role?: string;
+  exp: number;
+  name: string;
+}
 
-  const data = await res.json();
-  console.log("this call from auth page:", data);
+export async function POST(req: NextRequest) {
+  try {
+    const body: LoginCredentials = await req.json();
+    const { email, password, rememberMe } = body;
 
-  // Create NextResponse
-  const response = NextResponse.json(data, { status: res.status });
-
-  // If login successful, fetch profile status and set cookie
-  if (data.token) {
-    try {
-      // Fetch profile/biodata status
-      const profileResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/my-biodata`,
-        {
-          headers: {
-            Authorization: `${data.token}`,
-            "Content-Type": "application/json",
-          },
-        }
+    // Validate required fields
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
       );
-
-      // Set profileStatus based on response status
-      let profileStatus;
-      if (profileResponse.status === 404) {
-        profileStatus = "false";
-        console.log("Biodata not found - setting profileStatus: false");
-      } else if (profileResponse.ok) {
-        profileStatus = "true";
-        console.log("Biodata found - setting profileStatus: true");
-      } else {
-        profileStatus = "false";
-        console.log("Other error - setting profileStatus: false");
-      }
-
-      // Set cookie with profile status (true/false)
-      response.cookies.set("profileStatus", profileStatus, {
-        httpOnly: false,
-        secure: false, //process.env.NODE_ENV === 'production',
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
-        domain: undefined,
-      });
-    } catch (error) {
-      console.error("Error fetching profile status during login:", error);
-      // Set false if fetch fails
-      response.cookies.set("profileStatus", "false", {
-        httpOnly: false,
-        secure: false, //process.env.NODE_ENV === 'production',
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
-        domain: undefined,
-      });
     }
-  }
 
-  return response;
+    // Call your backend login endpoint
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+      { email, password, rememberMe },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    // Check if login was successful
+    if (!response.data?.data?.token) {
+      return NextResponse.json(
+        { error: "Authentication failed: No token received" },
+        { status: 401 }
+      );
+    }
+
+    const { token, ...userData } = response.data.data;
+
+    // Decode JWT to extract user information
+    const decoded: DecodedToken = jwtDecode(token);
+
+    const userToStore: UserData = {
+      userId: decoded.userId,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role || userData.role || "user",
+      ...userData,
+    };
+    // // Set cookie expiration (7 days or 30 days based on rememberMe)
+    const maxAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // seconds
+
+    // Create response with user data
+    const apiResponse = NextResponse.json({
+      success: true,
+      data: {
+        user: userToStore,
+        token: token,
+      },
+    });
+
+    // Set cookies
+    apiResponse.cookies.set("token", token, {
+      maxAge,
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+
+    apiResponse.cookies.set("user", JSON.stringify(userToStore), {
+      maxAge,
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+
+    apiResponse.cookies.set("userRole", userToStore.role || "user", {
+      maxAge,
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+
+    apiResponse.cookies.set(
+      "hasBiodata",
+      userToStore.hasBiodata ? "true" : "false",
+      {
+        maxAge,
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      }
+    );
+
+    apiResponse.cookies.set(
+      "subscriptionType",
+      userToStore.subscriptionType || "free",
+      {
+        maxAge,
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      }
+    );
+
+    return apiResponse;
+    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  } catch (error: any) {
+    console.error("Login error:", error);
+
+    // Handle different types of errors
+    if (error.response?.status === 401) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    if (error.response?.status === 429) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: "An error occurred during login. Please try again." },
+      { status: 500 }
+    );
+  }
 }

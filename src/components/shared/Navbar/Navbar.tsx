@@ -1,24 +1,29 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, Heart, User, LogOut, ChevronDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle"
-import { useAuth } from "@/app/(auth)/context/auth-context"
-import { LanguageSelector } from "../languageSelector/LanguageSelector"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, Heart, User, LogOut, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle";
+import { useAuth } from "@/app/(auth)/context/auth-context";
+import { LanguageSelector } from "../languageSelector/LanguageSelector";
 export default function Navbar() {
-  const pathname = usePathname()
-  const [isScrolled, setIsScrolled] = React.useState(false)
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [isProfileOpen, setIsProfileOpen] = React.useState(false)
-  const { user, isAuthenticated, logout } = useAuth()
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  console.log(user);
 
   const navigationItems = [
     { title: "Home", href: "/" },
@@ -26,20 +31,20 @@ export default function Navbar() {
     { title: "Success Stories", href: "/success-stories" },
     { title: "About", href: "/about" },
     { title: "Contact", href: "/contact" },
-  ]
+  ];
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = async () => {
-    logout()
-    setIsProfileOpen(false)
-  }
+    logout();
+    setIsProfileOpen(false);
+  };
 
   const getInitials = (name: string) => {
     return (
@@ -48,8 +53,8 @@ export default function Navbar() {
         .map((n) => n[0])
         .join("")
         .toUpperCase() || "U"
-    )
-  }
+    );
+  };
 
   return (
     <header
@@ -57,7 +62,7 @@ export default function Navbar() {
         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
         isScrolled
           ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-lg border-emerald-100 dark:border-gray-800"
-          : "bg-white dark:bg-gray-950 border-emerald-50 dark:border-gray-800",
+          : "bg-white dark:bg-gray-950 border-emerald-50 dark:border-gray-800"
       )}
     >
       <div className="container mx-auto px-4 lg:px-8">
@@ -90,7 +95,7 @@ export default function Navbar() {
                   "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 group",
                   pathname === item.href
                     ? "text-[#50C878] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70"
-                    : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400",
+                    : "text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400"
                 )}
               >
                 {item.title}
@@ -144,7 +149,9 @@ export default function Navbar() {
                           </p>
                           <div className="flex items-center space-x-2 mt-1">
                             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
+                            <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                              Online
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -153,7 +160,9 @@ export default function Navbar() {
                     {/* Menu Items */}
                     <div className="py-2">
                       <Link
-                        href={user?.role === "admin" ? "/dashboard" : "/profile"}
+                        href={
+                          user?.role === "admin" ? "/dashboard" : "/profile"
+                        }
                         onClick={() => setIsProfileOpen(false)}
                         className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
                       >
@@ -162,31 +171,35 @@ export default function Navbar() {
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-gray-800 dark:text-gray-200">
-                            {user?.role === "admin" ? "Admin Dashboard" : "My Profile"}
+                            {user?.role === "admin"
+                              ? "Admin Dashboard"
+                              : "My Profile"}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {user?.role === "admin" ? "Manage users and content" : "View and edit your profile"}
+                            {user?.role === "admin"
+                              ? "Manage users and content"
+                              : "View and edit your profile"}
                           </p>
                         </div>
                       </Link>
-                        <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
+                      <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
                       <Link
-    href="/profile/post-testimony"
-    onClick={() => setIsProfileOpen(false)}
-    className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
-  >
-    <div className="h-9 w-9 rounded-lg bg-pink-100 dark:bg-pink-900 flex items-center justify-center group-hover:bg-pink-200 dark:group-hover:bg-pink-800 transition-colors">
-      <Heart className="h-4 w-4 text-pink-600 dark:text-pink-400" />
-    </div>
-    <div className="flex-1">
-      <p className="font-medium text-gray-800 dark:text-gray-200">Submit Testimony</p>
-      <p className="text-xs text-gray-500 dark:text-gray-400">
-        Share your success story with others
-      </p>
-    </div>
-  </Link>
-
-
+                        href="/profile/post-testimony"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
+                      >
+                        <div className="h-9 w-9 rounded-lg bg-pink-100 dark:bg-pink-900 flex items-center justify-center group-hover:bg-pink-200 dark:group-hover:bg-pink-800 transition-colors">
+                          <Heart className="h-4 w-4 text-pink-600 dark:text-pink-400" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-800 dark:text-gray-200">
+                            Submit Testimony
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Share your success story with others
+                          </p>
+                        </div>
+                      </Link>
 
                       <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
 
@@ -198,8 +211,12 @@ export default function Navbar() {
                           <LogOut className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-800 dark:text-gray-200">Sign Out</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">Logout from your account</p>
+                          <p className="font-medium text-gray-800 dark:text-gray-200">
+                            Sign Out
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Logout from your account
+                          </p>
                         </div>
                       </button>
                     </div>
@@ -288,7 +305,7 @@ export default function Navbar() {
                         "flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 mx-2",
                         pathname === item.href
                           ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70 border-l-4 border-emerald-600 dark:border-emerald-500 shadow-sm"
-                          : "text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50",
+                          : "text-gray-700 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
                       )}
                     >
                       {item.title}
@@ -339,5 +356,5 @@ export default function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
