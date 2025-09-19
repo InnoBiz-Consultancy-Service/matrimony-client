@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Users, Shield, MapPin, Phone, Mail, Star } from "lucide-react";
+import { Heart, Users, Shield, MapPin, Phone, Mail } from "lucide-react";
 import AllTestimony from "@/components/features/public/testimony/allTestimony/AllTestimony";
 import Link from "next/link";
 

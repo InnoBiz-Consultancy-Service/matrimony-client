@@ -7,8 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Star,
   Quote,
-  Heart,
-  Users,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -287,7 +285,7 @@ export default function AllTestimony() {
 
                                 {/* Comment */}
                                 <p className="text-gray-700 dark:text-gray-200 mb-6 leading-relaxed text-pretty min-h-[60px]">
-                                  "{testimonial.comment}"
+                                  {testimonial.comment}
                                 </p>
 
                                 {/* User Info */}

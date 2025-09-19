@@ -26,14 +26,12 @@ import { Badge } from "@/components/ui/badge";
 import { BiodataType } from "@/types/publicBiodata";
 import { toast } from "sonner";
 import { PageLoader } from "@/components/common/Loader";
-import { useRouter } from "next/navigation";
 import { getCookie } from "@/utils/getToken";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
   const [ButtonLoader, setButtonLoader] = React.useState(false);
-  const router = useRouter();
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];

@@ -43,6 +43,7 @@ const BiodataPage = () => {
       } else {
         setBiodataList([]);
       }
+    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
     } catch (err: any) {
       console.error("Error fetching biodata:", err);
       if (err.code === "ECONNABORTED") {
@@ -93,6 +94,7 @@ const BiodataPage = () => {
 
       // Show success message (you can implement toast notification here)
       console.log("Biodata approved successfully");
+     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
     } catch (err: any) {
       console.error("Error approving biodata:", err);
       if (err.code === "ECONNABORTED") {

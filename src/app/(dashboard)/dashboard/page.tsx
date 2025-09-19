@@ -5,7 +5,6 @@ import {
   Gift,
   Mail,
   Star,
-  Users,
   DollarSign,
   Menu,
   X,
