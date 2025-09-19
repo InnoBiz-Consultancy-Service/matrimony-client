@@ -1,177 +1,130 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import {
-  Heart,
-  Mail,
-  Phone,
-  MapPin,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  Clock,
-} from "lucide-react"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Heart, MapPin, Mail, Phone } from "lucide-react";
+
+interface Translation {
+  en: string;
+  bn: string;
+}
+
+const translations: Record<string, Translation> = {
+  biodatas: { en: "Biodatas", bn: "বায়োডাটা" },
+  contact: { en: "Contact", bn: "যোগাযোগ" },
+  about: { en: "About", bn: "সম্পর্কে" },
+  successStories: { en: "Success Stories", bn: "সফলতার গল্প" },
+  tagline: {
+    en: "Connecting Hearts, Building Families",
+    bn: "হৃদয় সংযোগ, পরিবার গঠন",
+  },
+  location: { en: "Sylhet, Bangladesh", bn: "সিলেট, বাংলাদেশ" },
+  email: { en: "info@nikah.com", bn: "info@nikah.com" },
+  phone: { en: "+880 1XXX-XXXXXX", bn: "+৮৮০ ১XXX-XXXXXX" },
+  copyright: {
+    en: "© 2025 Nikah. All rights reserved.",
+    bn: "© ২০২৫ নিকাহ। সকল অধিকার সংরক্ষিত।",
+  },
+  madeWith: { en: "Made with", bn: "তৈরি করা হয়েছে" },
+  forCommunity: {
+    en: "for the Muslim community",
+    bn: "মুসলিম সম্প্রদায়ের জন্য",
+  },
+};
 
 export default function Footer() {
+  const [language, setLanguage] = useState<"en" | "bn">("en");
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") as "en" | "bn";
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
+
+  const t = (key: string): string => {
+    return translations[key]?.[language] || key;
+  };
+
+  const routes = [
+    { href: "/biodatas", label: t("biodatas") },
+    { href: "/about", label: t("about") },
+    { href: "/contact", label: t("contact") },
+    { href: "/success-stories", label: t("successStories") },
+  ];
+
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-      {/* Main Footer Content */}
-      <div className="py-16">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {/* Company Info */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
-                  <Heart className="h-5 w-5 text-white fill-white" />
-                </div>
-                <div>
-                  <span className="text-2xl font-bold primary-color">
-                    Nikah
-                  </span>
-                  <p className="text-xs text-gray-400 -mt-1">Find Your Perfect Match</p>
-                </div>
+    <footer className="bg-gray-800 border-t border-gray-800 mt-auto">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          {/* Brand Section */}
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                <Heart className="w-5 h-5 text-white fill-current" />
               </div>
-              <p className="text-gray-300 leading-relaxed">
-                The most trusted matrimony platform connecting hearts worldwide. We&apos;ve helped over 50,000 couples find
-                their perfect match.
-              </p>
-              <div className="flex space-x-4">
+              <h3 className="text-2xl font-bold text-white">নিকাহ</h3>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              {t("tagline")}
+            </p>
+            <div className="flex items-center text-sm text-gray-400">
+              <span>{t("madeWith")}</span>
+              <Heart className="w-4 h-4 mx-1 text-emerald-600 fill-current" />
+              <span>{t("forCommunity")}</span>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-white">Quick Links</h4>
+            <nav className="grid grid-cols-2 gap-2">
+              {routes.map((route) => (
                 <Link
-                  href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
+                  key={route.href}
+                  href={route.href}
+                  className="text-gray-400 hover:text-emerald-400 text-sm transition-colors duration-200 hover:underline"
                 >
-                  <Facebook className="h-5 w-5" />
+                  {route.label}
                 </Link>
-                <Link
-                  href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
-                >
-                  <Twitter className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
-                >
-                  <Instagram className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="#"
-                  className="h-10 w-10 bg-gray-700 hover:bg-emerald-600 rounded-full flex items-center justify-center transition-colors duration-300"
-                >
-                  <Youtube className="h-5 w-5" />
-                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Contact Info */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-white">Contact Info</h4>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3 text-sm text-gray-400">
+                <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>{t("location")}</span>
               </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="space-y-6">
-              <h4 className="text-lg font-semibold text-white">Quick Links</h4>
-              <ul className="space-y-3">
-                {[
-                  { name: "Find Matches", href: "/biodatas" },
-                  { name: "Success Stories", href: "/success-stories" },
-                  { name: "Premium Plans", href: "/pricing" },
-                  { name: "Mobile App", href: "/app" },
-                  { name: "Help Center", href: "/help" },
-                  { name: "Blog", href: "/blog" },
-                ].map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-200 flex items-center group"
-                    >
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div className="space-y-6">
-              <h4 className="text-lg font-semibold text-white">Support</h4>
-              <ul className="space-y-3">
-                {[
-                  { name: "Contact Us", href: "/contact" },
-                  { name: "Privacy Policy", href: "/privacy" },
-                  { name: "Terms of Service", href: "/terms" },
-                  { name: "Safety Tips", href: "/safety" },
-                  { name: "Report Profile", href: "/report" },
-                  { name: "Refund Policy", href: "/refund" },
-                ].map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-200 flex items-center group"
-                    >
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <h4 className="text-lg font-semibold text-white">Get in Touch</h4>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <MapPin className="h-5 w-5 text-emerald-400 mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="text-gray-300">123 Love Street</p>
-                    <p className="text-gray-300">Heart City, HC 12345</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-emerald-400 flex-shrink-0" />
-                  <Link href="tel:+1234567890" className="text-gray-300 hover:text-emerald-400 transition-colors">
-                    +1 (234) 567-8900
-                  </Link>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-emerald-400 flex-shrink-0" />
-                  <Link href="mailto:support@nikah.com" className="text-gray-300 hover:text-emerald-400 transition-colors">
-                    support@nikah.com
-                  </Link>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Clock className="h-5 w-5 text-emerald-400 flex-shrink-0" />
-                  <div>
-                    <p className="text-gray-300">24/7 Support</p>
-                    <p className="text-sm text-gray-400">Always here to help</p>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-3 text-sm text-gray-400">
+                <Mail className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>{t("email")}</span>
+              </div>
+              <div className="flex items-center space-x-3 text-sm text-gray-400">
+                <Phone className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>{t("phone")}</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-700 py-6">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-400 text-sm">
-              © 2025 Nikah. All rights reserved.
-            </div>
-            <div className="flex items-center space-x-6 text-sm">
-              <Link href="/privacy" className="text-gray-400 hover:text-emerald-400 transition-colors">
-                Privacy
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-emerald-400 transition-colors">
-                Terms
-              </Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-emerald-400 transition-colors">
-                Cookies
-              </Link>
-              <Link href="/sitemap" className="text-gray-400 hover:text-emerald-400 transition-colors">
-                Sitemap
-              </Link>
+
+        {/* Bottom Bar */}
+        <div className="pt-6 border-t border-gray-800">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+            <p className="text-sm text-gray-400">{t("copyright")}</p>
+            <div className="flex items-center space-x-4">
+              <div className="w-2 h-2 bg-emerald-600 rounded-full animate-pulse"></div>
+              <span className="text-xs text-gray-500">
+                Islamic Matrimony Platform
+              </span>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    </footer>
+  );
 }
