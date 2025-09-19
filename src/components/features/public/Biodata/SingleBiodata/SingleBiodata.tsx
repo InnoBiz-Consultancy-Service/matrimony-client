@@ -64,10 +64,10 @@ export default function Biodata({ id }: { id: string }) {
         {},
         {
           headers: {
-            Authorization: token,
+            Authorization:token,
           },
           params: {
-            receiverId: id,
+            receiverId:biodata?.userId,
           },
         }
       );
