@@ -443,7 +443,6 @@
 //   );
 // }
 
-
 "use client";
 
 import * as React from "react";
@@ -456,112 +455,78 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
-
-// Cookie helpers
-const setCookie = (name: string, value: string, days: number) => {
-  const expires = new Date();
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${encodeURIComponent(
-    value
-  )};expires=${expires.toUTCString()};path=/;SameSite=Strict`;
-};
-
-const getCookie = (name: string): string | null => {
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    const c = ca[i].trim(); // Fixed: changed let to const
-    if (c.indexOf(nameEQ) === 0)
-      return decodeURIComponent(c.substring(nameEQ.length));
-  }
-  return null;
-};
-
-const deleteCookie = (name: string) => {
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Strict`;
-};
-
-// Type for user data
-interface UserData {
-  userId?: string;
-  name?: string;
-  email?: string;
-  role?: string;
-  hasBiodata?: boolean;
-  subscriptionType?: string;
-  [key: string]: unknown;
-}
+import { getCookie } from "@/utils/getToken";
+import authService from "@/utils/authService";
+import { useAuth } from "../context/auth-context";
 
 // Auth service using only cookies
-const authService = {
-  login: async (credentials: {
-    email: string;
-    password: string;
-    rememberMe: boolean;
-  }) => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
-      credentials,
-      { headers: { "Content-Type": "application/json" }, withCredentials: true }
-    );
+// const authService = {
+//   login: async (credentials: {
+//     email: string;
+//     password: string;
+//     rememberMe: boolean;
+//   }) => {
+//     const response = await axios.post(
+//       `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+//       credentials,
+//       { headers: { "Content-Type": "application/json" }, withCredentials: true }
+//     );
 
-    if (!response.data?.data.token)
-      throw new Error("Authentication failed: No token received");
-    return response.data?.data;
-  },
+//     if (!response.data?.data.token)
+//       throw new Error("Authentication failed: No token received");
+//     return response.data?.data;
+//   },
 
-  storeAuthData: (token: string, userData: UserData = {}, rememberMe = false) => {
-    const decoded = jwtDecode<{
-      userId: string;
-      email: string;
-      role?: string;
-      exp: number;
-      name: string;
-    }>(token);
-    const userToStore = {
-      userId: decoded.userId,
-      name: decoded.name,
-      email: decoded.email,
-      role: decoded.role || userData.role || "user",
-      ...userData,
-    };
-    const days = rememberMe ? 30 : 7;
-    setCookie("token", token, days);
-    setCookie("user", JSON.stringify(userToStore), days);
-    setCookie("userRole", userToStore.role, days);
-    setCookie("hasBiodata", userToStore.hasBiodata ? "true" : "false", days);
-    setCookie("subscriptionType", userToStore.subscriptionType || "free", days);
-    return decoded;
-  },
+//  storeAuthData: (token: string, userData: UserData = {}, rememberMe = false) => {
+//    const decoded = jwtDecode<{
+//      userId: string;
+//      email: string;
+//      role?: string;
+//      exp: number;
+//      name: string;
+//    }>(token)}
+//  const userToStore = {
+//    userId: decoded.userId,
+//    name: decoded.name,
+//    email: decoded.email,
+//    role: decoded.role || userData.role || "user",
+//    ...userData,
+//  };
+//     const days = rememberMe ? 30 : 7;
+//     setCookie("token", token, days);
+//     setCookie("user", JSON.stringify(userToStore), days);
+//     setCookie("userRole", userToStore.role, days);
+//     setCookie("hasBiodata", userToStore.hasBiodata ? "true" : "false", days);
+//     setCookie("subscriptionType", userToStore.subscriptionType || "free", days);
+//     return decoded;
+//   },
 
-  clearAuthData: () => {
-    deleteCookie("token");
-    deleteCookie("user");
-    deleteCookie("userRole");
-    deleteCookie("hasBiodata");
-    deleteCookie("subscriptionType");
-  },
+//   clearAuthData: () => {
+//     deleteCookie("token");
+//     deleteCookie("user");
+//     deleteCookie("userRole");
+//     deleteCookie("hasBiodata");
+//     deleteCookie("subscriptionType");
+//   },
 
-  isAuthenticated: (): boolean => {
-    const token = getCookie("token");
-    if (!token) return false;
-    try {
-      const decoded = jwtDecode<{ exp: number }>(token);
-      const currentTime = Date.now() / 1000;
-      if (decoded.exp < currentTime) {
-        authService.clearAuthData();
-        return false;
-      }
-      return true;
-    } catch {
-      authService.clearAuthData();
-      return false;
-    }
-  },
-};
+//   isAuthenticated: (): boolean => {
+//     const token = getCookie("token");
+//     if (!token) return false;
+//     try {
+//       const decoded = jwtDecode<{ exp: number }>(token);
+//       const currentTime = Date.now() / 1000;
+//       if (decoded.exp < currentTime) {
+//         authService.clearAuthData();
+//         return false;
+//       }
+//       return true;
+//     } catch {
+//       authService.clearAuthData();
+//       return false;
+//     }
+//   },
+// };
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -571,6 +536,7 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const router = useRouter();
+  const { login, clearError } = useAuth();
 
   useEffect(() => {
     if (authService.isAuthenticated()) {
@@ -594,29 +560,45 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    clearError();
+
     try {
-      if (!email || !password)
+      // Client-side validation
+      if (!email || !password) {
         throw new Error("Please enter both email and password");
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         throw new Error("Please enter a valid email");
-      if (password.length < 8)
+      }
+
+      if (password.length < 8) {
         throw new Error("Password must be at least 8 characters long");
+      }
 
-      const response = await authService.login({ email, password, rememberMe });
-      authService.storeAuthData(response.token, response.user, rememberMe);
+      // Use AuthContext login function - this handles everything
+      await login({ email, password, rememberMe });
 
+      // Success toast
       toast.success("Login successful! Redirecting...", {
         position: "top-center",
       });
-      setTimeout(() => router.push("/"), 1000);
-    } catch (err: unknown) { // Fixed: replaced any with unknown
-      authService.clearAuthData();
-      const message =
-        (err as { response?: { data?: { message?: string } }; message?: string })
-          .response?.data?.message || 
-        (err as { message?: string }).message || 
-        "Something went wrong!";
-      toast.error(message, { position: "top-center" });
+
+      // The AuthContext login function automatically updates user state
+      // Small delay to ensure state is updated, then redirect
+      setTimeout(() => {
+        const userRole = getCookie("userRole") || "user";
+        const redirectPath =
+          userRole === "admin" ? "/admin/dashboard" : "/dashboard";
+        router.push(redirectPath);
+      }, 100);
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+    } catch (err: any) {
+      const message = err.message || "Login failed. Please try again.";
+      toast.error(message, {
+        position: "top-center",
+      });
+      console.error("Login error:", err);
     } finally {
       setIsSubmitting(false);
     }

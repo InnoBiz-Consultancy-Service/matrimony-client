@@ -116,41 +116,45 @@ export default function RegistrationPage() {
     },
   });
 
- const onSubmit = async (data: RegistrationFormData) => {
-  setIsSubmitting(true);
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/user/register`,
-      {
-        agreeToPrivacy: data.agreeToPrivacy,
-        agreeToTerms: data.agreeToTerms,
-        role: data.role,
-        gender: data.gender,
-        password: data.password,
-        phone: data.phone,
-        email: data.email,
-        name: data.name,
-      
-      }
-    );
+  const onSubmit = async (data: RegistrationFormData) => {
+    setIsSubmitting(true);
+    try {
+      const response = await axios.post(
+        `/api/auth/registration`,
+        {
+          agreeToPrivacy: data.agreeToPrivacy,
+          agreeToTerms: data.agreeToTerms,
+          role: data.role,
+          gender: data.gender,
+          password: data.password,
+          phone: data.phone,
+          email: data.email,
+          name: data.name,
+        }
+      );
 
-    console.log("Registration response:", response.data);
-console.log("Storing userId in localStorage:", response.data?.data?.userId);
-    localStorage.setItem("userId", JSON.stringify(response.data?.data?.userId));
-    localStorage.setItem(
-      "userInfo",
-      JSON.stringify({ email: data.email, phone: data.phone })
-    );
+      console.log("Registration response:", response.data);
+      console.log(
+        "Storing userId in localStorage:",
+        response.data?.data?.userId
+      );
+      localStorage.setItem(
+        "userId",
+        JSON.stringify(response.data?.data?.userId)
+      );
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({ email: data.email, phone: data.phone })
+      );
 
-    router.push("verify-otp");
-  } catch (error: unknown) {
-    const err = error as AxiosError<{ message: string }>;
-    toast.error(err.response?.data?.message || "Something went wrong");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+      router.push("verify-otp");
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const nextStep = async () => {
     const fieldsToValidate =
