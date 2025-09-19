@@ -64,14 +64,13 @@ export default function Biodata({ id }: { id: string }) {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
-        {
-          sender: user?.userId,
-          receiverId: biodata?.userId?._id,
-          status: "sent",
-        },
+        {},
         {
           headers: {
             Authorization: token,
+          },
+          params: {
+            receiverId: id,
           },
         }
       );
@@ -113,11 +112,8 @@ export default function Biodata({ id }: { id: string }) {
     // if (!user) return router.push("/login");
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/block`,
-        {
-          userId: user?.userId,
-          biodataId: biodata?.userId?._id,
-        },
+        `${process.env.NEXT_PUBLIC_BASE_URL}/ignore?ignoredUserId=${biodata?.userId?._id}`,
+        {},
         {
           headers: {
             Authorization: token,

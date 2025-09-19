@@ -21,11 +21,13 @@ import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
 import { PageLoader } from "@/components/common/Loader";
 import { useAuth } from "@/app/(auth)/context/auth-context";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Profile() {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
-console.log(biodata)
+  console.log(biodata);
   const { token, user } = useAuth();
   console.log(user);
   // Translation function
@@ -138,6 +140,29 @@ console.log(biodata)
                 </div>
               </CardContent>
             </Card>
+            <Link href={"/profile/interest-request"}>
+              <Button className="w-full mt-4 bg-emerald-600 dark:text-gray-100 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800 cursor-pointer">
+                Interest Request
+              </Button>
+            </Link>
+            <div className="flex items-center space-x-7 mt-6 justify-center">
+              <Link href={"/profile/my-sent-interest"}>
+                <Button
+                  className="cursor-pointer border-green-400"
+                  variant="outline"
+                >
+                  My interest
+                </Button>
+              </Link>
+              <Link href={"/profile/block-list"}>
+                <Button
+                  className="cursor-pointer border-red-400"
+                  variant="outline"
+                >
+                  Block list
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Right Side - Detailed Information */}
