@@ -21,7 +21,7 @@ export function useSearchFilters(): FilterParams {
   const maxAge = getNumberParam("maxAge") ?? defaultFilters.ageRange?.[1];
 
   return {
-    gender: getStringParam("gender") as "male" | "female" | undefined,
+    gender: getStringParam("gender") as "male" | "female" | "",
     ageRange:
       minAge !== undefined && maxAge !== undefined
         ? [minAge, maxAge]

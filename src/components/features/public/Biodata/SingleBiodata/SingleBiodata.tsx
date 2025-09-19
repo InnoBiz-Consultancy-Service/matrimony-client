@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios, { AxiosError } from "axios";
-import { useAuth } from "@/app/(auth)/context/auth-context";
 import femaleAvatar from "../../../../../../public/men_avatar.webp";
 import maleAvatar from "../../../../../../public/female_avatar.jpg";
 import { useLanguage } from "@/hooks/use-language";
@@ -17,10 +16,10 @@ import {
   Heart,
   Loader2,
   MapPin,
-  Star,
   Target,
   User,
   Users,
+  Shield,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BiodataType } from "@/types/publicBiodata";
@@ -35,8 +34,6 @@ export default function Biodata({ id }: { id: string }) {
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
-
-  const { user } = useAuth();
 
   const token = getCookie("token") || "";
 
@@ -293,8 +290,9 @@ export default function Biodata({ id }: { id: string }) {
                       </div>
                       <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
                         {edu.level === "SSC" || edu.level === "HSC" ? (
-                          <span>
+                          <span className="flex flex-col">
                             {edu.group} ({edu.year})
+                            {edu.result && <small>ফলাফল: {edu.result}</small>}
                           </span>
                         ) : edu.level === "Graduation" ||
                           edu.level === "Masters" ||
@@ -302,10 +300,12 @@ export default function Biodata({ id }: { id: string }) {
                           <span className="flex flex-col">
                             {edu.subject} ({edu.year})
                             <small>({edu.institution})</small>
+                            {edu.result && <small>{edu.result}</small>}
                           </span>
                         ) : (
                           <span>
                             {edu.level} ({edu.year})
+                            {edu.result && <small> {edu.result}</small>}
                           </span>
                         )}
                       </div>
@@ -360,6 +360,14 @@ export default function Biodata({ id }: { id: string }) {
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.motherProfession}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.motherProfession}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.familyInformation?.motherAlive}:
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
@@ -394,10 +402,34 @@ export default function Biodata({ id }: { id: string }) {
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.uncleProfession}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.unclesProfession?.join(", ")}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.familyInformation?.familyStatus}:
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
                       {biodata?.family?.financialStatus}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.familySituation}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.financialDetails}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.familyInformation?.religiousCondition}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.family?.religiousPractice}
                     </div>
                   </div>
                 </div>
@@ -471,10 +503,61 @@ export default function Biodata({ id }: { id: string }) {
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.mahram}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.personal?.maintainMahram
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.personal?.maintainMahram ? "হ্যাঁ" : "না"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.personalInformation?.quranReading}:
                     </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.personal?.quranReading
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.personal?.quranReading ? "হ্যাঁ" : "না"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.fiqh}
+                    </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
-                      {biodata?.personal?.quranReading}
+                      {biodata?.personal?.fiqh}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.personalInformation?.entertainment}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.personal?.entertainment
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.personal?.entertainment ? "হ্যাঁ" : "না"}
+                      </Badge>
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
@@ -659,6 +742,71 @@ export default function Biodata({ id }: { id: string }) {
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
                       {biodata?.userId?.phone}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/*  Pledge Section */}
+            <Card className="border-gray-300 dark:border-gray-600">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-2xl text-gray-800 dark:text-gray-100">
+                  <Shield className="w-6 h-6 mr-2 text-emerald-600" />
+                  {t.pledge.finalPledge}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.pledge?.parentsAware}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.pledge?.parentsAware
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.pledge?.parentsAware ? "হ্যাঁ" : "না"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.pledge?.confirmAccurate}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.pledge?.informationAccurate
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.pledge?.informationAccurate ? "হ্যাঁ" : "না"}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.pledge?.nikahResponsibility}
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 pl-2">
+                      <Badge
+                        variant={
+                          biodata?.pledge?.nikahResponsibility
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {biodata?.pledge?.nikahResponsibility ? "হ্যাঁ" : "না"}
+                      </Badge>
                     </div>
                   </div>
                 </div>

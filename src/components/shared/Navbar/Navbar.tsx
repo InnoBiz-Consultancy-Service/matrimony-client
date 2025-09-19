@@ -17,19 +17,23 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/features/public/ThemeToggle/ThemeToggle";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import { LanguageSelector } from "../languageSelector/LanguageSelector";
+import { useLanguage } from "@/hooks/use-language";
+import { navbarTranslation } from "@/dictionary/navbar";
 export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+    const { language } = useLanguage();
+    const t = navbarTranslation[language];
 
   const navigationItems = [
-    { title: "Home", href: "/" },
-    { title: "Find Match", href: "/biodatas" },
-    { title: "Success Stories", href: "/success-stories" },
-    { title: "About", href: "/about" },
-    { title: "Contact", href: "/contact" },
+    { title: t.home, href: "/" },
+    { title: t.findMatch, href: "/biodatas" },
+    { title: t.successStories, href: "/success-stories" },
+    { title: t.about, href: "/about" },
+    { title: t.contact, href: "/contact" },
   ];
 
   React.useEffect(() => {
@@ -229,12 +233,12 @@ export default function Navbar() {
                     variant="ghost"
                     className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 font-medium transition-all duration-200"
                   >
-                    Login
+                    {t.login}
                   </Button>
                 </Link>
                 <Link href="/registration">
                   <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white shadow-lg hover:shadow-emerald-200 dark:hover:shadow-emerald-800/30 transition-all duration-300 font-medium px-6">
-                    Join Free
+                    {t.registration}
                   </Button>
                 </Link>
               </>

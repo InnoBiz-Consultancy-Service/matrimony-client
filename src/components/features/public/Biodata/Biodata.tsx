@@ -54,7 +54,7 @@ export default function ProfessionalBiodatasPage() {
       setError("");
 
       // Get search parameters from URL
-      const lookingFor = searchParams.get("lookingFor") || "";
+      const gender = searchParams.get("gender") || "";
       const minAge = searchParams.get("minAge");
       const maxAge = searchParams.get("maxAge");
       const division = searchParams.get("division") || "";
@@ -68,7 +68,7 @@ export default function ProfessionalBiodatasPage() {
       // Build query parameters
       const queryParams: Record<string, string | number> = {};
 
-      if (lookingFor) queryParams.lookingFor = lookingFor;
+      if (gender) queryParams.gender = gender;
       if (minAge) queryParams.minAge = minAge;
       if (maxAge) queryParams.maxAge = maxAge;
       if (division) {
