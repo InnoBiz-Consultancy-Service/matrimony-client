@@ -18,7 +18,7 @@ import { useAuth } from "@/app/(auth)/context/auth-context";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { setCookie } from "@/utils/setCookie";
+// import { setCookie } from "@/utils/setCookie";
 
 const STORAGE_KEY = "biodata-form-data";
 const STEP_KEY = "biodata-current-step";
@@ -151,8 +151,8 @@ export default function BiodataForm() {
 
       if (response.status === 200) {
         toast.success("Profile posted successfully!");
-        setCookie("profileStatus", "true", 7);
-        router.push("/");
+        // router.push("/");
+        localStorage.removeItem("token");
       }
 
       return response.data;

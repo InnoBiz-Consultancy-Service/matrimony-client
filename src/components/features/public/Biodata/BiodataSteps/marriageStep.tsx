@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { MarriageInfo, StepProps } from "@/types/biodataForm";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 export default function MarriageStep({ data, updateData }: StepProps) {
   const [marriage, setMarriage] = useState<MarriageInfo>({
@@ -22,6 +23,8 @@ export default function MarriageStep({ data, updateData }: StepProps) {
     jobStatus: "",
     ...data.marriage,
   });
+
+  const { user } = useAuth();
 
   useEffect(() => {
     updateData({ marriage });
@@ -99,38 +102,42 @@ export default function MarriageStep({ data, updateData }: StepProps) {
         </Select>
       </div>
 
-      <div className="space-y-3">
-        <Label htmlFor="jobStatus">
-          {t.marriageRelatedInformation?.jobContinue}
-        </Label>
-        <Select
-          value={marriage.jobStatus || "not_decided"}
-          onValueChange={(value) =>
-            handleChange("jobStatus", value === "" ? "not_decided" : value)
-          }
-        >
-          <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
-            <SelectValue placeholder="Select job status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={t.marriageRelatedInformation?.continueJob}>
-              {t.marriageRelatedInformation?.continueJob}
-            </SelectItem>
-            <SelectItem value={t.marriageRelatedInformation?.changeJob}>
-              {t.marriageRelatedInformation?.changeJob}
-            </SelectItem>
-            <SelectItem value={t.marriageRelatedInformation?.quitJob}>
-              {t.marriageRelatedInformation?.quitJob}
-            </SelectItem>
-            <SelectItem value={t.marriageRelatedInformation?.startJob}>
-              {t.marriageRelatedInformation?.startJob}
-            </SelectItem>
-            <SelectItem value={t.marriageRelatedInformation?.noDecideJob}>
-              {t.marriageRelatedInformation?.noDecideJob}
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {user?.gender === "female" && (
+        <>
+          <div className="space-y-3">
+            <Label htmlFor="jobStatus">
+              {t.marriageRelatedInformation?.jobContinue}
+            </Label>
+            <Select
+              value={marriage.jobStatus || "not_decided"}
+              onValueChange={(value) =>
+                handleChange("jobStatus", value === "" ? "not_decided" : value)
+              }
+            >
+              <SelectTrigger className="border-emerald-200 dark:border-emerald-700 w-full">
+                <SelectValue placeholder="Select job status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={t.marriageRelatedInformation?.continueJob}>
+                  {t.marriageRelatedInformation?.continueJob}
+                </SelectItem>
+                <SelectItem value={t.marriageRelatedInformation?.changeJob}>
+                  {t.marriageRelatedInformation?.changeJob}
+                </SelectItem>
+                <SelectItem value={t.marriageRelatedInformation?.quitJob}>
+                  {t.marriageRelatedInformation?.quitJob}
+                </SelectItem>
+                <SelectItem value={t.marriageRelatedInformation?.startJob}>
+                  {t.marriageRelatedInformation?.startJob}
+                </SelectItem>
+                <SelectItem value={t.marriageRelatedInformation?.noDecideJob}>
+                  {t.marriageRelatedInformation?.noDecideJob}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      )}
 
       <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
         <h3 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">

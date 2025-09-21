@@ -84,7 +84,7 @@ export interface PreferenceInfo {
   maritalStatus: string;
   profession: string;
   financialCondition: string;
-  qualities: string[];
+  qualities: string;
 }
 
 export interface PledgeInfo {
