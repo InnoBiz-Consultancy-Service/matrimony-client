@@ -37,6 +37,7 @@ export interface EducationHistory {
   result: string;
   subject?: string;
   institution?: string;
+  institution_bangla?: string;
 }
 
 export interface EducationInfo {

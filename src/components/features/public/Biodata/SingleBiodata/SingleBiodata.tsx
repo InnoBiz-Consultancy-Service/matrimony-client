@@ -20,6 +20,7 @@ import {
   User,
   Users,
   Shield,
+  Star,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BiodataType } from "@/types/publicBiodata";
@@ -32,6 +33,8 @@ export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
   const [loading, setLoading] = React.useState(false);
   const [ButtonLoader, setButtonLoader] = React.useState(false);
+  const [shortListLoader, setShortListLoader] = React.useState(false);
+  const [blockLoader, setBlockLoader] = React.useState(false);
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
@@ -82,8 +85,9 @@ export default function Biodata({ id }: { id: string }) {
   };
   const handleBlock = async () => {
     // if (!user) return router.push("/login");
+    setBlockLoader(true);
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/ignore?ignoredUserId=${biodata?.userId?._id}`,
         {},
         {
@@ -92,13 +96,35 @@ export default function Biodata({ id }: { id: string }) {
           },
         }
       );
-      console.log("Blocked successfully:", response.data);
+      // console.log("Blocked successfully:", response.data);
       toast.success("Blocked successfully");
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;
       toast.error(err.response?.data?.message || "Something went wrong");
     } finally {
-      setButtonLoader(false);
+      setBlockLoader(false);
+    }
+  };
+  const handleShortlist = async () => {
+    // if (!user) return router.push("/login");
+    setShortListLoader(true);
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/shortList/${biodata?.userId?._id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      // console.log("Shortlisted successfully:", response.data);
+      toast.success("Shortlisted successfully");
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setShortListLoader(false);
     }
   };
 
@@ -196,14 +222,42 @@ export default function Biodata({ id }: { id: string }) {
               )}
               {ButtonLoader ? "Sending..." : t.sendInterest}
             </Button>
-            <div className="mt-6 w-full">
-              <Button
-                className="cursor-pointer border-red-400 w-full"
-                variant="outline"
-                onClick={handleBlock}
-              >
-                <Ban className="text-red-400" /> Ignore
-              </Button>
+            <div className="flex justify-between mt-6 w-full space-x-4">
+              {/* Shortlist Button */}
+              <div className="w-full">
+                <Button
+                  className="cursor-pointer border-green-400 w-full flex items-center justify-center"
+                  variant="outline"
+                  onClick={handleShortlist}
+                  disabled={shortListLoader}
+                >
+                  {shortListLoader ? (
+                    <span className="w-4 h-4 border-2 border-green-400 border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    <>
+                      <Star className="text-green-400 mr-2" /> Shortlist
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Ignore Button */}
+              <div className="w-full">
+                <Button
+                  className="cursor-pointer border-red-400 w-full flex items-center justify-center"
+                  variant="outline"
+                  onClick={handleBlock}
+                  disabled={blockLoader}
+                >
+                  {blockLoader ? (
+                    <span className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    <>
+                      <Ban className="text-red-400 mr-2" /> Ignore
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
 

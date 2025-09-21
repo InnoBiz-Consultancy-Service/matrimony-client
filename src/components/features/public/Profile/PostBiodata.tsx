@@ -39,6 +39,7 @@ export default function BiodataForm() {
   const [formData, setFormData] = useState<BiodataFormData>({});
   const [mounted, setMounted] = useState(false);
   const [showStepDropdown, setShowStepDropdown] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { user, token } = useAuth();
@@ -98,7 +99,7 @@ export default function BiodataForm() {
 
   const handleSubmit = async () => {
     try {
-
+      setLoading(true);
       if (!token) {
         toast.error("No authentication token found");
         return;
@@ -151,8 +152,9 @@ export default function BiodataForm() {
 
       if (response.status === 200) {
         toast.success("Profile posted successfully!");
-        // router.push("/");
-        localStorage.removeItem("token");
+        localStorage.removeItem("biodata-form-data");
+        localStorage.removeItem("biodata-current-step");
+        router.push("/");
       }
 
       return response.data;
@@ -168,6 +170,8 @@ export default function BiodataForm() {
 
       toast.error(errorMessage);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -324,9 +328,15 @@ export default function BiodataForm() {
           {currentStep === steps.length ? (
             <Button
               onClick={handleSubmit}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white flex-1 md:flex-none"
+              disabled={loading}
+              className={`bg-emerald-600 hover:bg-emerald-700 text-white flex-1 md:flex-none 
+    ${loading ? "cursor-not-allowed opacity-70" : ""}`}
             >
-              Submit Form
+              {loading ? (
+                <span className="loader border-2 border-white border-t-transparent rounded-full w-4 h-4 animate-spin"></span>
+              ) : (
+                "Submit Form"
+              )}
             </Button>
           ) : (
             <Button
