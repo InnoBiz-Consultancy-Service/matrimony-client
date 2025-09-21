@@ -11,10 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { PreferenceInfo, StepProps } from "@/types/biodataForm";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function PreferenceStep({ data, updateData }: StepProps) {
   const [preference, setPreference] = useState<PreferenceInfo>({
@@ -26,7 +27,7 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
     maritalStatus: "",
     profession: "",
     financialCondition: "",
-    qualities: [],
+    qualities: "",
     ...data.preference,
   });
 
@@ -38,26 +39,6 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
     setPreference((prev) => ({ ...prev, [field]: value }));
   };
 
-  const addQuality = () => {
-    setPreference((prev) => ({
-      ...prev,
-      qualities: [...prev.qualities, ""],
-    }));
-  };
-
-  const removeQuality = (index: number) => {
-    setPreference((prev) => ({
-      ...prev,
-      qualities: prev.qualities.filter((_, i) => i !== index),
-    }));
-  };
-
-  const updateQuality = (index: number, value: string) => {
-    setPreference((prev) => ({
-      ...prev,
-      qualities: prev.qualities.map((item, i) => (i === index ? value : item)),
-    }));
-  };
   const { language } = useLanguage();
   const t = biodataTranslation[language];
   return (
@@ -249,37 +230,18 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
       </div>
 
       <div>
-        <div className="flex justify-between items-center mb-4">
-          <Label>{t.expectedLifePartner?.qualities}</Label>
-          <Button
-            type="button"
-            onClick={addQuality}
-            size="sm"
-            className="bg-emerald-600 hover:bg-emerald-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            {t.expectedLifePartner?.addQualityBtn}
-          </Button>
-        </div>
-        <div className="space-y-2">
-          {preference.qualities.map((quality, index) => (
-            <div key={index} className="flex gap-2">
-              <Input
-                value={quality}
-                onChange={(e) => updateQuality(index, e.target.value)}
+        <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-3">
+            <Label>{t.expectedLifePartner?.qualities}</Label>
+            <div className="flex gap-2 w-full">
+              <Textarea
+                value={preference.qualities}
+                onChange={(e) => handleChange("qualities", e.target.value)}
                 placeholder={t.expectedLifePartner?.desiredQualityPlaceHolder}
-                className="border-emerald-200 dark:border-emerald-700"
+                className="border-emerald-200 dark:border-emerald-700 w-full"
               />
-              <Button
-                type="button"
-                onClick={() => removeQuality(index)}
-                size="sm"
-                variant="destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
             </div>
-          ))}
+          </div>
         </div>
       </div>
 

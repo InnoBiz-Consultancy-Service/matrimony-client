@@ -4,13 +4,10 @@ export const bannerContent = {
       tagLine: "Trusted by Happy Couples",
       title: "Find Your Match Perfect Today",
       description:
-        "Join thousands of successful couples who found their soulmate through our trusted matrimony platform. Your journey to happily ever after starts here.",
+        "“And marry those among you who are single, and the righteous among your male and female servants. If they are poor, Allah will enrich them out of His bounty. And Allah is All-Encompassing, All-Knowing.”(Surah An-Nur, Ayah 32)",
       badgeVerify: "100% Verified",
       privacy: "Privacy Protected",
       privacyDesc: "All profiles are manually verified for your safety",
-      happyCouples: "Happy Couples",
-      activeMember: "Active Member",
-      successRate: "Success Rate",
     },
   },
   bn: {
@@ -18,14 +15,11 @@ export const bannerContent = {
       tagLine: "সুখী দম্পতিদের দ্বারা বিশ্বস্ত",
       title: "এখনই আপনার নিখুঁত সঙ্গী খুঁজে বের করুন",
       description:
-        "আমাদের বিশ্বস্ত বিবাহ প্ল্যাটফর্মের মাধ্যমে হাজার হাজার সফল দম্পতির সাথে যোগ দিন যারা তাদের আত্মার সঙ্গী খুঁজে পেয়েছেন। আপনার সুখী জীবনের যাত্রা এখান থেকে শুরু হয়",
+        "“তোমাদের মধ্যে যারা বিবাহহীন, তাদের বিবাহ সম্পাদন করে দাও। আর তোমাদের দাস-দাসীদের মধ্যে যারা সৎ, তাদেরও (বিয়ে করাও)। তারা যদি দরিদ্রও হয়, তবে আল্লাহ্‌ নিজ অনুগ্রহে তাদের সচ্ছল করে দেবেন। আল্লাহ্‌ প্রশস্ত দানশীল ও সর্বজ্ঞ।”(সূরা নূর, আয়াত-৩২)",
       badgeVerify: "১০০% যাচাইকৃত",
       privacy: "গোপনীয়তা সুরক্ষিত",
       privacyDesc:
         "আপনার নিরাপত্তার জন্য সমস্ত প্রোফাইল ম্যানুয়ালি যাচাই করা হয়",
-      happyCouples: "সুখী দম্পতিরা",
-      activeMember: "সক্রিয় সদস্য",
-      successRate: "সাফল্যের হার",
     },
   },
 };

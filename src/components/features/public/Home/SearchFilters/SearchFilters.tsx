@@ -125,18 +125,6 @@ export default function SearchFilters() {
     <section className="bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-emerald-900/10 py-12 transition-colors duration-300">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Heart className="h-6 w-6 text-emerald-500 dark:text-emerald-400 fill-current" />
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
-              {t.title}
-            </h2>
-          </div>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
-            {t.description}
-          </p>
-        </div>
-
         <Card className="shadow-lg dark:shadow-emerald-500/10 bg-white dark:bg-gray-800 border-0 dark:border dark:border-gray-700">
           <CardContent className="p-8 md:p-12">
             <Form {...form}>
@@ -153,7 +141,7 @@ export default function SearchFilters() {
                     render={({ field }) => (
                       <FormItem className="space-y-4">
                         <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
-                          <Users className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400" />
+                          <Users className="h-4 w-4 mr-2 text-emerald-500 dark:text-emerald-400 text-xl" />
                           {t.lookingFor}
                         </FormLabel>
                         <FormControl>

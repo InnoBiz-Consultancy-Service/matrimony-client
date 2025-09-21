@@ -26,6 +26,7 @@ import { BiodataType } from "@/types/publicBiodata";
 import { toast } from "sonner";
 import { PageLoader } from "@/components/common/Loader";
 import { getCookie } from "@/utils/getToken";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
@@ -36,6 +37,8 @@ export default function Biodata({ id }: { id: string }) {
   const t = biodataTranslation[language];
 
   const token = getCookie("token") || "";
+
+  const { user } = useAuth();
 
   React.useEffect(() => {
     const getbiodata = async () => {
@@ -61,10 +64,10 @@ export default function Biodata({ id }: { id: string }) {
         {},
         {
           headers: {
-            Authorization:token,
+            Authorization: token,
           },
           params: {
-            receiverId:biodata?.userId,
+            receiverId: biodata?.userId,
           },
         }
       );
@@ -596,14 +599,16 @@ export default function Biodata({ id }: { id: string }) {
                       </Badge>
                     </div>
                   </div>
-                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
-                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
-                      {t.marriageRelatedInformation?.jobContinue}:
+                  {user?.gender === "female" && (
+                    <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                      <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                        {t.marriageRelatedInformation?.jobContinue}:
+                      </div>
+                      <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                        {biodata?.marriage?.jobStatus}
+                      </div>
                     </div>
-                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
-                      {biodata?.marriage?.jobStatus}
-                    </div>
-                  </div>
+                  )}
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
                     <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
                       {t.marriageRelatedInformation?.studyContinue}:
