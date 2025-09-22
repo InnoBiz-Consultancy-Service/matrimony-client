@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { PageLoader } from "@/components/common/Loader";
 import { getCookie } from "@/utils/getToken";
 import { useAuth } from "@/app/(auth)/context/auth-context";
+import ViewContact from "./viewContactModal";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
@@ -35,6 +36,10 @@ export default function Biodata({ id }: { id: string }) {
   const [ButtonLoader, setButtonLoader] = React.useState(false);
   const [shortListLoader, setShortListLoader] = React.useState(false);
   const [blockLoader, setBlockLoader] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [selectedProfileId, setSelectedProfileId] = React.useState<
+    string | null
+  >(null);
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
@@ -42,7 +47,6 @@ export default function Biodata({ id }: { id: string }) {
   const token = getCookie("token") || "";
 
   const { user } = useAuth();
-
   React.useEffect(() => {
     const getbiodata = async () => {
       setLoading(true);
@@ -63,14 +67,11 @@ export default function Biodata({ id }: { id: string }) {
     setButtonLoader(true);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/interest/send?receiverId=${biodata?.userId._id}`,
         {},
         {
           headers: {
             Authorization: token,
-          },
-          params: {
-            receiverId: biodata?.userId,
           },
         }
       );
@@ -126,6 +127,11 @@ export default function Biodata({ id }: { id: string }) {
     } finally {
       setShortListLoader(false);
     }
+  };
+
+  const handleViewContact = (profileId: string) => {
+    setSelectedProfileId(profileId);
+    setIsModalOpen(true);
   };
 
   const getInitials = (name: string) => {
@@ -844,6 +850,25 @@ export default function Biodata({ id }: { id: string }) {
                 </div>
               </CardContent>
             </Card>
+
+            <div className="space-y-2">
+              <Button
+                onClick={() => handleViewContact(biodata?.userId?._id || "")}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+              >
+                View Contact - {}
+              </Button>
+            </div>
+
+            {/* Modal */}
+            <ViewContact
+              isOpen={isModalOpen}
+              onClose={() => {
+                setIsModalOpen(false);
+                setSelectedProfileId(null);
+              }}
+              profileId={selectedProfileId}
+            />
           </div>
         </div>
       </div>
