@@ -94,7 +94,7 @@ type UserId = {
  email: string;
  phone: string;
  role: string;
- _id: string;
+ _id: string | undefined;
 };
 
 export type BiodataType = {

@@ -205,7 +205,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Use your storeAuthData function
         storeAuthData(userToken, userData, credentials.rememberMe);
 
-        console.log("Login successful with storeAuthData:", userData);
+        // console.log("Login successful with storeAuthData:", userData);
       } else {
         throw new Error("Invalid response format");
       }

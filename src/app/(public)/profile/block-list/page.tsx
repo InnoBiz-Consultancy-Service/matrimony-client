@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 
 // TypeScript interfaces
 interface IgnoredUser {
-  email: string;
+  name: string;
   _id: string;
 }
 
@@ -34,7 +34,6 @@ const BlockList: React.FC = () => {
   );
   const [error, setError] = useState<string | null>(null);
   const token: string = getCookie("token") || "";
-
   // Fetch blocked users
   useEffect(() => {
     const fetchIgnoredUsers = async (): Promise<void> => {
@@ -289,13 +288,13 @@ const BlockList: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     {/* Avatar */}
                     <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
-                      {getAvatarInitials(userBlock.ignoredUser.email)}
+                      {getAvatarInitials(userBlock.ignoredUser.name)}
                     </div>
 
                     {/* User Info */}
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
-                        {userBlock.ignoredUser.email}
+                        {userBlock.ignoredUser.name}
                       </h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Blocked on {formatDate(userBlock.createdAt)}
@@ -309,7 +308,7 @@ const BlockList: React.FC = () => {
                       onClick={() => handleUnblock(userBlock.ignoredUser._id)}
                       disabled={unblockingUsers.has(userBlock.ignoredUser._id)}
                       type="button"
-                      aria-label={`Unblock ${userBlock.ignoredUser.email}`}
+                      aria-label={`Unblock ${userBlock.ignoredUser.name}`}
                       className="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-medium transition-colors duration-200 disabled:cursor-not-allowed min-w-[120px] justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                     >
                       {unblockingUsers.has(userBlock.ignoredUser._id) ? (
