@@ -107,9 +107,6 @@ export default function LoginPage() {
   );
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`;
-    toast.success("Login successful! Redirecting...", {
-      position: "top-center",
-    });
     setTimeout(() => router.push("/"), 1000);
   };
 
