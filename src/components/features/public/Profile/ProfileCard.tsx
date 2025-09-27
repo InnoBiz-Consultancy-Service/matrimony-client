@@ -8,7 +8,10 @@ import { User, Mail, Phone, Calendar, Crown, Edit3 } from "lucide-react";
 import { profileTranslation } from "@/dictionary/profile";
 import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
-{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+import Link from "next/link";
+{
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+}
 export function ProfileCard({ profile }: any) {
   const { language } = useLanguage();
   const t = profileTranslation[language];
@@ -146,10 +149,12 @@ export function ProfileCard({ profile }: any) {
         </div>
       </div>
 
-      <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-        <Edit3 className="h-4 w-4 mr-2" />
-        {t.editProfile}
-      </Button>
+      <Link href={"/profile/create-biodata"}>
+        <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Edit3 className="h-4 w-4 mr-2" />
+          {t.editProfile}
+        </Button>
+      </Link>
     </div>
   );
 }
