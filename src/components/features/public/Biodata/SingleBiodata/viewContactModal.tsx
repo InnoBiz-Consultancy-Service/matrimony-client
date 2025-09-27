@@ -142,6 +142,7 @@ export default function ViewContact({
       } else {
         throw new Error(result.message || "Failed to load profile data");
       }
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
     } catch (err: any) {
       setError(
         err.response?.data?.message || err.message || "An error occurred"

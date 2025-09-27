@@ -109,15 +109,15 @@ export default function UniversitySelector({
     }
   };
 
-  const displayValue = () => {
-    if (isOthers) {
-      return manualInput;
-    }
-    if (selectedUniversity) {
-      return language === "bn" ? selectedUniversity.name_bangla : selectedUniversity.name_english;
-    }
-    return searchTerm;
-  };
+  // const displayValue = () => {
+  //   if (isOthers) {
+  //     return manualInput;
+  //   }
+  //   if (selectedUniversity) {
+  //     return language === "bn" ? selectedUniversity.name_bangla : selectedUniversity.name_english;
+  //   }
+  //   return searchTerm;
+  // };
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
