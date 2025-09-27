@@ -8,7 +8,7 @@ import { User, Mail, Phone, Calendar, Crown, Edit3 } from "lucide-react";
 import { profileTranslation } from "@/dictionary/profile";
 import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
-
+{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 export function ProfileCard({ profile }: any) {
   const { language } = useLanguage();
   const t = profileTranslation[language];

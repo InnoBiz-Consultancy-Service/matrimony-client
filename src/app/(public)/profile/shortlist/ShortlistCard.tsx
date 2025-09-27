@@ -4,7 +4,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Home, User } from "lucide-react";
-
+{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 export default function BiodataCard({ biodata }: any) {
   const { language } = useLanguage();
   const shortlist = biodata?.biodataId;
