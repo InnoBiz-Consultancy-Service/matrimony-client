@@ -107,7 +107,6 @@ export default function LoginPage() {
   );
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`;
-    setTimeout(() => router.push("/"), 1000);
   };
 
   return (

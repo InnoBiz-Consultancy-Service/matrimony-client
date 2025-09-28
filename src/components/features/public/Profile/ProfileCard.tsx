@@ -9,9 +9,7 @@ import { profileTranslation } from "@/dictionary/profile";
 import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
 import Link from "next/link";
-{
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-}
+{ /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
 export function ProfileCard({ profile }: any) {
   const { language } = useLanguage();
   const t = profileTranslation[language];
