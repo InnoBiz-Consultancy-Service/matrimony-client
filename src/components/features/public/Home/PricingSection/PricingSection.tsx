@@ -173,12 +173,18 @@ export default function PricingSection() {
 
         <div className="text-center mt-12">
           <p className="text-gray-600 dark:text-gray-300 mb-4">{t.contact}</p>
-          <Button
-            variant="outline"
-            className="border-emerald-500 dark:border-emerald-400 text-emerald-500 dark:text-emerald-400 hover:bg-emerald-500 dark:hover:bg-emerald-400 hover:text-white dark:hover:text-gray-900 bg-transparent dark:bg-transparent transition-all duration-200"
+          <a
+            href="https://wa.me/8801721972807"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            {t.supportBtn}
-          </Button>
+            <Button
+              variant="outline"
+              className="border-emerald-500 dark:border-emerald-400 text-emerald-500 dark:text-emerald-400 hover:bg-emerald-500 dark:hover:bg-emerald-400 hover:text-white dark:hover:text-gray-900 bg-transparent dark:bg-transparent transition-all duration-200 cursor-pointer"
+            >
+              {t.supportBtn}
+            </Button>
+          </a>
         </div>
       </div>
     </section>

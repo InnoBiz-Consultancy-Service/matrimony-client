@@ -17,7 +17,6 @@ export default function BiodataCard({ biodata }: any) {
       .toUpperCase()
       .slice(0, 2);
   };
-
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:scale-[1.02] overflow-hidden">
       <CardContent className="p-6">

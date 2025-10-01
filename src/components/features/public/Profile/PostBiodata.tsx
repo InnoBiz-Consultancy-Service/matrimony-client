@@ -19,6 +19,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getCookie } from "@/utils/getToken";
+import { setCookie } from "@/utils/setCookie";
 // import { setCookie } from "@/utils/setCookie";
 
 const STORAGE_KEY = "biodata-form-data";
@@ -230,7 +231,6 @@ export default function BiodataForm() {
         },
       };
 
-
       const isUpdate = hasBiodata === "true";
       const url = `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`;
       const method = isUpdate ? axios.patch : axios.post;
@@ -248,7 +248,7 @@ export default function BiodataForm() {
             ? "Profile updated successfully!"
             : "Profile posted successfully!"
         );
-        localStorage.removeItem("biodata-form-data");
+        setCookie("hasBiodata", "true");
         router.push("/");
       }
 

@@ -158,7 +158,7 @@ console.log(token)
   const filteredPayments = payments.filter((payment) => {
     const matchesSearch =
       payment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      payment.userId.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      payment?.userId?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       payment.subscriptionType.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
@@ -256,7 +256,7 @@ console.log(token)
                         {payment.name}
                       </span>
                       <span className="text-sm text-gray-500">
-                        {payment.userId.email}
+                        {payment?.userId?.email}
                       </span>
                     </div>
                   </td>
@@ -329,7 +329,7 @@ console.log(token)
                     {payment.name}
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {payment.userId.email}
+                    {payment?.userId?.email}
                   </p>
                 </div>
                 <span
@@ -473,7 +473,7 @@ console.log(token)
                     <label className="text-sm text-gray-500">Email</label>
                     <p className="font-medium flex items-center gap-2">
                       <Mail className="w-4 h-4" />
-                      {selectedPayment.userId.email}
+                      {selectedPayment?.userId?.email}
                     </p>
                   </div>
                   <div>

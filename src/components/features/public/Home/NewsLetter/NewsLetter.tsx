@@ -30,7 +30,7 @@ const NewsLetter = () => {
                 placeholder={t.placeholder}
                 className="bg-white/10 dark:bg-white/5 border-white/20 dark:border-white/15 text-white placeholder:text-emerald-100 dark:placeholder:text-emerald-50 focus:border-white/40 dark:focus:border-white/30 focus:bg-white/15 dark:focus:bg-white/10 rounded-xl backdrop-blur-sm transition-all duration-200"
               />
-              <Button className="bg-white dark:bg-gray-100 text-emerald-600 dark:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-white hover:text-emerald-700 dark:hover:text-emerald-800 font-semibold px-8 rounded-xl whitespace-nowrap shadow-lg hover:shadow-xl transition-all duration-200 border-0">
+              <Button className="bg-white dark:bg-gray-100 text-emerald-600 dark:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-white hover:text-emerald-700 dark:hover:text-emerald-800 font-semibold px-8 rounded-xl whitespace-nowrap shadow-lg hover:shadow-xl transition-all duration-200 border-0 cursor-pointer">
                 {t.button}
               </Button>
             </div>
