@@ -86,9 +86,7 @@ export default function LoginPage() {
         const redirectPath = userRole === "admin" ? "/dashboard" : "/";
         router.push(redirectPath);
       }, 100);
-      {
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      }
+      { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
     } catch (err: any) {
       const message = err.message || "Login failed. Please try again.";
       toast.error(message, {
