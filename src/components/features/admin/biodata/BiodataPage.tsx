@@ -13,6 +13,8 @@ const BiodataPage = () => {
 
   const token = getCookie("token") || "";
 
+  console.log(biodataList);
+
   useEffect(() => {
     if (!token) {
       setError("Authentication token not found. Please login again.");
@@ -43,7 +45,7 @@ const BiodataPage = () => {
       } else {
         setBiodataList([]);
       }
-    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
     } catch (err: any) {
       console.error("Error fetching biodata:", err);
       if (err.code === "ECONNABORTED") {
@@ -63,6 +65,63 @@ const BiodataPage = () => {
     }
   };
 
+  // const handleApproval = async (id: string) => {
+  //   if (!token) {
+  //     setError("Authentication token not found. Please login again.");
+  //     return;
+  //   }
+
+  //   try {
+  //     setApprovingIds((prev) => new Set(prev).add(id));
+  //     setError("");
+
+  //     await axios.patch(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/approval/${id}`,
+  //       { status: "approved" },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: token,
+  //         },
+  //         timeout: 10000,
+  //       }
+  //     );
+
+  //     // Update the local state to reflect the approval
+  //     setBiodataList((prev) =>
+  //       prev.map((item) =>
+  //         item._id === id ? { ...item, isApproved: "approved" as const } : item
+  //       )
+  //     );
+
+  //     // Show success message (you can implement toast notification here)
+  //     console.log("Biodata approved successfully");
+  //    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  //   } catch (err: any) {
+  //     console.error("Error approving biodata:", err);
+  //     if (err.code === "ECONNABORTED") {
+  //       setError("Request timeout. Please try again.");
+  //     } else if (err.response?.status === 401) {
+  //       setError("Authentication failed. Please login again.");
+  //     } else if (err.response?.status === 404) {
+  //       setError("Biodata not found.");
+  //     } else if (err.response?.status >= 500) {
+  //       setError("Server error. Please try again later.");
+  //     } else {
+  //       setError(
+  //         err.response?.data?.message ||
+  //           "Failed to approve biodata. Please try again."
+  //       );
+  //     }
+  //   } finally {
+  //     setApprovingIds((prev) => {
+  //       const newSet = new Set(prev);
+  //       newSet.delete(id);
+  //       return newSet;
+  //     });
+  //   }
+  // };
+
   const handleApproval = async (id: string) => {
     if (!token) {
       setError("Authentication token not found. Please login again.");
@@ -70,10 +129,11 @@ const BiodataPage = () => {
     }
 
     try {
+      // Approving state add
       setApprovingIds((prev) => new Set(prev).add(id));
       setError("");
 
-      await axios.patch(
+      const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/approval/${id}`,
         { status: "approved" },
         {
@@ -85,16 +145,22 @@ const BiodataPage = () => {
         }
       );
 
-      // Update the local state to reflect the approval
+      console.log("Patch response:", response.data);
+
+      // Immutable update with toString() check
       setBiodataList((prev) =>
         prev.map((item) =>
-          item._id === id ? { ...item, isApproved: "approved" as const } : item
+          item._id.toString() === id.toString()
+            ? { ...item, isApproved: "approved" as const }
+            : item
         )
       );
 
-      // Show success message (you can implement toast notification here)
       console.log("Biodata approved successfully");
-     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+
+      // Optional: fetch latest pending list from backend
+      // await fetchPendingBiodata();
+      { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
     } catch (err: any) {
       console.error("Error approving biodata:", err);
       if (err.code === "ECONNABORTED") {
@@ -112,6 +178,7 @@ const BiodataPage = () => {
         );
       }
     } finally {
+      // Remove from approvingIds
       setApprovingIds((prev) => {
         const newSet = new Set(prev);
         newSet.delete(id);
@@ -119,7 +186,6 @@ const BiodataPage = () => {
       });
     }
   };
-
   const getStatusBadge = (status: string) => {
     const baseClasses = "px-3 py-1 rounded-full text-sm font-medium";
     switch (status) {

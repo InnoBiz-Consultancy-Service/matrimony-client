@@ -11,6 +11,7 @@ export interface FilterParams {
   education?: string;
   maritalStatus?: string;
   incomeRange?: string;
+  university?: string;
 }
 
 export const defaultFilters: FilterParams = {
@@ -22,5 +23,6 @@ export const defaultFilters: FilterParams = {
   profession: '',
   education: '',
   maritalStatus: '',
-  incomeRange: ''
+  incomeRange: '',
+  university: ''
 };

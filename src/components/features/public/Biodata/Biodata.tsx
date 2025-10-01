@@ -64,6 +64,7 @@ export default function ProfessionalBiodatasPage() {
       const education = searchParams.get("education") || "";
       const maritalStatus = searchParams.get("maritalStatus") || "";
       const incomeRange = searchParams.get("incomeRange") || "";
+      const university = searchParams.get("university") || "";
 
       // Build query parameters
       const queryParams: Record<string, string | number> = {};
@@ -84,6 +85,7 @@ export default function ProfessionalBiodatasPage() {
       if (maritalStatus)
         queryParams["maritalInfo.maritalStatus"] = maritalStatus;
       if (incomeRange) queryParams.incomeRange = incomeRange;
+      if (university) queryParams["education.history.institution"] = university;
 
       // console.log("Frontend sending these params:", queryParams)
 
