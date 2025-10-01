@@ -198,7 +198,7 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white cursor-pointer">
                               <SelectValue placeholder={t.selectDivision} />
                             </SelectTrigger>
                           </FormControl>
@@ -207,7 +207,7 @@ export default function SearchFilters() {
                               <SelectItem
                                 key={div.division_id}
                                 value={div.division_id}
-                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                               >
                                 {div.bnDivisionName}
                               </SelectItem>
@@ -234,7 +234,7 @@ export default function SearchFilters() {
                           disabled={!selectedDivision}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50 cursor-pointer">
                               <SelectValue placeholder={t.selectDistrict} />
                             </SelectTrigger>
                           </FormControl>
@@ -243,7 +243,7 @@ export default function SearchFilters() {
                               <SelectItem
                                 key={dis.districtsName}
                                 value={dis.districtsName}
-                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                               >
                                 {dis.bnDistrictsName}
                               </SelectItem>
@@ -270,7 +270,7 @@ export default function SearchFilters() {
                           disabled={!selectedDistrict}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 dark:disabled:opacity-50 cursor-pointer">
                               <SelectValue placeholder={t.selectUpazila} />
                             </SelectTrigger>
                           </FormControl>
@@ -279,7 +279,7 @@ export default function SearchFilters() {
                               <SelectItem
                                 key={upa.subDistrictsName}
                                 value={upa.subDistrictsName}
-                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                               >
                                 {upa.bnSubDistrictsName}
                               </SelectItem>
@@ -307,7 +307,7 @@ export default function SearchFilters() {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <SelectTrigger className="border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-400 dark:focus:border-emerald-500 h-12 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white cursor-pointer">
                               <SelectValue
                                 placeholder={t.selectMaritalStatus}
                               />
@@ -316,19 +316,19 @@ export default function SearchFilters() {
                           <SelectContent className="bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                             <SelectItem
                               value={"Divorced".toLowerCase()}
-                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                             >
                               {t.divorced}
                             </SelectItem>
                             <SelectItem
                               value={"Naver Married".toLowerCase()}
-                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                             >
                               {t.naverMarried}
                             </SelectItem>
                             <SelectItem
                               value={"Married".toLowerCase()}
-                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                              className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                             >
                               {t.married}
                             </SelectItem>
@@ -344,7 +344,7 @@ export default function SearchFilters() {
                   <Button
                     type="submit"
                     disabled={isSearching}
-                    className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-12 py-4 rounded-lg font-semibold transition-all duration-200 text-lg shadow-lg hover:shadow-xl dark:shadow-emerald-500/20"
+                    className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-12 py-4 rounded-lg font-semibold transition-all duration-200 text-lg shadow-lg hover:shadow-xl dark:shadow-emerald-500/20 cursor-pointer"
                   >
                     {isSearching ? (
                       <div className="flex items-center space-x-3">

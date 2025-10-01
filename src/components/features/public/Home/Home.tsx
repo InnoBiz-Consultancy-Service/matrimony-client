@@ -5,19 +5,19 @@ import SearchFilters from "./SearchFilters/SearchFilters";
 import PricingSection from "./PricingSection/PricingSection";
 import NewsLetter from "./NewsLetter/NewsLetter";
 import { useAuth } from "@/app/(auth)/context/auth-context";
+import CreateBiodataSection from "./CreateBiodataSection/CreateBIodataSection";
 
 const Home = () => {
   const { user } = useAuth();
+  console.log(user);
   return (
     <div>
       <Banner />
       <SearchFilters />
-      {user?.subscriptionType === "free" ||
-        (user === null && (
-          <>
-            <PricingSection />
-          </>
-        ))}
+      {!user && <CreateBiodataSection />}
+      {(user?.subscriptionType === "free" || user === null) && (
+        <PricingSection />
+      )}
       <NewsLetter />
     </div>
   );

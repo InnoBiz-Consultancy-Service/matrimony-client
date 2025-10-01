@@ -299,7 +299,7 @@ export default function AllTestimony() {
                                       <AvatarImage
                                         src={
                                           getAvatarImage(
-                                            testimonial.userId.gender
+                                            testimonial?.userId?.gender
                                           ) || "/placeholder.svg"
                                         }
                                         alt={testimonial.biodataId.name}

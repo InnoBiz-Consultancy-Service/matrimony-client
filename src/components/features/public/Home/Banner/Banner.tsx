@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useLanguage } from "@/hooks/use-language";
 import { bannerContent } from "@/dictionary/banner";
+import bannerImage from "../../../../../../public/banner.jpg";
 
 export default function Banner() {
   const { language } = useLanguage();
@@ -49,7 +50,7 @@ export default function Banner() {
                 <Image
                   width={500}
                   height={500}
-                  src="https://t3.ftcdn.net/jpg/06/52/48/90/360_F_652489048_7AjxWwFhIEGCl1Md0VV5u78UR1MYjW4d.jpg"
+                  src={bannerImage}
                   alt="Happy couple"
                   className="w-full h-full object-cover"
                 />

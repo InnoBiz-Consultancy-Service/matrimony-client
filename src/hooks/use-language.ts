@@ -25,7 +25,7 @@
 import { useEffect, useState } from "react";
 
 export function useLanguage() {
-  const [language, setLanguage] = useState<"en" | "bn">("bn");
+  const [language, setLanguage] = useState<"en" | "bn">("en");
 
   useEffect(() => {
     const storedLang = localStorage.getItem("language") as "en" | "bn" | null;

@@ -4,7 +4,15 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Heart, Mail, Lock, ArrowRight } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Heart,
+  Mail,
+  Lock,
+  ArrowRight,
+  ArrowLeft,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,11 +83,12 @@ export default function LoginPage() {
       // Small delay to ensure state is updated, then redirect
       setTimeout(() => {
         const userRole = getCookie("userRole") || "user";
-        const redirectPath =
-          userRole === "admin" ? "/dashboard" : "/";
+        const redirectPath = userRole === "admin" ? "/dashboard" : "/";
         router.push(redirectPath);
       }, 100);
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+      }
     } catch (err: any) {
       const message = err.message || "Login failed. Please try again.";
       toast.error(message, {
@@ -105,9 +114,9 @@ export default function LoginPage() {
       )}
     </button>
   );
-  const handleGoogleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`;
-  };
+  // const handleGoogleLogin = () => {
+  //   window.location.href = `/api/auth/google-login`;
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center px-4">
@@ -115,6 +124,20 @@ export default function LoginPage() {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl"></div>
+        <div className="flex justify-start max-w-6xl mx-auto mt-4">
+          <Link href="/">
+            <Button
+              variant="ghost"
+              className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 group bg-amber-50 ml-4"
+              asChild
+            >
+              <div>
+                <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                Back
+              </div>
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="relative w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
@@ -150,45 +173,6 @@ export default function LoginPage() {
               verified profiles are waiting to connect with you.
             </p>
           </div>
-
-          {/* Success Stats */}
-          <div className="grid grid-cols-3 gap-6 pt-8">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-emerald-600">0</div>
-              <div className="text-sm text-gray-600">Happy Couples</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-emerald-600">0</div>
-              <div className="text-sm text-gray-600">Active Members</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-emerald-600">0</div>
-              <div className="text-sm text-gray-600">Success Rate</div>
-            </div>
-          </div>
-
-          {/* Testimonial */}
-          <Card className="bg-white/80 backdrop-blur-sm border-emerald-100 shadow-xl">
-            <CardContent className="p-6">
-              <div className="flex items-start space-x-4">
-                <div className="h-12 w-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center">
-                  <span className="text-emerald-600 font-semibold">S</span>
-                </div>
-                <div>
-                  <p className="text-gray-700 italic mb-2">
-                    I found my soulmate within 3 months. The platform is amazing
-                    and the profiles are genuine!
-                  </p>
-                  <div className="text-sm">
-                    <span className="font-semibold text-gray-800">
-                      Sarah Johnson
-                    </span>
-                    <span className="text-gray-500"> • Married in 2024</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Right Side - Login Form */}
@@ -216,7 +200,7 @@ export default function LoginPage() {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <Button
+              {/* <Button
                 type="button"
                 onClick={handleGoogleLogin}
                 className="w-full bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-gray-300 shadow-lg hover:shadow-xl transition-all duration-300 font-semibold py-3 rounded-xl group"
@@ -240,10 +224,10 @@ export default function LoginPage() {
                   />
                 </svg>
                 Continue with Google
-              </Button>
+              </Button> */}
 
               {/* Divider */}
-              <div className="relative">
+              {/* <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
@@ -252,7 +236,7 @@ export default function LoginPage() {
                     Or continue with email
                   </span>
                 </div>
-              </div>
+              </div> */}
 
               {/* Login Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -322,18 +306,18 @@ export default function LoginPage() {
                       Remember me
                     </Label>
                   </div>
-                  <Link
+                  {/* <Link
                     href="/forgot-password"
                     className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
                   >
                     Forgot password?
-                  </Link>
+                  </Link> */}
                 </div>
 
                 {/* Login Button */}
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl group cursor-pointer"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

@@ -29,6 +29,7 @@ import { PageLoader } from "@/components/common/Loader";
 import { getCookie } from "@/utils/getToken";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import ViewContact from "./viewContactModal";
+import Link from "next/link";
 
 export default function Biodata({ id }: { id: string }) {
   const [biodata, setBiodata] = React.useState<BiodataType | undefined>();
@@ -111,7 +112,7 @@ export default function Biodata({ id }: { id: string }) {
     setShortListLoader(true);
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/shortList/${biodata?.userId?._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/shortList/${biodata?._id}`,
         {},
         {
           headers: {
@@ -851,14 +852,68 @@ export default function Biodata({ id }: { id: string }) {
               </CardContent>
             </Card>
 
-            <div className="space-y-2">
-              <Button
-                onClick={() => handleViewContact(biodata?.userId?._id || "")}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white"
-              >
-                View Contact - {}
-              </Button>
-            </div>
+            {/* {(token && user?.subscriptionType === "premium") || "vip" ? (
+              <div className="space-y-2">
+                <Button
+                  onClick={() => handleViewContact(biodata?.userId?._id || "")}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white w-full"
+                >
+                  View Contact
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <Link href={"/registration"}>
+                  <Button className="bg-emerald-500 hover:bg-emerald-600 text-white w-full cursor-pointer">
+                    {t.createBiodata}
+                  </Button>
+                </Link>
+              </div>
+            )} */}
+
+            {token ? (
+              user?.subscriptionType === "premium" ||
+              user?.subscriptionType === "vip" ? (
+                // Premium or VIP
+                <div className="space-y-2">
+                  <Button
+                    onClick={() =>
+                      handleViewContact(biodata?.userId?._id || "")
+                    }
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white w-full"
+                  >
+                    View Contact
+                  </Button>
+                </div>
+              ) : user?.subscriptionType === "free" ? (
+                // Free user -> Payment page
+                <div>
+                  <Link href={"/payment?plan=premium"}>
+                    <Button className="bg-emerald-500 hover:bg-emerald-600 text-white w-full cursor-pointer">
+                      Upgrade to Premium
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                // No subscription -> Registration
+                <div>
+                  <Link href={"/payment?plan=premium"}>
+                    <Button className="bg-emerald-500 hover:bg-emerald-600 text-white w-full cursor-pointer">
+                      {t.createBiodata}
+                    </Button>
+                  </Link>
+                </div>
+              )
+            ) : (
+              // If not logged in at all
+              <div>
+                <Link href={"/registration"}>
+                  <Button className="bg-emerald-500 hover:bg-emerald-600 text-white w-full cursor-pointer">
+                    {t.createBiodata}
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Modal */}
             <ViewContact

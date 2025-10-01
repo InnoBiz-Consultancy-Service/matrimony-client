@@ -7,6 +7,8 @@ import { Menu, Heart, User, LogOut, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import logo from "../../../../public/logo/nikahlife.png";
+import logoWhite from "../../../../public/logo/nikahlife-white.png";
 import {
   Popover,
   PopoverContent,
@@ -19,14 +21,15 @@ import { useAuth } from "@/app/(auth)/context/auth-context";
 import { LanguageSelector } from "../languageSelector/LanguageSelector";
 import { useLanguage } from "@/hooks/use-language";
 import { navbarTranslation } from "@/dictionary/navbar";
+import Image from "next/image";
 export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const { user, isAuthenticated, logout } = useAuth();
-    const { language } = useLanguage();
-    const t = navbarTranslation[language];
+  const { language } = useLanguage();
+  const t = navbarTranslation[language];
 
   const navigationItems = [
     { title: t.home, href: "/" },
@@ -58,7 +61,6 @@ export default function Navbar() {
         .toUpperCase() || "U"
     );
   };
-
   return (
     <header
       className={cn(
@@ -71,21 +73,24 @@ export default function Navbar() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative">
-              <div className="h-10 w-10 rounded-full bg-[#50C878] dark:bg-emerald-600 flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 dark:group-hover:shadow-emerald-800/30 transition-all duration-300 group-hover:scale-105">
-                <Heart className="h-5 w-5 text-white fill-white" />
-              </div>
-              <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 opacity-80 animate-pulse"></div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold bg-emerald-600 dark:bg-emerald-500 bg-clip-text text-transparent">
-                Nikah
-              </span>
-              <span className="text-xs text-[#50C878] dark:text-emerald-400 font-medium -mt-1">
-                Find Your Perfect Match
-              </span>
-            </div>
+          <Link href={"/"}>
+            <Image
+              width={200}
+              height={200}
+              src={logo}
+              alt="nikahlife"
+              className="block dark:hidden"
+            />
+          </Link>
+
+          <Link href={"/"}>
+            <Image
+              width={200}
+              height={200}
+              src={logoWhite}
+              alt="nikahlife"
+              className="hidden dark:block"
+            />
           </Link>
 
           {/* Desktop Navigation */}

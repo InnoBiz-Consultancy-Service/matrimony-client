@@ -197,6 +197,7 @@ export const biodataTranslation = {
       phone: "Mobile",
     },
     biodataBtn: "Biodata",
+    createBiodata: "Create Biodata",
     sendInterest: "Send Interest",
     singleBiodata: {
       nationality: "Nationality",
@@ -404,6 +405,7 @@ export const biodataTranslation = {
       phone: "মোবাইল",
     },
     biodataBtn: "বায়োডাটা",
+    createBiodata: "আপনার বায়োডাটা তৈরি করুন",
     sendInterest: "আগ্রহ পাঠান",
     singleBiodata: {
       nationality: "জাতীয়তা",

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, MapPin, Mail, Phone } from "lucide-react";
+import Image from "next/image";
+import logo from "../../../../public/logo/nikahlife-white.png";
 
 interface Translation {
   en: string;
@@ -19,8 +21,8 @@ const translations: Record<string, Translation> = {
     bn: "হৃদয় সংযোগ, পরিবার গঠন",
   },
   location: { en: "Sylhet, Bangladesh", bn: "সিলেট, বাংলাদেশ" },
-  email: { en: "info@nikah.com", bn: "info@nikah.com" },
-  phone: { en: "+880 1XXX-XXXXXX", bn: "+৮৮০ ১XXX-XXXXXX" },
+  email: { en: "nikahlife25@gmail.com", bn: "nikahlife25@gmail.com" },
+  phone: { en: "+8801721972807", bn: "+8801721972807" },
   copyright: {
     en: "© 2025 Nikah. All rights reserved.",
     bn: "© ২০২৫ নিকাহ। সকল অধিকার সংরক্ষিত।",
@@ -60,12 +62,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white fill-current" />
-              </div>
-              <h3 className="text-2xl font-bold text-white">নিকাহ</h3>
-            </div>
+            <Image width={200} height={200} src={logo} alt="nikahlife" />
             <p className="text-gray-400 text-sm leading-relaxed">
               {t("tagline")}
             </p>

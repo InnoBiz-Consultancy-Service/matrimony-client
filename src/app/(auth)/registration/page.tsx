@@ -119,19 +119,16 @@ export default function RegistrationPage() {
   const onSubmit = async (data: RegistrationFormData) => {
     setIsSubmitting(true);
     try {
-      const response = await axios.post(
-        `/api/auth/registration`,
-        {
-          agreeToPrivacy: data.agreeToPrivacy,
-          agreeToTerms: data.agreeToTerms,
-          role: data.role,
-          gender: data.gender,
-          password: data.password,
-          phone: data.phone,
-          email: data.email,
-          name: data.name,
-        }
-      );
+      const response = await axios.post(`/api/auth/registration`, {
+        agreeToPrivacy: data.agreeToPrivacy,
+        agreeToTerms: data.agreeToTerms,
+        role: data.role,
+        gender: data.gender,
+        password: data.password,
+        phone: data.phone,
+        email: data.email,
+        name: data.name,
+      });
 
       console.log("Registration response:", response.data);
       console.log(
@@ -189,6 +186,20 @@ export default function RegistrationPage() {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl"></div>
+        <div className="flex justify-start mt-4 max-w-6xl mx-auto">
+          <Link href="/">
+            <Button
+              variant="ghost"
+              className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 group bg-amber-50 ml-4"
+              asChild
+            >
+              <div>
+                <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                Back
+              </div>
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="relative w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
@@ -360,7 +371,7 @@ export default function RegistrationPage() {
                       <Button
                         type="button"
                         onClick={nextStep}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl group"
+                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl group cursor-pointer"
                       >
                         Continue
                         <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -621,7 +632,7 @@ export default function RegistrationPage() {
                         <Button
                           type="submit"
                           disabled={isSubmitting}
-                          className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl"
+                          className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-emerald-200 transition-all duration-300 font-semibold py-3 rounded-xl cursor-pointer"
                         >
                           {isSubmitting ? (
                             <ButtonLoader size="sm" />

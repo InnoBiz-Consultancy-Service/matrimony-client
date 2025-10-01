@@ -356,17 +356,17 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-5 w-5" />
-                <span>+880 1XXX-XXXXXX</span>
+                <span>+8801721972807</span>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-5 w-5" />
-                <span>info@nikah.com</span>
+                <span>nikahlife25@gmail.com</span>
               </div>
             </div>
             <Link href={"/registration"}>
               <Button
                 size="lg"
-                className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white"
+                className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white cursor-pointer"
               >
                 {t.contact.cta}
               </Button>
