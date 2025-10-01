@@ -47,7 +47,7 @@ const PaymentPage = () => {
   const [approving, setApproving] = useState<string | null>(null);
 
   const {token} = useAuth()
-console.log(token)
+// console.log(token) 
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -80,7 +80,6 @@ console.log(token)
       setApproving(paymentId);
       await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`,
-        console.log( `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`),
         {
           headers: {
             "Content-Type": "application/json",

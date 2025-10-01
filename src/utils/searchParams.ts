@@ -26,6 +26,7 @@ export function generateSearchParams(filters: FilterParams): URLSearchParams {
   setParam('education', filters.education);
   setParam('maritalStatus', filters.maritalStatus);
   setParam('incomeRange', filters.incomeRange);
+  setParam('university', filters.university)
 
   return params;
 }

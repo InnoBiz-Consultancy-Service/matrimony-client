@@ -19,6 +19,7 @@ export const filterTranslation = {
     selectDistrict: "Select District",
     selectUpazila: "Select Upazila",
     selectMaritalStatus: "Select Marital Status",
+    universitySelectPlaceholder: "Select University"
   },
 
   bn: {
@@ -41,5 +42,6 @@ export const filterTranslation = {
     selectDistrict: "জেলা সিলেক্ট করুন",
     selectUpazila: "উপজেলা সিলেক্ট করুন",
     selectMaritalStatus: "বৈবাহিক অবস্থা সিলেক্ট করুন",
+    universitySelectPlaceholder: "বিশ্ববিদ্যালয় সিলেক্ট করুন",
   },
 };

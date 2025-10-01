@@ -41,6 +41,7 @@ export const biodataTranslation = {
       otherBtn: "Add other",
       institution: "Institution",
       educationalQualification: "Educational Qualification",
+      universitySelectPlaceholder: "Select University"
     },
     familyInformation: {
       fatherAlive: "Is your father alive",
@@ -252,6 +253,7 @@ export const biodataTranslation = {
       otherBtn: "অন্যান্য যোগ করুন",
       institution: "প্রতিষ্ঠানের নাম",
       educationalQualification: "শিক্ষাগত যোগ্যতা",
+      universitySelectPlaceholder: "বিশ্ববিদ্যালয় সিলেক্ট করুন"
     },
     familyInformation: {
       fatherAlive: "আপনার বাবা বেঁচে আছেন কি?",
