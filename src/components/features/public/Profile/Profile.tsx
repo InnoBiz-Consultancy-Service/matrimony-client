@@ -9,11 +9,13 @@ import { getCookie } from "@/utils/getToken";
 import { ProfileCard } from "./ProfileCard";
 import { NavigationButtons } from "./navigationButton";
 import { ProfileData } from "@/types/profile";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 export default function Profile() {
   const [profile, setProfile] = React.useState<ProfileData | undefined>();
   const [loading, setLoading] = React.useState(false);
   const token = getCookie("token") || "";
+  const {user} = useAuth()
   React.useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
@@ -58,7 +60,7 @@ export default function Profile() {
                   <p className="text-white/80 text-sm">
                     {language === "bn" ? "সাবস্ক্রিপশন" : "Subscription"}
                   </p>
-                  <p className="text-white font-semibold text-lg">Premium</p>
+                  <p className="text-white font-semibold text-lg">{user?.subscriptionType}</p>
                 </div>
               </div>
             </div>
@@ -71,7 +73,7 @@ export default function Profile() {
                     {language === "bn" ? "প্রোফাইল ভিউ" : "Profile Views"}
                   </p>
                   <p className="text-white font-semibold text-lg">
-                    99 {language === "bn" ? "বাকি" : "Left"}
+                    {profile?.subscriptionId?.profileViewLimit || 0} {language === "bn" ? "বাকি" : "Left"}
                   </p>
                 </div>
               </div>
@@ -119,7 +121,7 @@ export default function Profile() {
 
               <NavigationButtons />
 
-              <div className="mt-8 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 dark:from-emerald-400/10 dark:to-emerald-500/10 rounded-xl py-6 px-3 border border-emerald-200 dark:border-emerald-800">
+              {/* <div className="mt-8 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 dark:from-emerald-400/10 dark:to-emerald-500/10 rounded-xl py-6 px-3 border border-emerald-200 dark:border-emerald-800">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center flex-shrink-0">
                     <Crown className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
@@ -137,7 +139,7 @@ export default function Profile() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

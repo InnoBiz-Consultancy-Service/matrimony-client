@@ -83,7 +83,7 @@ export default function ProfessionalBiodatasPage() {
       if (profession) queryParams.profession = profession;
       if (education) queryParams.education = education;
       if (maritalStatus)
-        queryParams["maritalInfo.maritalStatus"] = maritalStatus;
+        queryParams["preference.maritalStatus"] = maritalStatus;
       if (incomeRange) queryParams.incomeRange = incomeRange;
       if (university) queryParams["education.history.institution"] = university;
 

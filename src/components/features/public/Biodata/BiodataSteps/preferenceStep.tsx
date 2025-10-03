@@ -159,16 +159,16 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={t.expectedLifePartner?.neverMarried}>
+              <SelectItem value={'unmarried'}>
                 {t.expectedLifePartner?.neverMarried}
               </SelectItem>
-              <SelectItem value={t.expectedLifePartner?.divorced}>
+              <SelectItem value={'divorced'}>
                 {t.expectedLifePartner?.divorced}
               </SelectItem>
-              <SelectItem value={t.expectedLifePartner?.widowed}>
+              <SelectItem value={'widowed'}>
                 {t.expectedLifePartner?.widowed}
               </SelectItem>
-              <SelectItem value={t.expectedLifePartner?.any}>
+              <SelectItem value={'any'}>
                 {t.expectedLifePartner?.any}
               </SelectItem>
             </SelectContent>

@@ -78,7 +78,7 @@ const PaymentPage = () => {
   const approvePayment = async (paymentId: string) => {
     try {
       setApproving(paymentId);
-      await axios.put(
+      await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`,
         {
           headers: {
