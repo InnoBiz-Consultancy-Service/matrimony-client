@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/app/(auth)/context/auth-context";
+import { getCookie } from "@/utils/getToken";
 import axios from "axios";
 import {
   Eye,
@@ -15,6 +15,7 @@ import {
   Shield,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 // Types
 interface UserId {
@@ -46,8 +47,9 @@ const PaymentPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [approving, setApproving] = useState<string | null>(null);
 
-  const {token} = useAuth()
-// console.log(token) 
+  // const {token} = useAuth()
+  const token = getCookie("token");
+  // console.log(token)
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -61,7 +63,6 @@ const PaymentPage = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: token,
-            
           },
           timeout: 10000,
         }
@@ -101,9 +102,10 @@ const PaymentPage = () => {
       if (selectedPayment && selectedPayment._id === paymentId) {
         setSelectedPayment({ ...selectedPayment, approvalStatus: "approved" });
       }
+      toast.success("Payment approved success");
     } catch (error) {
       console.error("Error approving payment:", error);
-      alert("Failed to approve payment. Please try again.");
+      toast.error("Failed to approve payment. Please try again.");
     } finally {
       setApproving(null);
     }

@@ -355,7 +355,7 @@ export default function Biodata({ id }: { id: string }) {
                         {edu.level === "SSC" || edu.level === "HSC" ? (
                           <span className="flex flex-col">
                             {edu.group} ({edu.year})
-                            {edu.result && <small>ফলাফল: {edu.result}</small>}
+                            {edu.result && <small>{t.educationalQualification?.result}: {edu.result}</small>}
                           </span>
                         ) : edu.level === "Graduation" ||
                           edu.level === "Masters" ||

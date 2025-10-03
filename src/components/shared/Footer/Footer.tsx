@@ -24,8 +24,8 @@ const translations: Record<string, Translation> = {
   email: { en: "nikahlife25@gmail.com", bn: "nikahlife25@gmail.com" },
   phone: { en: "+8801721972807", bn: "+8801721972807" },
   copyright: {
-    en: "© 2025 Nikah. All rights reserved.",
-    bn: "© ২০২৫ নিকাহ। সকল অধিকার সংরক্ষিত।",
+    en: "© 2025 Nikahlife All rights reserved.",
+    bn: "© ২০২৫ nikahlife সকল অধিকার সংরক্ষিত।",
   },
   madeWith: { en: "Made with", bn: "তৈরি করা হয়েছে" },
   forCommunity: {

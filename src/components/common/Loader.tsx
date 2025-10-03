@@ -1,68 +1,13 @@
 "use client";
 
-import { Heart, Users } from "lucide-react";
+import { Heart, Loader2, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Main Page Loader
 export function PageLoader() {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center">
-      {/* Background Decorative Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      <div className="relative text-center space-y-8">
-        {/* Logo with Animation */}
-        <div className="flex items-center justify-center space-x-3 mb-8">
-          <div className="h-16 w-16 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg animate-bounce">
-            <Heart className="h-8 w-8 text-white fill-white animate-pulse" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
-              Nikah
-            </span>
-            <span className="text-sm text-emerald-500/70 font-medium -mt-1">
-              Find Your Perfect Match
-            </span>
-          </div>
-        </div>
-
-        {/* Animated Hearts */}
-        <div className="flex justify-center space-x-2">
-          {[...Array(3)].map((_, i) => (
-            <Heart
-              key={i}
-              className={cn(
-                "h-6 w-6 text-emerald-400 fill-current animate-bounce",
-                i === 1 && "animation-delay-200",
-                i === 2 && "animation-delay-400"
-              )}
-              style={{
-                animationDelay: `${i * 200}ms`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Loading Text */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold text-gray-800">
-            Finding Your Perfect Match...
-          </h3>
-          <p className="text-gray-600">
-            Please wait while we prepare something special
-          </p>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-64 mx-auto">
-          <div className="h-2 bg-emerald-100 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full animate-pulse"></div>
-          </div>
-        </div>
-      </div>
+    <div className="h-screen flex justify-center items-center">
+      <Loader2 className="h-10 w-10 animate-spin text-emerald-500" />
     </div>
   );
 }

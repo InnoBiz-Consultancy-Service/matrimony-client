@@ -51,6 +51,7 @@ export interface FamilyInfo {
   motherAlive: boolean;
   fatherProfession: string;
   motherProfession: string;
+  brothersInfo: string[];
   brothers: number;
   sisters: number;
   sistersInfo: string[];
