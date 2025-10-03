@@ -44,7 +44,6 @@ export default function Biodata({ id }: { id: string }) {
   // Translation function
   const { language } = useLanguage();
   const t = biodataTranslation[language];
-
   const token = getCookie("token") || "";
 
   const { user } = useAuth();
@@ -762,25 +761,6 @@ export default function Biodata({ id }: { id: string }) {
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
                       {biodata?.preference?.qualities.join(", ")}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-1 mt-6">
-                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
-                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
-                      {t.contactInfo?.email}:
-                    </div>
-                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
-                      {biodata?.userId?.email}
-                    </div>
-                  </div>
-                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
-                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
-                      {t.contactInfo?.phone}:
-                    </div>
-                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
-                      {biodata?.userId?.phone}
                     </div>
                   </div>
                 </div>

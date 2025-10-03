@@ -9,6 +9,7 @@ import { profileTranslation } from "@/dictionary/profile";
 import femaleAvatar from "../../../../../public/female_avatar.jpg";
 import maleAvatar from "../../../../../public/men_avatar.webp";
 import Link from "next/link";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
 export function ProfileCard({ profile }: any) {
   const { language } = useLanguage();
@@ -19,6 +20,8 @@ export function ProfileCard({ profile }: any) {
       language === "bn" ? "bn-BD" : "en-US"
     );
   };
+
+  const { user } = useAuth()
 
   return (
     <div className="p-6">
@@ -57,7 +60,7 @@ export function ProfileCard({ profile }: any) {
             {profile?.isVerified ? t.verified : t.notVerified}
           </Badge>
           <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white border-0">
-            {t.premium}
+            {user?.subscriptionType}
           </Badge>
         </div>
       </div>
@@ -106,7 +109,7 @@ export function ProfileCard({ profile }: any) {
               {t.profileViewLimit}:
             </span>
             <span className="text-sm font-bold text-emerald-800 dark:text-emerald-200">
-              {profile?.subscriptionId?.profileViewLimit}
+              {profile?.subscriptionId?.profileViewLimit || 0}
             </span>
           </div>
         </div>

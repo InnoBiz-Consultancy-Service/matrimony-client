@@ -698,7 +698,7 @@ export default function SearchFilters() {
                               {t.divorced}
                             </SelectItem>
                             <SelectItem
-                              value={"Naver Married".toLowerCase()}
+                              value={"Unmarried".toLowerCase()}
                               className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                             >
                               {t.naverMarried}
