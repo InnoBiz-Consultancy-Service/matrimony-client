@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Loader2, Users } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Main Page Loader
