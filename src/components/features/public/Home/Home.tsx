@@ -9,7 +9,6 @@ import CreateBiodataSection from "./CreateBiodataSection/CreateBIodataSection";
 
 const Home = () => {
   const { user } = useAuth();
-  console.log(user);
   return (
     <div>
       <Banner />
