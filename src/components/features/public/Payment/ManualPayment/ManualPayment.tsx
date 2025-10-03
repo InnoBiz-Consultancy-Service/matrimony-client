@@ -68,14 +68,14 @@ export default function BkashManualPayment() {
     premium: {
       id: "premium",
       name: t.premium,
-      price: 999,
+      price: 3000,
       duration: t.oneMonth,
       features: [
         t.unlimitedProfileViews,
         t.premiumSupport,
         t.advancedSearchFilters,
         t.profileHighlight,
-        t.messagingFeature,
+        // t.messagingFeature,
       ],
       icon: Crown,
       color: "from-amber-500 to-orange-600",
@@ -84,8 +84,8 @@ export default function BkashManualPayment() {
     vip: {
       id: "vip",
       name: t.vip,
-      price: 1999,
-      duration: t.threeMonths,
+      price: 5000,
+      duration: t.oneMonth,
       features: [
         t.allPremiumFeatures,
         t.privateConsultation,
@@ -165,7 +165,7 @@ export default function BkashManualPayment() {
       if (!token) {
         throw new Error("No authentication token found");
       }
-      const response = await axios.post(
+       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/payment/create`,
         {
           ...values,
@@ -173,7 +173,7 @@ export default function BkashManualPayment() {
           email: userInfo.email,
           phone: userInfo.phone,
           approvalStatus: "pending",
-          durationInMonths: selectedPlan?.duration === t.threeMonths ? 3 : 1,
+          durationInMonths: selectedPlan?.duration === t.threeMonths ? 3 : 6,
           subscriptionType: selectedPlan?.id,
           userId: user?.userId,
         },
@@ -184,7 +184,7 @@ export default function BkashManualPayment() {
           },
         }
       );
-      console.log("Payment submission response:", response.data);
+      // console.log("Payment submission response:", response.data);
       localStorage.removeItem("userInfo");
       toast.success(t.paymentSubmittedSuccess);
       router.push("/payment/success");
@@ -300,7 +300,7 @@ export default function BkashManualPayment() {
                 <div className="bg-white dark:bg-gray-900 p-3 rounded border">
                   <div className="text-center">
                     <div className="text-lg font-bold text-pink-700">
-                      01712-345678
+                      01721972807
                     </div>
                     <div className="text-sm text-gray-700 dark:text-gray-300">
                       {t.merchantAccount}

@@ -7,7 +7,7 @@ export const manualPaymentTranslation = {
     // Plan Names & Durations
     premium: "Premium",
     vip: "VIP",
-    oneMonth: "1 Month",
+    oneMonth: "6 Months",
     threeMonths: "3 Months",
     popular: "Popular",
     subscription: "subscription",
@@ -18,7 +18,7 @@ export const manualPaymentTranslation = {
     premiumSupport: "Premium Support",
     advancedSearchFilters: "Advanced Search Filters",
     profileHighlight: "Profile Highlight",
-    messagingFeature: "Messaging Feature",
+    // messagingFeature: "Messaging Feature",
 
     // VIP Features
     allPremiumFeatures: "All Premium Features",
@@ -113,7 +113,7 @@ export const manualPaymentTranslation = {
     premiumSupport: "প্রিমিয়াম সাপোর্ট",
     advancedSearchFilters: "উন্নত সার্চ ফিল্টার",
     profileHighlight: "প্রোফাইল হাইলাইট",
-    messagingFeature: "মেসেজিং ফিচার",
+    // messagingFeature: "মেসেজিং ফিচার",
 
     // VIP Features
     allPremiumFeatures: "সকল প্রিমিয়াম ফিচার",

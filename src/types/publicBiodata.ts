@@ -40,6 +40,7 @@ type Family = {
  religiousPractice: string;
  sisters: number;
  sistersInfo: string[];
+ brothersInfo: string[];
  unclesProfession: string[];
 };
 
