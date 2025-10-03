@@ -57,14 +57,14 @@ export default function PaymentPage() {
     premium: {
       id: "premium",
       name: t.premium,
-      price: 999,
-      duration: t.oneMonth,
+      price: 3000,
+      duration: t.threeMonths,
       features: [
         t.unlimitedProfileViews,
         t.premiumSupport,
         t.advancedSearchFilters,
         t.profileHighlight,
-        t.messagingFeature,
+        // t.messagingFeature,
       ],
       icon: Crown,
       color: "from-amber-500 to-orange-600",
@@ -73,8 +73,8 @@ export default function PaymentPage() {
     vip: {
       id: "vip",
       name: t.vip,
-      price: 1999,
-      duration: t.threeMonths,
+      price: 5000,
+      duration: t.oneMonth,
       features: [
         t.allPremiumFeatures,
         t.privateConsultation,
@@ -228,11 +228,11 @@ export default function PaymentPage() {
                 <div className="space-y-1 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4" />
-                    <span>+880 1712-345678</span>
+                    <span>+8801721972807</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4" />
-                    <span>support@matrimony.com</span>
+                    <span>nikahlife25@gmail.com</span>
                   </div>
                 </div>
               </div>

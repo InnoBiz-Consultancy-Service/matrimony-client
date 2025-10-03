@@ -128,17 +128,22 @@ export default function PersonalInfoStep({ data, updateData }: StepProps) {
               <SelectItem value={t.personalInformation?.hanbali}>
                 {t.personalInformation?.hanbali}
               </SelectItem>
+              <SelectItem value={t.personalInformation?.salafiAhlulHadith}>
+                {t.personalInformation?.salafiAhlulHadith}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-3">
-          <Label>বয়স *</Label>
+          <Label>{t.personalInformation?.age} *</Label>
           <Input
             id="age"
             type="number"
             value={personal.age}
             onChange={(e) => handleChange("age", e.target.value)}
             placeholder="e.g., 20"
+            min={18}
+            max={60}
             className="border-emerald-200 dark:border-emerald-700"
           />
         </div>

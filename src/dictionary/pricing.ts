@@ -17,7 +17,7 @@ export const pricingTranslation = {
 
     premium: "Premium",
     premiumDesc: "Most popular plan",
-    premiumPrice: "1,500 BDT",
+    premiumPrice: "3,000 BDT",
     premiumDuration: "3 months",
     premiumFeatures: {
       freeFeatures: "All Free features",
@@ -31,7 +31,7 @@ export const pricingTranslation = {
     vip: "VIP",
     vipDesc: "Get maximum benefits",
     vipPrice: "5,000 BDT",
-    vipDuration: "1 year",
+    vipDuration: "6 Months",
     vipFeatures: {
       premiumFeatures: "All Premium features",
       duration: "1 year duration",

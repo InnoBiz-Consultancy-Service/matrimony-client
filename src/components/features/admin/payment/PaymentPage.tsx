@@ -81,6 +81,7 @@ const PaymentPage = () => {
       setApproving(paymentId);
       await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/payment/approve/${paymentId}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -262,7 +263,7 @@ const PaymentPage = () => {
                     </div>
                   </td>
                   <td className="py-3 px-4 text-emerald-600 font-semibold">
-                    ${payment.paidAmount}
+                    ৳{payment.paidAmount}
                   </td>
                   <td className="py-3 px-4">
                     <span className="capitalize font-medium">

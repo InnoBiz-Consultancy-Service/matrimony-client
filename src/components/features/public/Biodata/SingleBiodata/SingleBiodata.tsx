@@ -355,7 +355,12 @@ export default function Biodata({ id }: { id: string }) {
                         {edu.level === "SSC" || edu.level === "HSC" ? (
                           <span className="flex flex-col">
                             {edu.group} ({edu.year})
-                            {edu.result && <small>{t.educationalQualification?.result}: {edu.result}</small>}
+                            {edu.result && (
+                              <small>
+                                {t.educationalQualification?.result}:{" "}
+                                {edu.result}
+                              </small>
+                            )}
                           </span>
                         ) : edu.level === "Graduation" ||
                           edu.level === "Masters" ||
@@ -451,7 +456,8 @@ export default function Biodata({ id }: { id: string }) {
                       {t.familyInformation?.brother}:
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
-                      {biodata?.family?.brothers}
+                      {biodata?.family?.brothers} -{" "}
+                      {biodata?.family?.brothersInfo?.join(", ")}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
@@ -460,7 +466,7 @@ export default function Biodata({ id }: { id: string }) {
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
                       {biodata?.family?.sisters} -{" "}
-                      {biodata?.family?.sistersInfo.join(", ")}
+                      {biodata?.family?.sistersInfo?.join(", ")}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
