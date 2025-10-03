@@ -41,7 +41,7 @@ export const biodataTranslation = {
       otherBtn: "Add other",
       institution: "Institution",
       educationalQualification: "Educational Qualification",
-      universitySelectPlaceholder: "Select University"
+      universitySelectPlaceholder: "Select University",
     },
     familyInformation: {
       fatherAlive: "Is your father alive",
@@ -68,6 +68,10 @@ export const biodataTranslation = {
       upper: "Upper Middle Class",
       rich: "Rich",
       familyInfo: "Family Information",
+      brotherInformation: "Brother's Information",
+      addBrotherInfoBtn: "Add Brothers Info",
+      brotherInfoPlaceHolder:
+        "Enter brother's details (eg,. profession, financial status, etc.)",
     },
     personalInformation: {
       name: "Enter Your Name",
@@ -166,11 +170,11 @@ export const biodataTranslation = {
 
     pledge: {
       parentsAware:
-        "Do your parents know that you are submitting biodata to the nikah website?",
+        "Do your parents know that you are submitting biodata to the nikahlife website?",
       informationAccurate:
         "By Allah, testify that the all information given is true",
       nikahResponsibility:
-        "If you provide any false information, nikah.com will not take any responsibility for the conventional law and the hereafter. Do you agree?",
+        "If you provide any false information, nikahlife.com will not take any responsibility for the conventional law and the hereafter. Do you agree?",
       finalPledge: "Final Pledge",
       pledgeDescription:
         "Please read and confirm the following statements before submitting your biodata.",
@@ -253,7 +257,7 @@ export const biodataTranslation = {
       otherBtn: "অন্যান্য যোগ করুন",
       institution: "প্রতিষ্ঠানের নাম",
       educationalQualification: "শিক্ষাগত যোগ্যতা",
-      universitySelectPlaceholder: "বিশ্ববিদ্যালয় সিলেক্ট করুন"
+      universitySelectPlaceholder: "বিশ্ববিদ্যালয় সিলেক্ট করুন",
     },
     familyInformation: {
       fatherAlive: "আপনার বাবা বেঁচে আছেন কি?",
@@ -280,6 +284,10 @@ export const biodataTranslation = {
       upper: "উচ্চ মধ্যবিত্ত",
       rich: "বড়লোক",
       familyInfo: "পারিবারিক তথ্য",
+      brotherInformation: "ভাইয়ের তথ্য",
+      addBrotherInfoBtn: "ভাইয়ের তথ্য যোগ করুন",
+      brotherInfoPlaceHolder:
+        "ভাইয়ের বিস্তারিত লিখুন (যেমন, পেশা, আর্থিক অবস্থা ইত্যাদি)",
     },
     personalInformation: {
       name: "আপনার নাম লিখুন",
