@@ -2,6 +2,8 @@ export interface PersonalInfo {
   name: string;
   gender: string;
   age: string;
+  height: string;
+  maritalStatus: string;
   dress: string;
   prayerHabit: string;
   maintainMahram: string;
