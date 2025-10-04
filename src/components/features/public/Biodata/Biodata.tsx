@@ -12,10 +12,11 @@ import SearchFilters from "../Home/SearchFilters/SearchFilters";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/hooks/use-language";
 import { biodataTranslation } from "@/dictionary/biodata";
+import { useAuth } from "@/app/(auth)/context/auth-context";
 
 interface BiodataProps {
   _id: string;
-  preference: {
+  personal: {
     height: string;
   };
   userId: {
@@ -26,6 +27,7 @@ interface BiodataProps {
   };
   age: number;
   name: string;
+  gender: string;
 }
 
 export default function ProfessionalBiodatasPage() {
@@ -36,6 +38,8 @@ export default function ProfessionalBiodatasPage() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [profiles, setProfiles] = React.useState<BiodataProps[]>([]);
   const [error, setError] = React.useState<string>("");
+
+  const { user } = useAuth();
 
   const divisionMap: Record<string, string> = {
     "1": "Chattagram",
@@ -82,13 +86,11 @@ export default function ProfessionalBiodatasPage() {
       if (upazila) queryParams["address.present.upazila"] = upazila;
       if (profession) queryParams.profession = profession;
       if (education) queryParams.education = education;
-      if (maritalStatus)
-        queryParams["preference.maritalStatus"] = maritalStatus;
+      if (maritalStatus) queryParams["personal.maritalStatus"] = maritalStatus;
       if (incomeRange) queryParams.incomeRange = incomeRange;
       if (university) queryParams["education.history.institution"] = university;
 
       // console.log("Frontend sending these params:", queryParams)
-
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/all`,
         {
@@ -216,15 +218,25 @@ export default function ProfessionalBiodatasPage() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <h2 className="text-lg font-semibold text-black dark:text-gray-300">
-                        {biodata?.name}
-                      </h2>
+                      {user?.subscriptionType === "premium" ||
+                      user?.subscriptionType === "vip" ? (
+                        <h2 className="text-lg font-semibold text-black dark:text-gray-300">
+                          {biodata?.name}
+                        </h2>
+                      ) : (
+                        <h2 className="text-lg font-semibold text-black dark:text-gray-300">
+                          {biodata?.gender === "female"
+                            ? t.singleBiodata?.femaleBiodata
+                            : t.singleBiodata?.maleBiodata}
+                        </h2>
+                      )}
+
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         {t.personalInformation?.age} - {biodata?.age}
                       </p>
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         {t.expectedLifePartner?.height} -{" "}
-                        {biodata?.preference?.height}
+                        {biodata?.personal?.height}
                       </p>
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         {t.OccupationalInformation?.occupation} -{" "}
