@@ -1,13 +1,22 @@
+import { Toaster } from "sonner";
+import { AuthProvider } from "./(auth)/context/auth-context";
 import "./globals.css";
+import { Noto_Serif_Bengali } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 
-// You can change this to your custom favicon icon, title and description
 export const metadata = {
-  title: 'Create Next Base',
-  description: 'A production-ready Next.js starter template crafted by ONTONIM to accelerate your web development workflow. This boilerplate combines modern technologies with enterprise-grade architecture to help you build performant, scalable applications faster.',
+  title: "Nikahlife",
+  description:
+    "Nikahlife is a platform that connects individuals seeking marriage, providing a space for them to find potential partners and build meaningful relationships. This site developed by ontonim team.",
   icons: {
-    icon: 'https://i.ibb.co/BHMGGW7z/ontonim.png',
+    icon: "https://i.ibb.co.com/x8SNvKCZ/Fav-png.png",
   },
 };
+
+const notoBengali = Noto_Serif_Bengali({
+  subsets: ["bengali"],
+  weight: ["400", "500", "700"],
+});
 
 export default function RootLayout({
   children,
@@ -15,9 +24,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>
-        <main>{children}</main>
+    <html lang="bn">
+      <body className={notoBengali.className}>
+        <main>
+          <AuthProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+            </ThemeProvider>
+            <Toaster
+              position="top-right"
+              richColors
+              closeButton
+              toastOptions={{
+                style: {
+                  borderRadius: "12px",
+                  fontSize: "14px",
+                  padding: "12px 16px",
+                },
+                classNames: {
+                  toast: "shadow-lg",
+                },
+              }}
+            />
+          </AuthProvider>
+        </main>
       </body>
     </html>
   );

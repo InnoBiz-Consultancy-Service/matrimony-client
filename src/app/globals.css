@@ -3,8 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Your custom styles here */
-
+/* custom button style */
+.primary-color {
+  @apply block bg-gradient-to-r from-emerald-600 via-emerald-500 to-pink-500 bg-clip-text text-transparent;
+}
+.primary-btn {
+  @apply bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-emerald-200 transition-all duration-300 font-medium px-6 cursor-pointer;
+}
 @theme inline {
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -218,3 +223,19 @@
     @apply bg-background text-foreground;
   }
 }
+/* Light mode defaults */
+body {
+  @apply bg-white text-black;
+}
+
+/* Dark mode (applies site-wide when html has class="dark") */
+.dark body {
+  @apply bg-black text-white;
+}
+/* :lang(bn) {
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+:lang(en) {
+  font-family: 'Inter', sans-serif;
+} */

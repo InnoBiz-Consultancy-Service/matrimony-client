@@ -1,8 +1,16 @@
-import "../globals.css";
-export default function DashboardLayout({
+const Layout = ({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  return <div className="dashboard-layout">{children}</div>;
-}
+}>) => {
+  return (
+    <html>
+      <body>
+        <main className="w-full">
+          <div className="px-4">{children}</div>
+        </main>
+      </body>
+    </html>
+  );
+};
+export default Layout;
