@@ -62,7 +62,7 @@ export const pricingTranslation = {
 
     premium: "Premium",
     premiumDesc: "সবচেয়ে জনপ্রিয় প্ল্যান",
-    premiumPrice: "১,৫০০ টাকা",
+    premiumPrice: "৩,০০০ টাকা",
     premiumDuration: "৩ মাস",
     premiumFeatures: {
       freeFeatures: "সব ফ্রি ফিচার",
@@ -75,10 +75,10 @@ export const pricingTranslation = {
     vip: "VIP",
     vipDesc: "সর্বোচ্চ সুবিধা পান",
     vipPrice: "৫,০০০ টাকা",
-    vipDuration: "১ বছর",
+    vipDuration: "৬ মাস",
     vipFeatures: {
       premiumFeatures: "সব প্রিমিয়াম ফিচার",
-      duration: "১ বছরের মেয়াদ",
+      duration: "৬ মাসের মেয়াদ",
       unlimited: "আনলিমিটেড প্রোফাইল অ্যাক্সেস",
       support: "প্রায়োরিটি কাস্টমার সাপোর্ট",
     },
