@@ -143,25 +143,17 @@ export default function BiodataForm() {
         },
       };
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      );
-      if (response.status === 200) {
-        localStorage.removeItem("biodata-form-data");
-        localStorage.removeItem("biodata-current-step");
-        localStorage.removeItem("biodata-form-data-backup");
-        toast.success("Profile posted successfully!");
-
-        router.push("/");
-      }
-      return response.data;
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/biodata`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      localStorage.removeItem("biodata-form-data");
+      localStorage.removeItem("biodata-current-step");
+      localStorage.removeItem("biodata-form-data-backup");
+      toast.success("Profile posted successfully!");
+      router.push("/");
     } catch (error: unknown) {
       console.error("Profile post failed:", error);
 
@@ -178,80 +170,6 @@ export default function BiodataForm() {
       setLoading(false);
     }
   };
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     setLoading(true);
-  //     if (!token) {
-  //       toast.error("No authentication token found");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       ...formData,
-  //       name: user?.name || formData.personal?.name || "",
-  //       gender:
-  //         formData.personal?.gender?.toLowerCase() === "male"
-  //           ? "male"
-  //           : "female",
-  //       age: Number(formData.personal?.age),
-  //       personal: {
-  //         ...formData.personal,
-  //         favoriteBooks: Array.isArray(formData.personal?.favoriteBooks)
-  //           ? formData.personal.favoriteBooks
-  //           : formData.personal?.favoriteBooks?.split(",") || [],
-  //         hobbies: Array.isArray(formData.personal?.hobbies)
-  //           ? formData.personal.hobbies
-  //           : formData.personal?.hobbies?.split(",") || [],
-  //       },
-  //       education: {
-  //         ...formData.education,
-  //         history: formData.education?.history.map((h) => ({
-  //           ...h,
-  //           year: Number(h.year),
-  //         })),
-  //       },
-  //     };
-
-  //     const isUpdate = hasBiodata === "true";
-  //     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`;
-  //     const method = isUpdate ? axios.patch : axios.post;
-
-  //     const response = await method(url, payload, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: token,
-  //       },
-  //     });
-
-  //     if (response.status === 200) {
-  //       toast.success(
-  //         isUpdate
-  //           ? "Profile updated successfully!"
-  //           : "Profile posted successfully!"
-  //       );
-  //       setCookie("hasBiodata", "true");
-  //       router.push("/");
-  //     }
-
-  //     return response.data;
-  //   } catch (error: unknown) {
-  //     console.error("Profile post failed:", error);
-
-  //     let errorMessage = "Failed to post profile. Please try again.";
-  //     if (axios.isAxiosError(error)) {
-  //       errorMessage = error.response?.data?.message || errorMessage;
-  //     } else if (error instanceof Error) {
-  //       errorMessage = error.message || errorMessage;
-  //     }
-
-  //     toast.error(errorMessage);
-  //     throw error;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const CurrentStepComponent = steps[currentStep - 1].component;
   const progress = (currentStep / steps.length) * 100;
 

@@ -223,14 +223,6 @@ const SpecialOffersPage = () => {
 
       setOffers(sortedOffers);
 
-      if (sortedOffers.length === 0) {
-        showToast.success("No special offers found. Create your first offer!", {
-          action: {
-            label: "Create Offer",
-            onClick: () => setActiveTab("post"),
-          },
-        });
-      }
     } catch (error: unknown) {
       const apiError = handleApiError(error);
       setError(apiError.message);
