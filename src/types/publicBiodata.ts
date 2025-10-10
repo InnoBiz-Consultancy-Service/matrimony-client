@@ -71,6 +71,8 @@ type Personal = {
  prayerHabit: string;
  quranReading: string;
  specialSkills: string;
+ height: string;
+ maritalStatus: string;
 };
 
 type Pledge = {

@@ -274,7 +274,7 @@ export default function Navbar() {
                       <Heart className="h-4 w-4 text-white fill-white" />
                     </div>
                     <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 dark:from-emerald-500 dark:to-emerald-400 bg-clip-text text-transparent">
-                      Nikah
+                      Nikahlife
                     </span>
                   </div>
                 </div>
@@ -304,6 +304,33 @@ export default function Navbar() {
 
                 {/* Mobile Navigation */}
                 <nav className="flex flex-col space-y-1 py-4 flex-1 px-2">
+                  <Link
+                    href={user?.role === "admin" ? "/dashboard" : "/profile"}
+                    onClick={() => setIsProfileOpen(false)}
+                    className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800 dark:text-gray-200">
+                        {user?.role === "admin"
+                          ? "Admin Dashboard"
+                          : "My Profile"}
+                      </p>
+                    </div>
+                  </Link>
+                  <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
+                  <Link
+                    href="/profile/post-testimony"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors duration-200 group cursor-pointer"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800 dark:text-gray-200">
+                        Submit Testimony
+                      </p>
+                    </div>
+                  </Link>
+
+                  <Separator className="my-2 bg-emerald-100 dark:bg-emerald-900" />
                   {navigationItems.map((item) => (
                     <Link
                       key={item.title}
