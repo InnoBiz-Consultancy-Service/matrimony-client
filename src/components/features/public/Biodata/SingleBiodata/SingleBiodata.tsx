@@ -185,7 +185,7 @@ export default function Biodata({ id }: { id: string }) {
                         variant="secondary"
                         className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 whitespace-nowrap"
                       >
-                        {biodata?.gender === "male"
+                        {biodata?.gender === "male" || "Male"
                           ? t.singleBiodata?.maleBiodata
                           : t.singleBiodata?.femaleBiodata}
                       </Badge>

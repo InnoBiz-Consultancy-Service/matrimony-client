@@ -34,7 +34,7 @@ export const pricingTranslation = {
     vipDuration: "6 Months",
     vipFeatures: {
       premiumFeatures: "All Premium features",
-      duration: "1 year duration",
+      duration: "6 months duration",
       unlimited: "Unlimited profile access",
       support: "Priority customer support",
     },

@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getCookie } from "@/utils/getToken";
 import ContactInfo from "../Biodata/BiodataSteps/contactInfo";
+import { setCookie } from "@/utils/setCookie";
 
 const STORAGE_KEY = "biodata-form-data";
 const STEP_KEY = "biodata-current-step";
@@ -149,6 +150,7 @@ export default function BiodataForm() {
           Authorization: token,
         },
       });
+      setCookie("token", "true", 7);
       localStorage.removeItem("biodata-form-data");
       localStorage.removeItem("biodata-current-step");
       localStorage.removeItem("biodata-form-data-backup");
