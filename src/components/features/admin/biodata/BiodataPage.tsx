@@ -1,19 +1,32 @@
 "use client";
 
-import { ApiResponse, BiodataItem } from "@/types/dashboard/biodata";
+import type { ApiResponse, BiodataItem } from "@/types/dashboard/biodata";
 import { getCookie } from "@/utils/getToken";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import {
+  User,
+  MapPin,
+  GraduationCap,
+  Briefcase,
+  Heart,
+  Users,
+  Phone,
+  X,
+} from "lucide-react";
 
 const BiodataPage = () => {
   const [biodataList, setBiodataList] = useState<BiodataItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [approvingIds, setApprovingIds] = useState<Set<string>>(new Set());
+  const [selectedBiodata, setSelectedBiodata] = useState<BiodataItem | null>(
+    null
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const token = getCookie("token") || "";
-
-  console.log(biodataList);
 
   useEffect(() => {
     if (!token) {
@@ -45,7 +58,7 @@ const BiodataPage = () => {
       } else {
         setBiodataList([]);
       }
-      { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
+    { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
     } catch (err: any) {
       console.error("Error fetching biodata:", err);
       if (err.code === "ECONNABORTED") {
@@ -65,63 +78,6 @@ const BiodataPage = () => {
     }
   };
 
-  // const handleApproval = async (id: string) => {
-  //   if (!token) {
-  //     setError("Authentication token not found. Please login again.");
-  //     return;
-  //   }
-
-  //   try {
-  //     setApprovingIds((prev) => new Set(prev).add(id));
-  //     setError("");
-
-  //     await axios.patch(
-  //       `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/approval/${id}`,
-  //       { status: "approved" },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: token,
-  //         },
-  //         timeout: 10000,
-  //       }
-  //     );
-
-  //     // Update the local state to reflect the approval
-  //     setBiodataList((prev) =>
-  //       prev.map((item) =>
-  //         item._id === id ? { ...item, isApproved: "approved" as const } : item
-  //       )
-  //     );
-
-  //     // Show success message (you can implement toast notification here)
-  //     console.log("Biodata approved successfully");
-  //    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  //   } catch (err: any) {
-  //     console.error("Error approving biodata:", err);
-  //     if (err.code === "ECONNABORTED") {
-  //       setError("Request timeout. Please try again.");
-  //     } else if (err.response?.status === 401) {
-  //       setError("Authentication failed. Please login again.");
-  //     } else if (err.response?.status === 404) {
-  //       setError("Biodata not found.");
-  //     } else if (err.response?.status >= 500) {
-  //       setError("Server error. Please try again later.");
-  //     } else {
-  //       setError(
-  //         err.response?.data?.message ||
-  //           "Failed to approve biodata. Please try again."
-  //       );
-  //     }
-  //   } finally {
-  //     setApprovingIds((prev) => {
-  //       const newSet = new Set(prev);
-  //       newSet.delete(id);
-  //       return newSet;
-  //     });
-  //   }
-  // };
-
   const handleApproval = async (id: string) => {
     if (!token) {
       setError("Authentication token not found. Please login again.");
@@ -129,11 +85,10 @@ const BiodataPage = () => {
     }
 
     try {
-      // Approving state add
       setApprovingIds((prev) => new Set(prev).add(id));
       setError("");
 
-      const response = await axios.patch(
+      await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata/approval/${id}`,
         { status: "approved" },
         {
@@ -145,9 +100,6 @@ const BiodataPage = () => {
         }
       );
 
-      console.log("Patch response:", response.data);
-
-      // Immutable update with toString() check
       setBiodataList((prev) =>
         prev.map((item) =>
           item._id.toString() === id.toString()
@@ -156,11 +108,9 @@ const BiodataPage = () => {
         )
       );
 
-      console.log("Biodata approved successfully");
-
-      // Optional: fetch latest pending list from backend
-      // await fetchPendingBiodata();
-      { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
+      setIsModalOpen(false);
+      setSelectedBiodata(null);
+    { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
     } catch (err: any) {
       console.error("Error approving biodata:", err);
       if (err.code === "ECONNABORTED") {
@@ -178,7 +128,6 @@ const BiodataPage = () => {
         );
       }
     } finally {
-      // Remove from approvingIds
       setApprovingIds((prev) => {
         const newSet = new Set(prev);
         newSet.delete(id);
@@ -186,6 +135,17 @@ const BiodataPage = () => {
       });
     }
   };
+
+  const handleViewBiodata = (biodata: BiodataItem) => {
+    setSelectedBiodata(biodata);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedBiodata(null);
+  };
+
   const getStatusBadge = (status: string) => {
     const baseClasses = "px-3 py-1 rounded-full text-sm font-medium";
     switch (status) {
@@ -213,7 +173,7 @@ const BiodataPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading biodata...</p>
         </div>
       </div>
@@ -244,7 +204,7 @@ const BiodataPage = () => {
             <p className="text-gray-600 mb-4">{error}</p>
             <button
               onClick={fetchPendingBiodata}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors"
             >
               Try Again
             </button>
@@ -256,7 +216,7 @@ const BiodataPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
@@ -274,7 +234,7 @@ const BiodataPage = () => {
             <button
               onClick={fetchPendingBiodata}
               disabled={loading}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               <svg
                 className="w-4 h-4"
@@ -346,9 +306,9 @@ const BiodataPage = () => {
                   {/* Personal Information */}
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
                         <svg
-                          className="w-4 h-4 text-blue-600"
+                          className="w-4 h-4 text-emerald-600"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -425,52 +385,439 @@ const BiodataPage = () => {
                     </div>
                   </div>
 
-                  {/* Action Button */}
-                  {biodata.isApproved === "pending" && (
-                    <button
-                      onClick={() => handleApproval(biodata._id)}
-                      disabled={approvingIds.has(biodata._id)}
-                      className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                  <button
+                    onClick={() => handleViewBiodata(biodata)}
+                    className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition-colors flex items-center justify-center space-x-2 cursor-pointer"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      {approvingIds.has(biodata._id) ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                          <span>Approving...</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          <span>Approve</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-
-                  {biodata.isApproved === "approved" && (
-                    <div className="w-full bg-gray-100 text-gray-600 py-2 px-4 rounded-md text-center text-sm">
-                      Already Approved
-                    </div>
-                  )}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                    <span>View Biodata</span>
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {isModalOpen && selectedBiodata && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Biodata Details
+              </h2>
+              <button
+                onClick={handleCloseModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Modal Content - Detailed Biodata View */}
+            <div className="p-6">
+              {/* Header */}
+              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-6 mb-6 border border-emerald-200">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full mx-auto mb-3 flex items-center justify-center">
+                    <User className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    {selectedBiodata.name}
+                  </h3>
+                  <div className="flex items-center justify-center gap-3 text-gray-700 flex-wrap">
+                    <span className="bg-white px-3 py-1 rounded-full text-sm font-medium">
+                      {selectedBiodata.age} years
+                    </span>
+                    <span className="bg-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+                      {selectedBiodata.personal.maritalStatus}
+                    </span>
+                    <span className="bg-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+                      {selectedBiodata.gender}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Personal Info */}
+              <Section
+                icon={<User className="w-5 h-5" />}
+                title="Personal Information"
+              >
+                <InfoRow
+                  label="Height"
+                  value={selectedBiodata.personal.height}
+                />
+                <InfoRow
+                  label="Marital Status"
+                  value={
+                    selectedBiodata.personal.maritalStatus === "unmarried"
+                      ? "Unmarried"
+                      : "Married"
+                  }
+                />
+                <InfoRow label="Fiqh" value={selectedBiodata.personal.fiqh} />
+                <InfoRow
+                  label="Prayer Habit"
+                  value={selectedBiodata.personal.prayerHabit}
+                />
+                <InfoRow
+                  label="Quran Reading"
+                  value={selectedBiodata.personal.quranReading}
+                />
+                <InfoRow
+                  label="Maintain Mahram"
+                  value={selectedBiodata.personal.maintainMahram}
+                />
+                <InfoRow
+                  label="Dress Style"
+                  value={selectedBiodata.personal.dress}
+                />
+                <InfoRow
+                  label="Entertainment"
+                  value={selectedBiodata.personal.entertainment}
+                />
+                <InfoRow
+                  label="Health Issues"
+                  value={selectedBiodata.personal.healthIssues}
+                />
+                <InfoRow
+                  label="Special Skills"
+                  value={selectedBiodata.personal.specialSkills}
+                />
+                <InfoRow
+                  label="Hobbies"
+                  value={selectedBiodata.personal.hobbies.join(", ")}
+                />
+                <InfoRow
+                  label="Favorite Books"
+                  value={selectedBiodata.personal.favoriteBooks.join(", ")}
+                />
+              </Section>
+
+              {/* Address */}
+              <Section icon={<MapPin className="w-5 h-5" />} title="Address">
+                <InfoRow
+                  label="Country"
+                  value={selectedBiodata.address.country}
+                />
+                <InfoRow
+                  label="Grew Up At"
+                  value={selectedBiodata.address.grewUpAt}
+                />
+                <div className="mt-3 space-y-3">
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm font-semibold text-gray-700 mb-1">
+                      Permanent Address
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      {selectedBiodata.address.permanent.address}
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      {selectedBiodata.address.permanent.upazila},{" "}
+                      {selectedBiodata.address.permanent.district},{" "}
+                      {selectedBiodata.address.permanent.division}
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm font-semibold text-gray-700 mb-1">
+                      Present Address
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      {selectedBiodata.address.present.address}
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      {selectedBiodata.address.present.upazila},{" "}
+                      {selectedBiodata.address.present.district},{" "}
+                      {selectedBiodata.address.present.division}
+                    </p>
+                  </div>
+                </div>
+              </Section>
+
+              {/* Education */}
+              <Section
+                icon={<GraduationCap className="w-5 h-5" />}
+                title="Educational Qualification"
+              >
+                <InfoRow
+                  label="Education Method"
+                  value={selectedBiodata.education.method}
+                />
+                {selectedBiodata.education.history.map((edu, idx) => (
+                  <div
+                    key={idx}
+                    className="mt-3 p-3 bg-emerald-50 rounded-lg border border-emerald-100"
+                  >
+                    <InfoRow label="Level" value={edu.level} />
+                    <InfoRow label="Institution" value={edu.institution} />
+                    <InfoRow label="Subject" value={edu.subject} />
+                    <InfoRow label="Year" value={edu.year} />
+                    <InfoRow label="Result" value={edu.result} />
+                  </div>
+                ))}
+              </Section>
+
+              {/* Occupation */}
+              <Section
+                icon={<Briefcase className="w-5 h-5" />}
+                title="Occupation"
+              >
+                <InfoRow
+                  label="Current Job"
+                  value={selectedBiodata.occupation.current}
+                />
+                <InfoRow
+                  label="Description"
+                  value={selectedBiodata.occupation.description}
+                />
+                <InfoRow
+                  label="Income"
+                  value={`${selectedBiodata.occupation.income.amount} ${selectedBiodata.occupation.income.currency}`}
+                />
+              </Section>
+
+              {/* Family */}
+              <Section
+                icon={<Users className="w-5 h-5" />}
+                title="Family Information"
+              >
+                <InfoRow
+                  label="Father"
+                  value={
+                    selectedBiodata.family.fatherAlive ? "Alive" : "Deceased"
+                  }
+                />
+                <InfoRow
+                  label="Father's Profession"
+                  value={selectedBiodata.family.fatherProfession}
+                />
+                <InfoRow
+                  label="Mother"
+                  value={
+                    selectedBiodata.family.motherAlive ? "Alive" : "Deceased"
+                  }
+                />
+                <InfoRow
+                  label="Mother's Profession"
+                  value={selectedBiodata.family.motherProfession}
+                />
+                <InfoRow
+                  label="Brothers"
+                  value={selectedBiodata.family.brothers}
+                />
+                <InfoRow
+                  label="Brothers Info"
+                  value={selectedBiodata.family.brothersInfo.join(", ")}
+                />
+                <InfoRow
+                  label="Sisters"
+                  value={selectedBiodata.family.sisters}
+                />
+                <InfoRow
+                  label="Sisters Info"
+                  value={selectedBiodata.family.sistersInfo.join(", ")}
+                />
+                <InfoRow
+                  label="Uncles' Profession"
+                  value={selectedBiodata.family.unclesProfession.join(", ")}
+                />
+                <InfoRow
+                  label="Financial Status"
+                  value={selectedBiodata.family.financialStatus}
+                />
+                <InfoRow
+                  label="Financial Details"
+                  value={selectedBiodata.family.financialDetails}
+                />
+                <InfoRow
+                  label="Religious Practice"
+                  value={selectedBiodata.family.religiousPractice}
+                />
+              </Section>
+
+              {/* Marriage */}
+              <Section
+                icon={<Heart className="w-5 h-5" />}
+                title="Marriage Information"
+              >
+                <InfoRow
+                  label="Guardians Agree"
+                  value={selectedBiodata.marriage.guardiansAgree ? "Yes" : "No"}
+                />
+                <InfoRow
+                  label="Study Continue"
+                  value={selectedBiodata.marriage.studyContinue}
+                />
+                <InfoRow
+                  label="Reason for Marriage"
+                  value={selectedBiodata.marriage.reason}
+                />
+              </Section>
+
+              {/* Preferences */}
+              <Section
+                icon={<Heart className="w-5 h-5" />}
+                title="Partner Preferences"
+              >
+                <InfoRow
+                  label="Age Range"
+                  value={selectedBiodata.preference.ageRange}
+                />
+                <InfoRow
+                  label="Complexion"
+                  value={selectedBiodata.preference.complexion}
+                />
+                <InfoRow
+                  label="Height"
+                  value={selectedBiodata.preference.height}
+                />
+                <InfoRow
+                  label="Education"
+                  value={selectedBiodata.preference.education}
+                />
+                <InfoRow
+                  label="Location"
+                  value={selectedBiodata.preference.location}
+                />
+                <InfoRow
+                  label="Marital Status"
+                  value={selectedBiodata.preference.maritalStatus}
+                />
+                <InfoRow
+                  label="Profession"
+                  value={selectedBiodata.preference.profession}
+                />
+                <InfoRow
+                  label="Financial Condition"
+                  value={selectedBiodata.preference.financialCondition}
+                />
+                <InfoRow
+                  label="Desired Qualities"
+                  value={selectedBiodata.preference.qualities.join(", ")}
+                />
+              </Section>
+
+              {/* Contact */}
+              <Section
+                icon={<Phone className="w-5 h-5" />}
+                title="Contact Information"
+              >
+                <InfoRow
+                  label="Guardian's Phone"
+                  value={selectedBiodata.contactInfo.guardianPhone}
+                />
+                <InfoRow
+                  label="Relation"
+                  value={selectedBiodata.contactInfo.relation}
+                />
+                <InfoRow label="Email" value={selectedBiodata.userId.email} />
+                <InfoRow label="Phone" value={selectedBiodata.userId.phone} />
+              </Section>
+
+              {/* Footer Info */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center text-sm text-gray-600">
+                <p>Biodata ID: {selectedBiodata._id}</p>
+                <p className="mt-1">
+                  Created on: {formatDate(selectedBiodata.createdAt)}
+                </p>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-2xl">
+              {selectedBiodata.isApproved === "pending" ? (
+                <button
+                  onClick={() => handleApproval(selectedBiodata._id)}
+                  disabled={approvingIds.has(selectedBiodata._id)}
+                  className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 font-medium cursor-pointer"
+                >
+                  {approvingIds.has(selectedBiodata._id) ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span>Approving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <span>Approve Biodata</span>
+                    </>
+                  )}
+                </button>
+              ) : (
+                <div className="w-full bg-gray-100 text-gray-600 py-3 px-6 rounded-lg text-center font-medium">
+                  Already Approved
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+const Section = ({
+  icon,
+  title,
+  children,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
+}) => (
+  <div className="mb-6 last:mb-0">
+    <div className="flex items-center gap-2 mb-3 pb-2 border-b-2 border-gray-100">
+      <div className="text-emerald-600">{icon}</div>
+      <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+    </div>
+    <div className="pl-7 space-y-2">{children}</div>
+  </div>
+);
+
+const InfoRow = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) => (
+  <div className="flex py-2 border-b border-gray-50 last:border-0">
+    <span className="text-sm font-medium text-gray-600 w-48 flex-shrink-0">
+      {label}:
+    </span>
+    <span className="text-sm text-gray-800">{value}</span>
+  </div>
+);
 
 export default BiodataPage;
