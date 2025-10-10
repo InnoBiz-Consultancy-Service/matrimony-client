@@ -89,8 +89,8 @@ export const biodataTranslation = {
       favoriteBooks: "Write the name Islamic books you have read.",
       hobbies:
         "Write about your hobbies, likes and dislike, tastes, dreams, and so on",
-      male: "Male",
-      female: "Female",
+      male: "male",
+      female: "female",
       quranReading: "Do you have reading quran.",
       selectGender: "Select Gender",
       selectFiqh: "Select Fiqh",

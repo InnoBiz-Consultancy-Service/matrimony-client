@@ -150,7 +150,7 @@ export function ProfileCard({ profile }: any) {
         </div>
       </div>
 
-      <Link href={"/profile/create-biodata"}>
+      <Link href={"/profile/update-biodata"}>
         <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
           <Edit3 className="h-4 w-4 mr-2" />
           {t.editProfile}

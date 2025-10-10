@@ -10,12 +10,17 @@ import { ProfileCard } from "./ProfileCard";
 import { NavigationButtons } from "./navigationButton";
 import { ProfileData } from "@/types/profile";
 import { useAuth } from "@/app/(auth)/context/auth-context";
+import { getOwnBiodata } from "@/app/actions/getOwnBiodata";
 
 export default function Profile() {
   const [profile, setProfile] = React.useState<ProfileData | undefined>();
   const [loading, setLoading] = React.useState(false);
   const token = getCookie("token") || "";
-  const {user} = useAuth()
+  const { user } = useAuth();
+
+  React.useEffect(() => {
+    getOwnBiodata();
+  }, []);
   React.useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
@@ -60,7 +65,9 @@ export default function Profile() {
                   <p className="text-white/80 text-sm">
                     {language === "bn" ? "সাবস্ক্রিপশন" : "Subscription"}
                   </p>
-                  <p className="text-white font-semibold text-lg">{user?.subscriptionType}</p>
+                  <p className="text-white font-semibold text-lg">
+                    {user?.subscriptionType}
+                  </p>
                 </div>
               </div>
             </div>
@@ -73,7 +80,8 @@ export default function Profile() {
                     {language === "bn" ? "প্রোফাইল ভিউ" : "Profile Views"}
                   </p>
                   <p className="text-white font-semibold text-lg">
-                    {profile?.subscriptionId?.profileViewLimit || 0} {language === "bn" ? "বাকি" : "Left"}
+                    {profile?.subscriptionId?.profileViewLimit || 0}{" "}
+                    {language === "bn" ? "বাকি" : "Left"}
                   </p>
                 </div>
               </div>
