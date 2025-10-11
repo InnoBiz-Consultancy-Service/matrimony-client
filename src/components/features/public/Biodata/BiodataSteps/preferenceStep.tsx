@@ -204,9 +204,6 @@ export default function PreferenceStep({ data, updateData }: StepProps) {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={t.familyInformation?.poor}>
-                {t.familyInformation?.poor}
-              </SelectItem>
               <SelectItem value={t.familyInformation?.lower}>
                 {t.familyInformation?.lower}
               </SelectItem>
