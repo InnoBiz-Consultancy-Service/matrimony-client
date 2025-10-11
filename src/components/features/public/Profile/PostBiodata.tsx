@@ -19,8 +19,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getCookie } from "@/utils/getToken";
+import ContactInfo from "../Biodata/BiodataSteps/contactInfo";
 import { setCookie } from "@/utils/setCookie";
-// import { setCookie } from "@/utils/setCookie";
 
 const STORAGE_KEY = "biodata-form-data";
 const STEP_KEY = "biodata-current-step";
@@ -33,7 +33,8 @@ const steps = [
   { id: 5, title: "Occupation", component: OccupationStep },
   { id: 6, title: "Marriage", component: MarriageStep },
   { id: 7, title: "Preference", component: PreferenceStep },
-  { id: 8, title: "Pledge", component: PledgeStep },
+  { id: 8, title: "Contact Info", component: ContactInfo },
+  { id: 9, title: "Pledge", component: PledgeStep },
 ];
 
 export default function BiodataForm() {
@@ -47,7 +48,6 @@ export default function BiodataForm() {
   const { user } = useAuth();
 
   const token = getCookie("token");
-  const hasBiodata = getCookie("hasBiodata");
 
   useEffect(() => {
     setMounted(true);
@@ -102,101 +102,6 @@ export default function BiodataForm() {
     }
   };
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     setLoading(true);
-  //     if (!token) {
-  //       toast.error("No authentication token found");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       ...formData,
-  //       name: user?.name || formData.personal?.name || "",
-  //       gender:
-  //         formData.personal?.gender?.toLowerCase() === "male"
-  //           ? "male"
-  //           : "female",
-  //       age: Number(formData.personal?.age),
-  //       personal: {
-  //         ...formData.personal,
-  //         maintainMahram: formData.personal?.maintainMahram,
-  //         quranReading: formData.personal?.quranReading,
-  //         entertainment: formData.personal?.entertainment,
-  //         healthIssues: formData.personal?.healthIssues,
-  //         favoriteBooks: Array.isArray(formData.personal?.favoriteBooks)
-  //           ? formData.personal.favoriteBooks
-  //           : formData.personal?.favoriteBooks?.split(",") || [],
-  //         hobbies: Array.isArray(formData.personal?.hobbies)
-  //           ? formData.personal.hobbies
-  //           : formData.personal?.hobbies?.split(",") || [],
-  //       },
-  //       education: {
-  //         ...formData.education,
-  //         history: formData.education?.history.map((h) => ({
-  //           ...h,
-  //           year: Number(h.year),
-  //         })),
-  //       },
-  //       marriage: {
-  //         ...formData.marriage,
-  //         studyContinue: formData.marriage?.studyContinue,
-  //       },
-  //     };
-
-  //     if (hasBiodata === "false") {
-  //       const response = await axios.post(
-  //         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
-  //         payload,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: token,
-  //           },
-  //         }
-  //       );
-  //       if (response.status === 200) {
-  //         toast.success("Profile posted successfully!");
-  //         localStorage.removeItem("biodata-form-data");
-  //         router.push("/");
-  //       }
-  //       return response.data;
-  //     }
-  //     if (hasBiodata === "true") {
-  //       const response = await axios.patch(
-  //         `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`,
-  //         payload,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: token,
-  //           },
-  //         }
-  //       );
-  //       if (response.status === 200) {
-  //         toast.success("Profile posted successfully!");
-  //         localStorage.removeItem("biodata-form-data");
-  //         router.push("/");
-  //       }
-  //       return response.data;
-  //     }
-  //   } catch (error: unknown) {
-  //     console.error("Profile post failed:", error);
-
-  //     let errorMessage = "Failed to post profile. Please try again.";
-  //     if (error instanceof Error) {
-  //       errorMessage = error.message || errorMessage;
-  //     } else if (axios.isAxiosError(error)) {
-  //       errorMessage = error.response?.data?.message || errorMessage;
-  //     }
-
-  //     toast.error(errorMessage);
-  //     throw error;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -215,6 +120,10 @@ export default function BiodataForm() {
         age: Number(formData.personal?.age),
         personal: {
           ...formData.personal,
+          maintainMahram: formData.personal?.maintainMahram,
+          quranReading: formData.personal?.quranReading,
+          entertainment: formData.personal?.entertainment,
+          healthIssues: formData.personal?.healthIssues,
           favoriteBooks: Array.isArray(formData.personal?.favoriteBooks)
             ? formData.personal.favoriteBooks
             : formData.personal?.favoriteBooks?.split(",") || [],
@@ -229,38 +138,32 @@ export default function BiodataForm() {
             year: Number(h.year),
           })),
         },
+        marriage: {
+          ...formData.marriage,
+          studyContinue: formData.marriage?.studyContinue,
+        },
       };
 
-      const isUpdate = hasBiodata === "true";
-      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/biodata`;
-      const method = isUpdate ? axios.patch : axios.post;
-
-      const response = await method(url, payload, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/biodata`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
       });
-
-      if (response.status === 200) {
-        toast.success(
-          isUpdate
-            ? "Profile updated successfully!"
-            : "Profile posted successfully!"
-        );
-        setCookie("hasBiodata", "true");
-        router.push("/");
-      }
-
-      return response.data;
+      setCookie("hasBiodata", "true", 7);
+      localStorage.removeItem("biodata-form-data");
+      localStorage.removeItem("biodata-current-step");
+      localStorage.removeItem("biodata-form-data-backup");
+      toast.success("Profile posted successfully!");
+      router.push("/");
     } catch (error: unknown) {
       console.error("Profile post failed:", error);
 
       let errorMessage = "Failed to post profile. Please try again.";
-      if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message || errorMessage;
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         errorMessage = error.message || errorMessage;
+      } else if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || errorMessage;
       }
 
       toast.error(errorMessage);
@@ -269,7 +172,6 @@ export default function BiodataForm() {
       setLoading(false);
     }
   };
-
   const CurrentStepComponent = steps[currentStep - 1].component;
   const progress = (currentStep / steps.length) * 100;
 

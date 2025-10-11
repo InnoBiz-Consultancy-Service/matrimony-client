@@ -80,7 +80,7 @@ export const subscriptionPlan = {
     // Plan Names & Durations
     premium: "প্রিমিয়াম",
     vip: "ভিআইপি",
-    oneMonth: "১ মাস",
+    oneMonth: "৬ মাস",
     threeMonths: "৩ মাস",
     popular: "জনপ্রিয়",
     subscription: "সাবস্ক্রিপশন",

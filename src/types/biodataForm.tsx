@@ -91,6 +91,11 @@ export interface PreferenceInfo {
   qualities: string;
 }
 
+export interface ContactInfo {
+  guardianPhone: string;
+  relation: string;
+}
+
 export interface PledgeInfo {
   parentsAware: boolean;
   informationAccurate: boolean;
@@ -105,6 +110,8 @@ export interface BiodataFormData {
   occupation?: OccupationInfo;
   marriage?: MarriageInfo;
   preference?: PreferenceInfo;
+  contactInfo?: ContactInfo;
+  isContactInfoValid?: boolean;
   pledge?: PledgeInfo;
 }
 

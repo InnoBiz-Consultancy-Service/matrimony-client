@@ -168,9 +168,12 @@ export default function Biodata({ id }: { id: string }) {
                   </Avatar>
                 </div>
 
-                <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
-                  {biodata?.name}
-                </h2>
+                {user &&
+                  ["premium", "vip"].includes(user?.subscriptionType || "") && (
+                    <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
+                      {biodata?.name}
+                    </h2>
+                  )}
 
                 <div className="space-y-1">
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-3">
@@ -182,7 +185,7 @@ export default function Biodata({ id }: { id: string }) {
                         variant="secondary"
                         className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 whitespace-nowrap"
                       >
-                        {biodata?.gender === "male"
+                        {biodata?.gender === "male" || "Male"
                           ? t.singleBiodata?.maleBiodata
                           : t.singleBiodata?.femaleBiodata}
                       </Badge>
@@ -560,6 +563,22 @@ export default function Biodata({ id }: { id: string }) {
                     </div>
                     <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
                       {biodata?.personal?.dress}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.height}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.height}
+                    </div>
+                  </div>
+                  <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="w-2/5 font-medium text-gray-600 dark:text-gray-300 pr-4 flex-shrink-0 leading-relaxed border-r border-gray-200 dark:border-gray-700">
+                      {t.expectedLifePartner?.maritalStatus}:
+                    </div>
+                    <div className="flex-1 text-gray-800 dark:text-gray-100 break-words leading-relaxed pl-2">
+                      {biodata?.personal?.maritalStatus}
                     </div>
                   </div>
                   <div className="flex border-b border-gray-200 dark:border-gray-700 py-4">
