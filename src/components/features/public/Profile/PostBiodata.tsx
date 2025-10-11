@@ -150,7 +150,7 @@ export default function BiodataForm() {
           Authorization: token,
         },
       });
-      setCookie("token", "true", 7);
+      setCookie("hasBiodata", "true", 7);
       localStorage.removeItem("biodata-form-data");
       localStorage.removeItem("biodata-current-step");
       localStorage.removeItem("biodata-form-data-backup");
