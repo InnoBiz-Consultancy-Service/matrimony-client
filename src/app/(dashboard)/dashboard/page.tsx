@@ -8,6 +8,8 @@ import {
   DollarSign,
   Menu,
   X,
+  UserRoundPlus,
+  Users,
 } from "lucide-react";
 import PaymentPage from "@/components/features/admin/payment/PaymentPage";
 import ReviewPage from "@/components/features/admin/reviews/ReviewPage";
@@ -15,6 +17,7 @@ import SendMailPage from "@/components/features/admin/sendMail/SendMail";
 import SpecialOffersPage from "@/components/features/admin/specialOffer/SpecialOffer";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import BiodataPage from "@/components/features/admin/biodata/BiodataPage";
+import AllBiodata from "@/components/features/admin/allBiodata/AllBiodata";
 
 const AdminDashboard = () => {
   const [activeRoute, setActiveRoute] = useState("payment");
@@ -27,7 +30,8 @@ const AdminDashboard = () => {
     { id: "special-offers", label: "Special Offers", icon: Gift },
     { id: "send-mail", label: "Send Mail", icon: Mail },
     { id: "review", label: "Reviews", icon: Star },
-    { id: "biodata", label: "Biodata", icon: Star },
+    { id: "biodata", label: "Pending Biodata", icon: UserRoundPlus },
+    { id: "all-biodata", label: "All Biodata", icon: Users },
   ];
 
   // Special Offers Component
@@ -44,6 +48,8 @@ const AdminDashboard = () => {
         return <ReviewPage />;
       case "biodata":
         return <BiodataPage />;
+      case "all-biodata":
+        return <AllBiodata />;
       default:
         return <SpecialOffersPage />;
     }
